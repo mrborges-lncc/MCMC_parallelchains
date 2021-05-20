@@ -11,21 +11,21 @@ for a in select_thetas/theta_v*.dat; do rm -f $a; done
 rm -f select_thetas/theta_v*;
 rm -rf ../twophaseflow/exp0*;
 rm -rf ../twophaseflow/exp1*;
-rm -f  ../twophaseflow/output0*;
+rm -f  ../twophaseflow/output*.out;
 rm -rf ../simuladorRigido/exp0*;
 rm -rf ../simuladorRigido/exp1*;
-rm -f  ../simuladorRigido/output0*;
+rm -f  ../simuladorRigido/output*.out;
 rm -rf ./simuladorRigido/exp0*;
 rm -rf ./simuladorRigido/exp1*;
-rm -f  ./simuladorRigido/output0*;
+rm -f  ./simuladorRigido/output*.out;
 rm -rf ../gera_KL/FORTRAN_KL3D/in0*;
 rm -rf ../gera_KL/FORTRAN_RW/in0*;
+rm -rf ../gera_KL/FORTRAN_KL3D/output_0*;
+rm -rf ../gera_KL/FORTRAN_RW/output_0*;
 rm -rf ../gera_KL/FORTRAN_KL3D/out/theta0*;
 rm -rf ../gera_KL/FORTRAN_KL3D/out/thetanew0*;
 rm -rf ../gera_KL/FORTRAN_RW/out/theta0*;
 rm -rf ../gera_KL/FORTRAN_RW/out/thetanew0*;
-rm -rf ../gera_KL/FORTRAN_RW1/out/theta0*;
-rm -rf ../gera_KL/FORTRAN_RW2/out/theta0*;
 rm -rf ../gera_KL/MVN/in0*;
 rm -rf ../gera_KL/MVN/out/theta0*;
 rm -rf ../gera_KL/MVN/out/thetanew0*;
@@ -40,5 +40,7 @@ rm -rf ../blackbox/exp7*;
 rm -rf ../blackbox/exp8*;
 rm -rf ../blackbox/exp9*;
 rm -rf ../blackbox/output*.out;
+rm -rf ./upscaling/output*.out;
+rm -rf ./upscaling/in0*;
 
 
