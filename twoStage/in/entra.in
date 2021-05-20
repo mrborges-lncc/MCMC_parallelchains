@@ -1,0 +1,23 @@
+         1
+         1
+amostra
+         0
+       100
+     20000
+         6
+         2         1
+         1         2         1        60
+         4         2         1        60
+        13         2         1     13005         1        10 0.25000E-00
+../gera_KL/MATLAB/out/avet1_510x510x20_51x51x5_l50x50x10_M13005.bin
+ 1.00000E-04
+ 2.00000E-04
+ 1.00000E-04
+ 2.00000E-04
+../twophaseflow/exp/pres/pres_ref_0.dat
+../twophaseflow/exp/pres/pres_amostra_0.dat
+../twophaseflow/exp/prod/prod_ref_0.dat
+../twophaseflow/exp/prod/prod_amostra_0.dat
+KLfull_RW
+         23      645681         749       46301       63547         354      576542     0893587     3847565     11347657     768764      199883     876523     3402981     9873649      546301      263547      047354      576542     0893587     3847565     11347657     876523     3402981     9873649      546301      263547      047354      576542     0893587     3847565     11347657           67
+         0

@@ -1,0 +1,26 @@
+# realizacoes
+1
+# Kozeny-Carman
+0
+1.0 0.1183
+# permeabilidade
+1
+./fields/perm_amostra_
+./fields/perm_amostra_
+1.0 1.0
+# porosidade
+0
+./fields/phi_amostra_
+0.1975 0.1570
+# beta
+0
+./e300x10_10_
+1.0e-12    1.0
+# mixing
+0
+./mix/mix_twohetK_
+0
+# producao
+0
+./prod/test_inj_
+1000

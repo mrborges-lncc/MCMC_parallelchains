@@ -1,0 +1,104 @@
+# linear(1) nao-linear(2)
+2
+# viscosidade da agua
+1.0
+# viscosidade do oleo
+10.0
+# massa especifica da agua
+1.0
+# massa especifica do oleo
+1.0
+# saturacao residual da agua
+0.20
+# saturacao residual do oleo
+0.15
+# saturacao inicial da agua
+0.21
+# saturacao na injecao
+1.0
+# saturacao do bloco 
+0.21
+# x central do bloco de sat
+10.0
+# y central do bloco de sat
+50.0
+# z central do bloco de sat
+0.05
+# lx do bloco de sat
+0.01
+# ly do bloco de sat
+0.2
+# lz do bloco de sat
+0.2
+# permeabilidade inicial 
+1.0
+# permeabilidade do bloco
+1.0
+# x central do bloco de perm
+0.5
+# y central do bloco de perm
+0.5
+# z central do bloco de perm
+0.5
+# lx do bloco de perm
+0.2
+# ly do bloco de perm
+0.2
+# lz do bloco de perm
+0.2
+# porosidade inicial
+0.2
+# porosidade do bloco
+0.2
+# x central do bloco de phi
+0.5
+# y central do bloco de phi
+0.5
+# z central do bloco de phi
+0.5
+# lx do bloco de phi
+0.2
+# ly do bloco de phi
+0.2
+# lz do bloco de phi
+0.2
+# instante inicial
+0.0
+# tempo total de simulacao
+0.12
+# numero de calculos da velocidade
+800
+# impressao para matlab(0) ou paraview(1) ou paraview(2)
+2
+# impressao da saturacao
+0
+./out/
+100
+# impressao da pressao
+0
+./out/
+80
+# impressao da velocidade
+0
+./out/
+50
+# impressao da porosidade
+0
+./out/
+50
+# calculo da massa de agua
+0
+./out/
+50
+# balanco local da massa de agua
+0
+./out/
+50
+# balanco global de massa por elemento
+0
+./out/
+50
+# derivada do tracco da tensao total
+0
+./out/
+50

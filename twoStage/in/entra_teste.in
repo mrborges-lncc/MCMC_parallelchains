@@ -1,0 +1,23 @@
+         1
+         1
+amostra
+         0
+       100
+     20000
+         6
+         2         1
+         1         2         1        60
+         4         2         1        60
+        13         2         1     10000         1        10 2.50000e-01
+../gera_KL/MATLAB/out/avet1_1x1x1_100x100x1_l0.2x0.2x0.02_M10000.bin
+ 1.00000e-04
+ 1.00000e-04
+ 1.00000e-04
+ 1.00000e-04
+../simuladorRigido/exp/conc/conc_ref_0.dat
+../simuladorRigido/exp/conc/conc_amostra_0.dat
+../simuladorRigido/exp/conc/conc_ref_0.dat
+../simuladorRigido/exp/conc/conc_amostra_0.dat
+TwoPhase3D
+      181847      263803      145539      136069      869292      579705      549860      144955      853031      622055      350952      513250      401808       75967      239916      123319      183908      239953      417267       49654      902716      944787      490864      489253      337719      900054      369247      111203      780252      389739      241691      403912       96455
+           0

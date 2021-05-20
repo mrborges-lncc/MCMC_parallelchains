@@ -1,0 +1,15 @@
+# concentracao
+1
+conc/conc_amostra_
+400
+input_cond.dat
+# pressao
+0
+pres/pres_amostra_
+400
+input_pres.dat
+# producao
+1
+prod/prod_amostra_
+400
+input_prod.dat
