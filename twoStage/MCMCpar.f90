@@ -4885,20 +4885,17 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
   USE MPI
   USE VARIAVEIS, ONLY:  SIG,MKL,XRMVN,MATDE,XRMVN_MEAN
   USE VARIAVEIS, ONLY:  GERATIPO,THETAN,CONT,VETCONT
-  USE VARIAVEIS, ONLY:  COVMATID,COVMATDOWN,DIMR,SIGDE
   USE VARIAVEIS, ONLY:  CONTADORC,NFREQ,JUMP,VARPROP
 !
-  REAL                 :: XEPS,XCS,XCSININT,XAUX
-  INTEGER              :: K,I,J,N,DIM,NK,DESTART
+  REAL                 :: XEPS,XCS
+  INTEGER              :: K,I,N,DIM,NK,DESTART
   INTEGER              :: IERROR,TAG,NPROC
-  INTEGER              :: ROOT,SOMACONT
   REAL,DIMENSION(DIM)  :: XVET
   LOGICAL              :: FIRST
   INTEGER,DIMENSION(2) :: R
   INTEGER, EXTERNAL    :: INTMIN
   REAL, EXTERNAL       :: GAMMA_DREAM_METHOD
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  ROOT   = NK
   FIRST  = .TRUE.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !  XEPS   = 2.38/SQRT(2.0*REAL(DIM))
@@ -4907,7 +4904,8 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
        CONTADORC,NFREQ(K),VARPROP(K))
   WRITE(*,100)XEPS
   IERROR = 0
-  XCS    = 1.0E-03
+  XCS    = SQRT(1.0E-03)
+  XVET   = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   DESTART = INTMIN(VETCONT,NPROC)
@@ -4916,9 +4914,11 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
      MATDE  = 0.0E+00
      CALL LOADTHETASDE(NK,K,DIM,VETCONT,NPROC)
      R = CHOOSER(NK+1,NPROC)
-     CALL RANDOM_MVNORM(DIM,XRMVN_MEAN,XCS*COVMATID,&
-          COVMATDOWN,FIRST,XVET,IERROR)
-     THETAN(K,1:DIM) = MATDE(1:DIM,NK+1) + &
+     DO I=1,DIM
+        XVET(I) = RANDOM_NORMAL()*XCS
+     END DO
+     THETAN(K,1:DIM) = (SQRT(1.0 - 2*XEPS*XEPS))*&
+          MATDE(1:DIM,NK+1) + &
           XEPS*(MATDE(1:DIM,R(1))-MATDE(1:DIM,R(2)))+XVET
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      CALL GERA_AMTHETA(MKL(K),GERATIPO(K),K,NK)
