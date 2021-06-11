@@ -8,13 +8,14 @@ M   = fim-ini+1;
 home= '/home/mrborges/MCMC_par/trunk/twoStage/';
 home= '/home/mrborges/MCMC_parallelchains/twoStage/';
 home= '~/MCMCde/twoStage/';
+%
 homef='/home/mrborges/MCMC_parallelchains/';
 homef='~/MCMC_parallelchains/';
 homef='~/MCMCde/';
 base_name = 'KLfull_DE_RK';
 nome_extra = '';
 nchain=1;
-my=0.2;
+my=0.25;
 my0=0.0;
 lwd  = 2;
 xmaximo = 0;
@@ -120,7 +121,7 @@ print('-depsc','-r300',base);
 %print('-djpeg','-r300',base);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if(NV>1)
-    my=0.50;
+    my=0.850;
     % Create figure
     figure2= figure;
     if(transp==1)
@@ -251,7 +252,7 @@ figure4= figure;
         fig.InvertHardcopy = 'off';
     end
 N=max(tm)+1;
-my=0.5;
+my=0.2;
 % Create axes
 axes3 = axes('Parent',figure4,'LineWidth',2,'FontSize',16,...
     'FontName','Times New Roman','FontWeight','bold',...

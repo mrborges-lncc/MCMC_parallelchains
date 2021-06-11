@@ -1,16 +1,17 @@
 clear;
 close all
-base_name = 'prod_D2_KLfull_DE_RK3_146';
+base_name = 'prod_D1_KLfull_DE_RK0_46';
 %dados=load('../prod/prodF_ref_0.dat');
 %dados=load('../SIMULADOR_ELASTICO/exp/conc/conc_ref_0.dat');
-dados=load('/home/mrborges/MCMCde/twophaseflow/exp/prod/prod_referencia_0.dat');
+dados=load('/home/mrborges/MCMCde/twophaseflow/exp/pres/pres_ref_0.dat');
+%dados=load('/home/mrborges/MCMC/twophaseflow/exp/prod/prod_ref_0.dat');
 ref=dados;
 %
 file_name = ['/home/mrborges/MCMCde/twoStage/select_prod/' base_name '.dat']
 %
 % Create figure
 figure1 = figure()
-B=600.;
+B=150.;
 A=0.0;
 %B=1e-2;
 %A=1e-5;
@@ -29,12 +30,12 @@ dados=load(file_name);
 
 plot(dados(:,1),dados(:,2),'Parent',axes1,'Color',[1 0 0],...
     'MarkerSize',5,'Marker','o','LineStyle','none','DisplayName','sample 1')
-plot(dados(:,1),dados(:,3),'Parent',axes1,'Color',[0 0 1],...
-    'MarkerSize',5,'Marker','s','LineStyle','none','DisplayName','sample 2')
-plot(dados(:,1),dados(:,4),'Parent',axes1,'Color',[0 0 0],...
-    'MarkerSize',5,'Marker','^','LineStyle','none','DisplayName','sample 3')
-plot(dados(:,1),dados(:,5),'Parent',axes1,'Color',[0 1 0],...
-    'MarkerSize',5,'Marker','v','LineStyle','none','DisplayName','sample 4')
+% plot(dados(:,1),dados(:,3),'Parent',axes1,'Color',[0 0 1],...
+%     'MarkerSize',4,'Marker','s','LineStyle','none','DisplayName','sample 2')
+% plot(dados(:,1),dados(:,4),'Parent',axes1,'Color',[0 0 0],...
+%     'MarkerSize',4,'Marker','o','LineStyle','none','DisplayName','sample 3')
+% plot(dados(:,1),dados(:,5),'Parent',axes1,'Color',[0 1 0],...
+%     'MarkerSize',4,'Marker','s','LineStyle','none','DisplayName','sample 4')
 % plot(dados(:,1),dados(:,6),'Parent',axes1,'Color',[0 1 1],...
 %     'MarkerSize',4,'Marker','o','LineStyle','none','DisplayName','sample 5')
 % plot(dados(:,1),dados(:,7),'Parent',axes1,'Color',[0.2 0.2 0.5],...
@@ -82,12 +83,12 @@ plot(dados(:,1),dados(:,5),'Parent',axes1,'Color',[0 1 0],...
 %dados=load('../conc/conc_amostra_0.dat');
 plot(ref(:,1),ref(:,2),'Parent',axes1,'Color',[1 0 0],...
     'MarkerSize',4,'LineWidth',2,'DisplayName','ref. 1')
-plot(ref(:,1),ref(:,3),'Parent',axes1,'Color',[0 0 1],...
-    'MarkerSize',4,'LineWidth',2,'DisplayName','ref. 2')
-plot(ref(:,1),ref(:,4),'Parent',axes1,'Color',[0 0 0],...
-    'MarkerSize',4,'LineWidth',2,'DisplayName','ref. 3')
-plot(ref(:,1),ref(:,5),'Parent',axes1,'Color',[0 1 0],...
-    'MarkerSize',4,'LineWidth',2,'DisplayName','ref. 4')
+% plot(ref(:,1),ref(:,3),'Parent',axes1,'Color',[0 0 1],...
+%     'MarkerSize',4,'LineWidth',2,'DisplayName','ref. 2')
+% plot(ref(:,1),ref(:,4),'Parent',axes1,'Color',[0 0 0],...
+%     'MarkerSize',4,'LineWidth',2,'DisplayName','ref. 3')
+% plot(ref(:,1),ref(:,5),'Parent',axes1,'Color',[0 1 0],...
+%     'MarkerSize',4,'LineWidth',2,'DisplayName','ref. 4')
 % plot(ref(:,1),ref(:,6),'Parent',axes1,'Color',[0 1 1],...
 %     'MarkerSize',4,'LineWidth',2,'DisplayName','ref. 5')
 % plot(ref(:,1),ref(:,7),'Parent',axes1,'Color',[0.2 0.2 .5],...
@@ -139,7 +140,7 @@ xlabel('$t (day)$','FontSize',16,'FontName','Times New Roman',...
     'FontAngle','italic','Interpreter','latex');
 
 % Create ylabel
-ylabel('Oil rate ($m^3/day$)','FontSize',16,'FontName',...
+ylabel('Pressure ($MPa$)','FontSize',16,'FontName',...
     'Times New Roman','FontAngle','italic','Interpreter','latex');
 % Create legend
 legend1 = legend(axes1,'show');
@@ -148,7 +149,7 @@ set(legend1,'Box','off');
 
 % Print
 base=['../figuras/conc_' base_name];
-print('-djpeg90',base)
+%print('-djpeg90',base)
 print('-depsc','-r100',base)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

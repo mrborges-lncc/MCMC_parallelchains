@@ -11,7 +11,7 @@ EXECUTAVEL=${DIRBIN}/${NOMEEXECUTAVEL}
 
 #### definicao do comando a ser executado
 maquina=$(hostname)
-comando="( cd ${dirExp}; time  ${EXECUTAVEL})"
+comando="( cd ${dirExp}; ${EXECUTAVEL})"
 
 if [ -e ${EXECUTAVEL} ] 
 then

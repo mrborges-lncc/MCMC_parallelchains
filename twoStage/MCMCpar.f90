@@ -4898,10 +4898,12 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   FIRST  = .TRUE.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!  XEPS   = 2.38/SQRT(2.0*REAL(DIM))
-  XEPS   = SIG(K)
-  XEPS   = GAMMA_DREAM_METHOD(SIG(K),&
+  XEPS   = 2.38/SQRT(2.0*REAL(DIM))
+!  XEPS   = SIG(K)
+  XEPS   = GAMMA_DREAM_METHOD(XEPS,&
        CONTADORC,NFREQ(K),VARPROP(K))
+!  XEPS   = GAMMA_DREAM_METHOD(SIG(K),&
+!       CONTADORC,NFREQ(K),VARPROP(K))
 !  WRITE(*,100)XEPS
   IERROR = 0
   XCS    = SQRT(1.0E-03)
@@ -4974,12 +4976,12 @@ REAL FUNCTION GAMMA_DREAM_METHOD(SIGK,CT,NFREQ,VP)
   !  CALL RANDOM_SEED()
   AUX = SIGK
 !
-  IF(VP.EQ.1)THEN
-     TOL   = (1.0D-01)*SIGK
-     CALL RANDOM_NUMBER(AUX)
-     AUX = (SIGK-TOL)*AUX + TOL
-  END IF
-  IF(MOD(CT,NFREQ).EQ.0) AUX = SQRT(0.5) - 1.0e-2
+!  IF(VP.EQ.1)THEN
+!     TOL   = (1.0D-01)*SIGK
+!     CALL RANDOM_NUMBER(AUX)
+!     AUX = (SIGK-TOL)*AUX + TOL
+!  END IF
+  IF(MOD(CT,NFREQ).EQ.0) AUX = 2.0 * SIGK
 !
   WRITE(*,100)SIGK,AUX
   GAMMA_DREAM_METHOD = AUX

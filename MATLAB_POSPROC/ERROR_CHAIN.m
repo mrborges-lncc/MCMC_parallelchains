@@ -1,8 +1,8 @@
 clear;
-base_name = 'KL5000_RW_RK0';
+base_name = 'KLfull_DE_RK0';
 %file_name = ['../MCMC/error/erros_' base_name '.dat']
-file_name = ['../twoStage/error/erros_' base_name '.dat']
-file_name2= ['../twoStage/out/nchain_' base_name '.dat']
+file_name = ['~/MCMCde/twoStage/error/erros_' base_name '.dat']
+file_name2= ['~/MCMCde/twoStage/out/nchain_' base_name '.dat']
 dados =load(file_name);
 dados2=load(file_name2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
