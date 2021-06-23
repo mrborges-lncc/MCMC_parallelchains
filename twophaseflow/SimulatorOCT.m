@@ -165,17 +165,19 @@ E     = 1 * giga * Pascal; %% Young's module
 nu    = 0.3;               %% Poisson's ratio
 alpha = 1;                 %% Biot's coefficient
 CompO = 1.0e-05/psia;      %% Oil compressibility
-params = poroParams(mean(rock.poro), true, 'E', mean(E),...
-    'nu', mean(nu), 'alpha', mean(alpha), 'K_f', 1/CompO);
+% params = poroParams(mean(rock.poro), true, 'E', mean(E),...
+%     'nu', mean(nu), 'alpha', mean(alpha), 'K_f', 1/CompO);
+params.gamma = 0.719172896357077;
 ptop = overburden * params.gamma;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Compute BHPressure
 if PRbhp < TOL
     g     = norm(gravity);
-    equil = ode23(@(z,p) g.* rho(2), ...
-        [0, max(G.nodes.coords(:,3))], patm);
-    BHPressure = reshape(deval(equil, max(G.cells.centroids(:,3))),...
-        [], 1);  clear equil
+%    equil = ode23(@(z,p) g.* rho(2), ...
+%        [0, max(G.nodes.coords(:,3))], patm);
+%    BHPressure = reshape(deval(equil, max(G.cells.centroids(:,3))),...
+%        [], 1);  clear equil
+    BHPressure = g.* rho(2) * max(G.nodes.coords(:,3));
 else
     BHPressure = PRbhp;
 end
@@ -250,7 +252,7 @@ nstep    = numel(dt);
 wellSols = cell(nstep+1,1);  wellSols{1} = getWellSol(W, sol, fluid);
 oip      = zeros(nstep+1,1); oip(1) = sum(sol.s(:,2).*pv);
 t = 0;
-% hwb = waitbar(t,'Simulation ..');
+%hwb = waitbar(t,'Simulation ..');
 for n=1:nstep
     t = t + dt(n);
     fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
@@ -266,9 +268,9 @@ for n=1:nstep
     %% Saving results at wells
     save_data(sol,G,W,wellSols{n+1},salva,nome,exper,(t/day),n,njump,ndt,nini,...
         s_monitores,p_monitores,[]);
-%     waitbar(t/TT,hwb);
+%    waitbar(t/TT,hwb);
 end
-% close(hwb);
+%close(hwb);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Plot %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -372,9 +374,11 @@ if printa == 1
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-telapsed = toc(tstart);
-Totaltime= seconds(telapsed);
-Totaltime.Format = 'hh:mm:ss';
+secs = toc(tstart);
+horas= floor(secs/360);
+minutes = floor((secs - horas * 360)/60);
+seconds = secs - (horas * 360 + minutes * 60);
+Totaltime= [num2str(horas,'%d') 'h:' num2str(minutes,'%d') 'min:' num2str(seconds,'%2.1f') 'sec'];
 fprintf('\n =================================================\n')
 fprintf(' Total time elapsed.......: %s\n',char(Totaltime))
 fprintf(' =================================================\n')%clear
