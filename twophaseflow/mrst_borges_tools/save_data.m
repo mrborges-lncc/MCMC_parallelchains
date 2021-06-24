@@ -34,11 +34,7 @@ function np = save_data(sol,G,W,wellsol,printa,nome,exper,t,n,njump,ndt,rep,smon
         end
         %% files %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if n == 0
-            if isfile(nomeprod)
-                mode = 'w';
-            else
-                mode = 'a';
-            end
+            mode = 'w';
         else
             mode = 'a';
         end
@@ -51,11 +47,7 @@ function np = save_data(sol,G,W,wellsol,printa,nome,exper,t,n,njump,ndt,rep,smon
         fclose(fileIDprod);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if n == 0
-            if isfile(nomewcut)
-                mode = 'w';
-            else
-                mode = 'a';
-            end
+            mode = 'w';
         else
             mode = 'a';
         end
@@ -68,11 +60,7 @@ function np = save_data(sol,G,W,wellsol,printa,nome,exper,t,n,njump,ndt,rep,smon
         fclose(fileIDwcut);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if n == 0
-            if isfile(nomepres)
-                mode = 'w';
-            else
-                mode = 'a';
-            end
+            mode = 'w';
         else
             mode = 'a';
         end
@@ -85,11 +73,7 @@ function np = save_data(sol,G,W,wellsol,printa,nome,exper,t,n,njump,ndt,rep,smon
         fclose(fileIDpres);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if n == 0
-            if isfile(nomesmon)
-                mode = 'w';
-            else
-                mode = 'a';
-            end
+            mode = 'w';
         else
             mode = 'a';
         end
@@ -102,11 +86,7 @@ function np = save_data(sol,G,W,wellsol,printa,nome,exper,t,n,njump,ndt,rep,smon
         fclose(fileIDsmon);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if n == 0
-            if isfile(nomepmon)
-                mode = 'w';
-            else
-                mode = 'a';
-            end
+            mode = 'w';
         else
             mode = 'a';
         end
@@ -119,11 +99,7 @@ function np = save_data(sol,G,W,wellsol,printa,nome,exper,t,n,njump,ndt,rep,smon
         fclose(fileIDpmon);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if n == 0
-            if isfile(nomedmon)
-                mode = 'w';
-            else
-                mode = 'a';
-            end
+            mode = 'w';
         else
             mode = 'a';
         end

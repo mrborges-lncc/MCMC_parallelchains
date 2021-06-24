@@ -12,6 +12,8 @@ rm -f select_thetas/theta_v*;
 rm -rf ../twophaseflow/exp0*;
 rm -rf ../twophaseflow/exp1*;
 rm -f  ../twophaseflow/output*.out;
+rm -f  ../twophaseflow/*.mat;
+rm -f  ../twophaseflow/octave-workspace;
 rm -rf ../simuladorRigido/exp0*;
 rm -rf ../simuladorRigido/exp1*;
 rm -f  ../simuladorRigido/output*.out;

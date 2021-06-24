@@ -1,4 +1,7 @@
-function Simulator(exper)
+function SimulatorOCT
+args = argv();
+num= str2num(args{1});
+exper = num;
 exper = ['exp' num2str(exper,'%0.3d')];
 % Single phase flow Simulator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 25/03/2020
@@ -35,6 +38,7 @@ monitorsat  = 1;  %% if == 1 saturation monitors at some points
 nome  = 'amostra';
 % nome  = 'ref';
 et    = 0;
+verb = false;
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -256,9 +260,9 @@ t = 0;
 for n=1:nstep
     t = t + dt(n);
     fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
-    sol  = incompTPFA(sol, G, hT, fluid, 'wells', W);
+    sol  = incompTPFA(sol, G, hT, fluid, 'wells', W, 'verbose', verb);
     sol  = explicitTransport(sol, G, dt(n), rock, fluid,...
-        'wells', W, 'verbose', true, 'dt_factor', 0.75);
+        'wells', W, 'verbose', verb, 'dt_factor', 0.75);
     npk  = PandSfigures(sol,G,W,printa,vw,nome,et,n,nprjump,(t/day),npk,ndt,lim);
     wellSols{n+1} = getWellSol(W, sol, fluid);
     oip(n+1) = sum(sol.s(:,2).*pv);
@@ -382,3 +386,8 @@ Totaltime= [num2str(horas,'%d') 'h:' num2str(minutes,'%d') 'min:' num2str(second
 fprintf('\n =================================================\n')
 fprintf(' Total time elapsed.......: %s\n',char(Totaltime))
 fprintf(' =================================================\n')%clear
+end
+SimulatorOCT();
+printf('\nEND\n');
+clear;
+exit;

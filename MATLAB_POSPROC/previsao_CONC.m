@@ -1,7 +1,7 @@
 clear;
 close all
 loc=100;
-jump=1;
+jump=4;
 N=00;
 B=450;
 A=50;
@@ -9,8 +9,8 @@ A=50;
 Nch_ini = 0;
 Nch_fim = 3;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(120, 1, Nchains);
-Nfim = [254 141 212 194];
+Nini = repmat(100, 1, Nchains);
+Nfim = [130 156 182 105];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -48,16 +48,16 @@ hold(axes1,'all');
 
 dados = dmedio;
 errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
-    'Parent',axes1,'Color',[0.85 0.33 0.10],'MarkerSize',2,'Marker','o',...
+    'Parent',axes1,'Color',[0.85 0.33 0.10],'MarkerSize',4,'Marker','o',...
     'LineStyle','none','DisplayName','mean 1','LineWidth',1)
 errorbar(dados(1:jump:end,1),dados(1:jump:end,3),erro(1:jump:end,3),...
-    'Parent',axes1,'Color',[0.07 0.62 1],'MarkerSize',2,'Marker','s',...
+    'Parent',axes1,'Color',[0.07 0.62 1],'MarkerSize',4,'Marker','s',...
     'LineStyle','none','DisplayName','mean 2','LineWidth',1)
 errorbar(dados(1:jump:end,1),dados(1:jump:end,4),erro(1:jump:end,4),...
-    'Parent',axes1,'Color',[0.93 0.69 0.13],'MarkerSize',2,'Marker','o',...
+    'Parent',axes1,'Color',[0.93 0.69 0.13],'MarkerSize',4,'Marker','o',...
     'LineStyle','none','DisplayName','mean 3','LineWidth',1)
 errorbar(dados(1:jump:end,1),dados(1:jump:end,5),erro(1:jump:end,4),...
-    'Parent',axes1,'Color',[0 0 0],'MarkerSize',2,'Marker','s',...
+    'Parent',axes1,'Color',[0 0 0],'MarkerSize',4,'Marker','s',...
     'LineStyle','none','DisplayName','mean 4','LineWidth',1)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dados=ref;

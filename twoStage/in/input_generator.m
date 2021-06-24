@@ -20,7 +20,7 @@ dlg_title = 'EXPERIMENT INPUT';
 num_lines = [1 70];
 def    = {'TwoPhase3D','amostra','2','1','1','2','1'};
 answer = inputdlg(prompt,dlg_title,num_lines,def,options);
-test   = int16(size(answer,1));
+test   = int64(size(answer,1));
 if(test==0)
     clear all
     error('ERROR');
@@ -28,11 +28,11 @@ end
 ans = char(answer);
 nome_exp    = char(answer(1,:));
 nome_sample = char(answer(2,:));
-ns   = int16(str2num(ans(3,:)));
-np   = int16(str2num(ans(4,:)));
-maxs = int16(str2num(ans(5,:)));
-maxf = int16(str2num(ans(6,:)));
-ndata= int16(str2num(ans(7,:)));
+ns   = int64(str2num(ans(3,:)));
+np   = int64(str2num(ans(4,:)));
+maxs = int64(str2num(ans(5,:)));
+maxf = int64(str2num(ans(6,:)));
+ndata= int64(str2num(ans(7,:)));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% DATA MANAGEMENT
 prompt = [];
@@ -66,16 +66,16 @@ for i=1:ndata
     end
     num_lines = [1 70];
     answer = inputdlg(prompt,dlg_title,num_lines,def,options);
-    test   = int16(size(answer,1));
+    test   = int64(size(answer,1));
     if(test==0)
         clear all
        error('ERROR');
     end
     ans = char(answer);
-    nwells = [nwells; int16(str2num(ans(1,:)))];
-    lkh    = [lkh; int16(str2num(ans(2,:)))];
-    init   = [init; int16(str2num(ans(3,:)))];
-    final  = [final; int16(str2num(ans(4,:)))];
+    nwells = [nwells; int64(str2num(ans(1,:)))];
+    lkh    = [lkh; int64(str2num(ans(2,:)))];
+    init   = [init; int64(str2num(ans(3,:)))];
+    final  = [final; int64(str2num(ans(4,:)))];
     nor    = char(answer(5,:));
     nomer  = char(answer(6,:));
     nomes  = char(answer(7,:));
@@ -128,16 +128,16 @@ for i=1:np
     num_lines = [1 70];
     def    = {'2','10000','1','10','0.25','../gera_KL/MATLAB/out/avet1_1x1x1_100x100x1_l0.2x0.2x0.02_M10000.bin'};
     answer = inputdlg(prompt,dlg_title,num_lines,def,options);
-    test   = int16(size(answer,1));
+    test   = int64(size(answer,1));
     if(test==0)
         clear all
        error('ERROR');
     end
     ans    = char(answer);
-    prop   = [prop; int16(str2num(ans(1,:)))];
-    stcd   = [stcd; int16(str2num(ans(2,:)))];
-    njump  = [njump; int16(str2num(ans(3,:)))];
-    fjump  = [fjump; int16(str2num(ans(4,:)))];
+    prop   = [prop; int64(str2num(ans(1,:)))];
+    stcd   = [stcd; int64(str2num(ans(2,:)))];
+    njump  = [njump; int64(str2num(ans(3,:)))];
+    fjump  = [fjump; int64(str2num(ans(4,:)))];
     jump   = [jump; double(str2num(ans(5,:)))];
     nome   = char(answer(6,:))
     Tmat   = char(Tmat,nome);
@@ -147,9 +147,9 @@ Tmat = Tmat(2:end,:)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 list = {'Blackbox','SIMULADOR','simuladorRigido','simul_comp',...
     'UW SIMULATOR','SIMULADOR_VISCOELASTICO',...
-    'twophaseflow'};
+    'twophaseflow','twophaseflowOCT'};
 [indx,tf] = listdlg('ListString',list);
-simul = int16(indx-1);
+simul = int64(indx-1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if ns == 2
     prompt = [];
@@ -161,7 +161,7 @@ if ns == 2
     num_lines = [1 70];
     def    = {'0','1','2'};
     answer = inputdlg(prompt,dlg_title,num_lines,def,options);
-    test   = int16(size(answer,1));
+    test   = int64(size(answer,1));
     if(test==0)
         clear all
        error('ERROR');
@@ -170,7 +170,7 @@ if ns == 2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     up = zeros(np,1);
     for i=1:np
-        up(i) = int16(str2num(ans(i,:)));
+        up(i) = int64(str2num(ans(i,:)));
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -217,5 +217,6 @@ for i=1:NSEED
 end
 fprintf(fileID,'\n%12d',0);
 fclose(fileID);
+clear
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

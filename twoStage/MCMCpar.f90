@@ -363,7 +363,7 @@ PROGRAM MAIN
 334  FORMAT(I7,2X,E15.7)
 1000 FORMAT('((----- REFAZENDO SIMULACAO FINE NO RANK: ',I2,'-----))')
 1001 FORMAT('((----- REFAZENDO SIMULACAO COARSE NO RANK: ',I2,'-----))')
-555  FORMAT('ACCEPTED_JUMP AT RANK',I3,': ',E8.2)
+555  FORMAT('ACCEPTED_JUMP AT RANK',I3,': ',F8.2)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 END PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -984,7 +984,10 @@ SUBROUTINE INITIAL(NERROREAD,NK,NPROC,TFILE)
      IF(NK.EQ.0)WRITE(*,*)'<<< SIMULADOR_VISCOELASTICO >>>'
   END IF
   IF(NSIMUL.EQ.6)THEN
-     IF(NK.EQ.0)WRITE(*,*)'<<< TWOPHASEFLOW >>>'
+     IF(NK.EQ.0)WRITE(*,*)'<<< TWOPHASEFLOW MATLAB >>>'
+  END IF
+  IF(NSIMUL.EQ.7)THEN
+     IF(NK.EQ.0)WRITE(*,*)'<<< TWOPHASEFLOW OCTAVE >>>'
   END IF
 !!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3167,6 +3170,12 @@ SUBROUTINE SIMULADOR_C(NK)
      COMMAND=TRIM(COMMAND)// ('); exit;"  > output')//TRIM(ADJUSTL(NUMB))//('.out')
   END IF
 !
+  IF(NSIMUL.EQ.7)THEN
+     COMMAND='cd ./twophaseflow/; octave --no-gui SimulatorOCT.m'
+     COMMAND=TRIM(COMMAND)//' '//TRIM(ADJUSTL(NUMB))
+     COMMAND=TRIM(COMMAND)// (' ;')
+  END IF
+!
   WRITE(*,200)NK,COMMAND
   CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
 !
@@ -3396,6 +3405,12 @@ SUBROUTINE SIMULADOR_F(NK)
      COMMAND=TRIM(COMMAND)// ('); exit;"  > output')//TRIM(ADJUSTL(NUMB))//('.out')
   END IF
 !
+  IF(NSIMUL.EQ.7)THEN
+     COMMAND='cd ../twophaseflow/; octave --no-gui SimulatorOCT.m '
+     COMMAND=TRIM(COMMAND)//' '//TRIM(ADJUSTL(NUMB))
+     COMMAND=TRIM(COMMAND)// (' ;')
+  END IF
+!
   
   WRITE(*,*)COMMAND
   CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
@@ -3596,6 +3611,9 @@ SUBROUTINE COPYFILES(NN,NOMEP,NK)
            COMMAND='../SIMULADOR_VISCOELASTICO/exp/fields/'
         END IF
         IF(NSIMUL.EQ.6)THEN
+           COMMAND='../twophaseflow/exp/fields/'
+        END IF
+        IF(NSIMUL.EQ.7)THEN
            COMMAND='../twophaseflow/exp/fields/'
         END IF
 
@@ -4976,11 +4994,11 @@ REAL FUNCTION GAMMA_DREAM_METHOD(SIGK,CT,NFREQ,VP)
   !  CALL RANDOM_SEED()
   AUX = SIGK
 !
-!  IF(VP.EQ.1)THEN
-!     TOL   = (1.0D-01)*SIGK
-!     CALL RANDOM_NUMBER(AUX)
-!     AUX = (SIGK-TOL)*AUX + TOL
-!  END IF
+  IF(VP.EQ.1)THEN
+     TOL   = (5.0D-01)*SIGK
+     CALL RANDOM_NUMBER(AUX)
+     AUX = (SIGK-TOL)*AUX + TOL
+  END IF
   IF(MOD(CT,NFREQ).EQ.0) AUX = 2.0 * SIGK
 !
   WRITE(*,100)SIGK,AUX
@@ -5187,6 +5205,22 @@ SUBROUTINE COPY_DIR(NPR,NUMSIMUL,NS)
   END IF
 !
   IF(NUMSIMUL.EQ.6)THEN
+     WRITE(NUMB,'(I4.3)')NPR
+     COMMAND=TRIM('cp -r ../twophaseflow/exp')
+     COMMAND=TRIM(COMMAND)//TRIM(' ../twophaseflow/exp') &
+          //TRIM(ADJUSTL(NUMB))
+     WRITE(*,*)COMMAND
+     CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
+     IF(NS.EQ.2)THEN
+        COMMAND=TRIM('cp -r ./twophaseflow/exp')
+        COMMAND=TRIM(COMMAND)//TRIM(' ./twophaseflow/exp') &
+             //TRIM(ADJUSTL(NUMB))
+        WRITE(*,*)COMMAND
+        CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
+     END IF
+  END IF
+!
+  IF(NUMSIMUL.EQ.7)THEN
      WRITE(NUMB,'(I4.3)')NPR
      COMMAND=TRIM('cp -r ../twophaseflow/exp')
      COMMAND=TRIM(COMMAND)//TRIM(' ../twophaseflow/exp') &

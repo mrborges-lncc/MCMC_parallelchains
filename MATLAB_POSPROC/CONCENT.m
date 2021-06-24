@@ -1,6 +1,6 @@
 clear;
 close all
-base_name = 'prod_D2_KLfull_DE_RK3_146';
+base_name = 'prod_D2_KLfull_DE_RK3_0';
 %dados=load('../prod/prodF_ref_0.dat');
 %dados=load('../SIMULADOR_ELASTICO/exp/conc/conc_ref_0.dat');
 dados=load('/home/mrborges/MCMCde/twophaseflow/exp/prod/prod_referencia_0.dat');
