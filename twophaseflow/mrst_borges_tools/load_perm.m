@@ -7,9 +7,9 @@ function [K] = load_perm(G,namex,namey,namez,depth,nini,nD)
     Lx0 = L(1); Ly0 = L(2); Lz0 = L(3);
     n  = G.cartDims;
     nx = int16(n(1)); ny = int16(n(2)); nz = int16(n(3));
-    dx = Lx/double(nx);
-    dy = Ly/double(ny);
-    dz = Lz/double(nz);
+    dx = (Lx-Lx0)/double(nx);
+    dy = (Ly-Ly0)/double(ny);
+    dz = (Lz-Lz0)/double(nz);
     [yx, Llx, Lly, Llz, nnx, nny, nnz] = perm_reader(namex,nini,nD);
     if(nD == '2D') Llz = Lz; dp = 0.0; end;
     if(abs(Llx-Lx)>TOL || abs(Lly-Ly)>TOL || abs(Llz-Lz+dp)>TOL )

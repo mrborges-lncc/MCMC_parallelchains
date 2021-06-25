@@ -28,6 +28,7 @@ grav= 1;
 lim = [0 0];
 %lim = 1.0e+02 * [0.85   2.0];
 heter = 1;   %% if 0 => homog.; 1 => heter.; 2 => read *.mat
+phiheter = 1;
 printa= 10;
 salva = 1;   %% if == 1 save well informations
 monitorpres = 1;  %% if == 1 pressure monitors at some points
@@ -46,10 +47,10 @@ ny  = 51;
 nz  = 5;
 well_r= 0.125;          %% well radius
 TT    = 180;            %% days
-nstep = 60;            %% number of time steps for pressure-velocity system
-nprint= 30;             %% Number of impressions
-ndata = 60;            %% Number of impressions of data
-ndt   = 20;
+nstep = 60;             %% number of time steps for pressure-velocity system
+nprint= 20;             %% Number of impressions
+ndata = 60;             %% Number of impressions of data
+ndt   = 10;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
 [ndata njump] = ajusteImpress(ndata,nstep);
 PRbhp = 0.0;            %% production well pressure
@@ -79,6 +80,7 @@ s_monitores = monitors(G, monitorsat , [exper '/in/input_sat.in']);
 filenx = [exper '/fields/perm_' nome '_'];
 fileny = [exper '/fields/perm_' nome '_'];
 filenz = [exper '/fields/perm_' nome '_'];
+filephi= [exper '/fields/poro_' nome '_'];
 fieldnz = 0;
 nini = 0;
 TOL  = 1.0e-7;
@@ -96,6 +98,12 @@ else
         K = [100 100 100]*milli*darcy;
     end
 end
+if phiheter == 1
+    phibeta = phi;
+    phirho  = 0.23;
+    phi = load_poro(G,filephi,depth,nini,nD);
+    phi = phibeta * exp(phirho * phi);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rock model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rock = makeRock(G, K, phi);
@@ -106,6 +114,7 @@ fprintf('\n==============================================================\n\n')
 fprintf('Mean k_x....: %4.1f mD \t | \t std k_x....: %4.1f mD\n',mK(1),sK(1));
 fprintf('Mean k_y....: %4.1f mD \t | \t std k_y....: %4.1f mD\n',mK(2),sK(2));
 fprintf('Mean k_z....: %4.1f mD \t | \t std k_z....: %4.1f mD\n',mK(3),sK(3));
+fprintf('Mean phi....: %4.2f mD \t | \t std k_z....: %4.2f mD\n',mean(rock.poro),std(rock.poro));
 fprintf('\n==============================================================\n')
 clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,6 +130,10 @@ if printa == 1 && heter == 1
     print('-depsc','-r600', base);
     plot_rock(rock.perm(:,3),G,'Y','$\kappa_z$',color,lim,vw,3);
     base=['../figuras/permKz_' nome];
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600', base);
+    plot_rock_poro(rock.poro,G,'Yn',1,1,'$\phi$',color,[0 0],vw,4)
+    base=['../figuras/phi_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     pause(et); clf; close all
@@ -307,7 +320,7 @@ if printa == 1
     ylabel('$y (m)$','FontSize',14,'Interpreter','latex');
     xlabel('$x (m)$','FontSize',14,'Interpreter','latex');
     hold off 
-    base=['figuras/velocity_' nome];
+    base=['../figuras/velocity_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     pause(et);

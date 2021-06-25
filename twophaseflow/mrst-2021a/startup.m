@@ -21,6 +21,9 @@ along with MRST.  If not, see <http://www.gnu.org/licenses/>.
 %}
 
    build_mrst_path_tree();
+   
+   % octave
+   mrstPath('add','octave','./modules/octave/')
 
    % Register known third-party modules
    mod_3rdparty = { 'matlab_bgl' };

@@ -937,8 +937,12 @@ SUBROUTINE INITIAL(NERROREAD,NK,NPROC,TFILE)
         FILE_INFIELD(I) = '../gera_KL/MVN2/in'
      END IF
      IF(GERATIPO(I).EQ.13)THEN
-        IF(NK.EQ.0)WRITE(*,*)'<<< GERADOR FORTRAN CAMPOS #D >>>'
+        IF(NK.EQ.0)WRITE(*,*)'<<< GERADOR FORTRAN CAMPOS 3D >>>'
         FILE_INFIELD(I) = '../gera_KL/FORTRAN_KL3D/in'
+     END IF
+     IF(GERATIPO(I).EQ.14)THEN
+        IF(NK.EQ.0)WRITE(*,*)'<<< GERADOR FORTRAN CAMPOS 3D >>>'
+        FILE_INFIELD(I) = '../gera_KL/FORTRAN_KL3D_2/in'
      END IF
 !
      WRITE(NUMB,'(I4.3)')NK
@@ -1011,7 +1015,7 @@ SUBROUTINE INITIAL(NERROREAD,NK,NPROC,TFILE)
           GERATIPO(I).EQ.32.OR.GERATIPO(I).EQ.33.OR.&
           GERATIPO(I).EQ.34.OR.GERATIPO(I).EQ.6.OR.&
           GERATIPO(I).EQ.7.OR.GERATIPO(I).EQ.8.OR.&
-          GERATIPO(I).EQ.13)THEN
+          GERATIPO(I).EQ.13.OR.GERATIPO(I).EQ.14)THEN
         IF(NSINAL.EQ.0)THEN
            ALLOCATE(THETA(NPRIORR,MAX(MAXVAL(MKL),MAXVAL(NTOTAL))))
            ALLOCATE(THETAN(NPRIORR,MAX(MAXVAL(MKL),MAXVAL(NTOTAL))))
@@ -1185,6 +1189,10 @@ SUBROUTINE INITIAL(NERROREAD,NK,NPROC,TFILE)
            CALL GERATHETA(MKL(K),GERATIPO(K),K,NK)
         ENDIF
 !
+        IF(GERATIPO(K).EQ.14)THEN
+           CALL GERATHETA(MKL(K),GERATIPO(K),K,NK)
+        ENDIF
+!
      END DO
   END IF
 !
@@ -1265,6 +1273,12 @@ SUBROUTINE COPY_DIRGER(NPR,NUMSIMUL,NS)
      IF(TIPO.EQ.13)THEN
         COMMAND=('cp -r ../gera_KL/FORTRAN_KL3D/in/ ')//&
              (' ../gera_KL/FORTRAN_KL3D/in')//TRIM(ADJUSTL(NUMB))//('/')
+        WRITE(*,*)COMMAND
+        CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
+     END IF
+     IF(TIPO.EQ.14)THEN
+        COMMAND=('cp -r ../gera_KL/FORTRAN_KL3D_2/in/ ')//&
+             (' ../gera_KL/FORTRAN_KL3D_2/in')//TRIM(ADJUSTL(NUMB))//('/')
         WRITE(*,*)COMMAND
         CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
      END IF
@@ -1396,7 +1410,7 @@ SUBROUTINE READ_FIELD(NERROREAD,K,NK)
      IF(NK.EQ.0)WRITE(*,8002)NFILE
 !
      IF(GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.33.OR.&
-          GERATIPO(K).EQ.13)THEN
+          GERATIPO(K).EQ.13.OR.GERATIPO(K).EQ.14)THEN
         READ(IN_FILE,1000)DIMX(K),DIMY(K),DIMZ(K)
         IF(NK.EQ.0)WRITE(*,8801)DIMX(K),DIMY(K),DIMZ(K)
 !
@@ -1462,7 +1476,7 @@ SUBROUTINE READ_FIELD(NERROREAD,K,NK)
 !
      IF(GERATIPO(K).EQ.3.OR.GERATIPO(K).EQ.31&
           .OR.GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.34&
-          .OR.GERATIPO(K).EQ.13)THEN
+          .OR.GERATIPO(K).EQ.13.OR.GERATIPO(K).EQ.14)THEN
         READ(IN_FILE,3000)MMKL
         IF(NK.EQ.0)WRITE(*,2005)MMKL
 !
@@ -1564,7 +1578,8 @@ SUBROUTINE READ_FIELD(NERROREAD,K,NK)
         STOP
      END IF
 !
-     IF(GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.33.OR.GERATIPO(K).EQ.13)THEN
+     IF(GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.33.OR.GERATIPO(K).EQ.13&
+          .OR.GERATIPO(K).EQ.14)THEN
         DO I=0,NCOND(K)-1
            READ(IN_FILE,1011)VET(K,0,I),VET(K,1,I),VET(K,2,I),&
                 VET(K,3,I)
@@ -2149,7 +2164,7 @@ SUBROUTINE GERAFILEIN(NERROREAD,NRK,NPROC,K)
      ENDDO
   ENDIF
 !
-  IF(GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.13)THEN
+  IF(GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.13.OR.GERATIPO(K).EQ.14)THEN
      WRITE(IN_FILE,8000)INIF,NFILES
      WRITE(IN_FILE,1000)DIMX(K),DIMY(K),DIMZ(K)
      WRITE(IN_FILE,2000)NX(K),NY(K),NZ(K)
@@ -2371,6 +2386,11 @@ SUBROUTINE GERADOR(NN,NK,K)
           TRIM(ADJUSTL(NUMB))//(' > output_')//TRIM(ADJUSTL(NUMB))//('.out')
   ENDIF
 !
+  IF(GERATIPO(K).EQ.14)THEN
+     COMMAND=('cd ../gera_KL/FORTRAN_KL3D_2/; sh rodarKL.sh in')//&
+          TRIM(ADJUSTL(NUMB))//(' > output_')//TRIM(ADJUSTL(NUMB))//('.out')
+  ENDIF
+!
   WRITE(*,*)COMMAND
   CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
 !
@@ -2379,7 +2399,8 @@ SUBROUTINE GERADOR(NN,NK,K)
   IF(GERATIPO(K).EQ.0.OR.GERATIPO(K).EQ.1.OR.&
        GERATIPO(K).EQ.3.OR.GERATIPO(K).EQ.31.OR.&
        GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.33.OR.&
-       GERATIPO(K).EQ.34.OR.GERATIPO(K).EQ.13)THEN
+       GERATIPO(K).EQ.34.OR.GERATIPO(K).EQ.13.OR.&
+       GERATIPO(K).EQ.14)THEN
 !!!!!!!!!!!!!!!! LEITURA DO THETA ANTERIOR !!!!!!!!!!!!!!!!!!!!!!
      OUT_FILE = 900+NK
      IF(GERATIPO(K).EQ.0)THEN
@@ -2433,6 +2454,11 @@ SUBROUTINE GERADOR(NN,NK,K)
      END IF
      IF(GERATIPO(K).EQ.13)THEN
         NOME=ADJUSTL(TRIM('../gera_KL/FORTRAN_KL3D/out/theta'))//&
+             TRIM(ADJUSTL(NUMB))//TRIM(ADJUSTL('.dat'))
+        MK=MKL(K)
+     END IF
+     IF(GERATIPO(K).EQ.14)THEN
+        NOME=ADJUSTL(TRIM('../gera_KL/FORTRAN_KL3D_2/out/theta'))//&
              TRIM(ADJUSTL(NUMB))//TRIM(ADJUSTL('.dat'))
         MK=MKL(K)
      END IF
@@ -2504,6 +2530,11 @@ SUBROUTINE GERADOR(NN,NK,K)
      END IF
      IF(GERATIPO(K).EQ.13)THEN
         NOME=ADJUSTL(TRIM('../gera_KL/FORTRAN_KL3D/out/thetanew'))//&
+             TRIM(ADJUSTL(NUMB))//TRIM(ADJUSTL('.dat'))
+        MK=MKL(K)
+     END IF
+     IF(GERATIPO(K).EQ.14)THEN
+        NOME=ADJUSTL(TRIM('../gera_KL/FORTRAN_KL3D_2/out/thetanew'))//&
              TRIM(ADJUSTL(NUMB))//TRIM(ADJUSTL('.dat'))
         MK=MKL(K)
      END IF
@@ -2857,7 +2888,7 @@ SUBROUTINE PRIOR_RATIO()
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         IF(GERATIPO(K).EQ.3.OR.GERATIPO(K).EQ.31.OR.&
              GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.34.OR.&
-             GERATIPO(K).EQ.13)THEN
+             GERATIPO(K).EQ.13.OR.GERATIPO(K).EQ.14)THEN
            DO I=1,MKL(K)
               AUX   = THETA(K,I)-MEAN
               AUXN  = THETAN(K,I)-MEAN
@@ -3654,7 +3685,8 @@ SUBROUTINE COPYFILES(NN,NOMEP,NK)
         ENDIF
         IF(GERATIPO(K).EQ.3.OR.GERATIPO(K).EQ.31.OR.&
              GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.33.OR.&
-             GERATIPO(K).EQ.34.OR.GERATIPO(K).EQ.13)THEN
+             GERATIPO(K).EQ.34.OR.GERATIPO(K).EQ.13.OR.&
+             GERATIPO(K).EQ.14)THEN
            NAME=ADJUSTL(TRIM(NAME(7:LEN_TRIM(NAME))))
         ENDIF
         IF(GERATIPO(K).EQ.4)THEN
@@ -3841,6 +3873,43 @@ SUBROUTINE COPYFILES(NN,NOMEP,NK)
 !
         ENDIF
 !              
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        IF(GERATIPO(K).EQ.14)THEN
+           CHARAUX=TRIM('mv ../gera_KL/FORTRAN_KL3D_2/out/thetanew')//&
+                TRIM(ADJUSTL(NUMB))//('.dat ')
+           CHARAUX2=TRIM(' ../gera_KL/FORTRAN_KL3D_2/out/theta')//&
+                TRIM(ADJUSTL(NUMB))//('.dat')
+           COMMAND=TRIM(CHARAUX)//TRIM(CHARAUX2)
+           COMMAND=ADJUSTL(TRIM(COMMAND))
+!
+           WRITE(*,*)COMMAND
+!
+           CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           CHA=TRIM(ADJUSTL('cp  '))
+           WRITE(C,113)K
+           C=ADJUSTL(C)
+           NAMEOUT=TRIM(' ./select_thetas/theta_v')//&
+                TRIM(C)//TRIM(D)//TRIM(NAME_OUT)//&
+                TRIM(CHARRANK)//TRIM(D)
+           WRITE(C,113)CONT
+           C=ADJUSTL(C)
+!
+           CHARAUX =TRIM(' ../gera_KL/FORTRAN_KL3D_2/out/theta')//&
+           TRIM(ADJUSTL(NUMB))//('.dat ')
+           COMMAND=CHA//CHARAUX
+           COMMAND=TRIM(COMMAND)//NAMEOUT
+           COMMAND=ADJUSTL(TRIM(COMMAND))
+           COMMAND=TRIM(COMMAND)//TRIM(C)//TRIM(EXT)
+!
+           WRITE(*,*)COMMAND
+!
+           CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
+!
+        ENDIF
+!              
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         IF(GERATIPO(K).EQ.6)THEN
            CHARAUX=TRIM('mv ../gera_KL/MVN/out/thetanew')//&
@@ -4141,7 +4210,8 @@ SUBROUTINE COPYFILES(NN,NOMEP,NK)
            ENDIF
            IF(GERATIPO(K).EQ.3.OR.GERATIPO(K).EQ.31.OR.&
                 GERATIPO(K).EQ.32.OR.GERATIPO(K).EQ.33.OR.&
-                GERATIPO(K).EQ.34.OR.GERATIPO(K).EQ.13)THEN
+                GERATIPO(K).EQ.34.OR.GERATIPO(K).EQ.13.OR.&
+                GERATIPO(K).EQ.14)THEN
               NAME=ADJUSTL(TRIM(NAME(4:LEN_TRIM(NAME))))
            ENDIF
            IF(GERATIPO(K).EQ.4)THEN
@@ -5722,6 +5792,12 @@ SUBROUTINE SWITCH(NK,NPR,INDX,INDXT,CONTOUT,LOC)
         NOME=ADJUSTL(TRIM('../gera_KL/FORTRAN_KL3D/out/theta'))//&
              TRIM(ADJUSTL(NUMB))//TRIM(ADJUSTL('.dat'))
         NAME=ADJUSTL(TRIM('../gera_KL/FORTRAN_KL3D/out/theta'))//&
+             TRIM(ADJUSTL(NUMA))//TRIM(ADJUSTL('.dat'))
+     END IF
+     IF(GERATIPO(K).EQ.14)THEN
+        NOME=ADJUSTL(TRIM('../gera_KL/FORTRAN_KL3D_2/out/theta'))//&
+             TRIM(ADJUSTL(NUMB))//TRIM(ADJUSTL('.dat'))
+        NAME=ADJUSTL(TRIM('../gera_KL/FORTRAN_KL3D_2/out/theta'))//&
              TRIM(ADJUSTL(NUMA))//TRIM(ADJUSTL('.dat'))
      END IF
      IF(GERATIPO(K).EQ.31)THEN
