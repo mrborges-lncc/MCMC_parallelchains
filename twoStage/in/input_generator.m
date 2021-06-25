@@ -123,10 +123,9 @@ for i=1:np
         'Stochastic dimension (KL):',...
         'Jump (0 == fixed; 1 == variable):',...
         'Jump frequency:',...
-        'Jump size (mean or fixed):',...
-        'Name of eigen-vector matrix:'};
+        'Jump size (mean or fixed):'};
     num_lines = [1 70];
-    def    = {'4','13005','0','10','0.25','../gera_KL/MATLAB/out/avet1_510x510x20_51x51x5_l50x50x10_M13005.bin'};
+    def    = {'4','13005','0','10','0.25'};
     answer = inputdlg(prompt,dlg_title,num_lines,def,options);
     test   = int64(size(answer,1));
     if(test==0)
@@ -139,10 +138,10 @@ for i=1:np
     njump  = [njump; int64(str2num(ans(3,:)))];
     fjump  = [fjump; int64(str2num(ans(4,:)))];
     jump   = [jump; double(str2num(ans(5,:)))];
-    nome   = char(answer(6,:))
-    Tmat   = char(Tmat,nome);
+%     nome   = char(answer(6,:))
+%     Tmat   = char(Tmat,nome);
 end
-Tmat = Tmat(2:end,:)
+%Tmat = Tmat(2:end,:);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 list = {'Blackbox','SIMULADOR','simuladorRigido','simul_comp',...
@@ -186,7 +185,9 @@ if ns == 2
         fprintf(fileID,'%10d',up(i));
     end
 else
-    fprintf(fileID,'%10d',0);
+    for i=1:np
+        fprintf(fileID,'%10d',0);
+    end
 end
 fprintf(fileID,'\n');
 fprintf(fileID,'%10d\n',maxs);
@@ -198,9 +199,9 @@ for i=1:ndata
     fprintf(fileID,'%10d%10d%10d%10d\n',nwells(i),lkh(i),init(i),final(i));
 end
 for i=1:np
-    fprintf(fileID,'%10d%10d%10d%10d%10d%10d%12.5e\n',gera(i),prop(i),1,stcd(i),...
+    fprintf(fileID,'%10d%10d%10d%10d%10d%10d%12.5e\n',gera(i),prop(i),0,stcd(i),...
         njump(i),fjump(i),jump(i));
-    fprintf(fileID,'%s\n',Tmat(i,:));
+%    fprintf(fileID,'%s\n',Tmat(i,:));
 end
 for i=1:ndata
     fprintf(fileID,'%12.5e\n',ef(i));
