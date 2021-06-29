@@ -392,9 +392,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 secs = toc(tstart);
-horas= floor(secs/360);
-minutes = floor((secs - horas * 360)/60);
-seconds = secs - (horas * 360 + minutes * 60);
+horas= floor(secs/3600);
+minutes = floor((secs - horas * 3600)/60);
+seconds = secs - (horas * 3600 + minutes * 60);
 Totaltime= [num2str(horas,'%d') 'h:' num2str(minutes,'%d') 'min:' num2str(seconds,'%2.1f') 'sec'];
 fprintf('\n =================================================\n')
 fprintf(' Total time elapsed.......: %s\n',char(Totaltime))
