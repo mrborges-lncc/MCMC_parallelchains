@@ -3,31 +3,46 @@ close all
 loc=100;
 jump=3;
 N=60;
-B=125;
-A=70;
+B=150;
+A=0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
 Nch_fim = 3;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(100, 1, Nchains);
-Nfim = [130 156 182 105];
+Nini = repmat(50, 1, Nchains);
+Nfim = [82 80 91 104];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
-base_name = 'prod_D1_KLfull_DE_RK'
-dados=load('/home/mrborges/MCMCde/twophaseflow/exp/pres/pres_ref_0.dat');
+nome = 'TwoPhase3D_DE_RK';
+base_name = ['prod_D1_' nome];
+dados=load('../twophaseflow/exp/pres/pres_referencia_0.dat');
 ref=dados;
-home = '/home/mrborges/MCMCde/twoStage/select_prod/'
+home = '../twoStage/select_prod/'
 %
-data=zeros(size(ref,1),size(ref,2),sum(Nt));
-k = 0;
+file_name   = [home base_name '0_0.dat'];
+data=load(file_name);
+total=0;
 for j=1:Nchains
-    n = num2str(chains(j),'%d');
+    n = num2str(chains(j),'%d')
+    pchains = load([home '../out/nchain_' nome n '.dat']);
+    total = total + sum(pchains(Nini(j):Nfim(j),2))
+end
+data = zeros(size(data,1),size(data,2),total);
+%% MEDIA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cont = 0;
+for j=1:Nchains
+    n = num2str(chains(j),'%d')
+    pchains = load([home '../out/nchain_' nome n '.dat']);
     for i=Nini(j):Nfim(j)
-        k = k+1;
         istr=num2str(i,5);
-        file_name   = [home base_name n '_' istr '.dat']
-        data(:,:,k) = load(file_name);
+        file_name = [home base_name n '_' istr '.dat']
+        dat  = load(file_name);
+        m = pchains(i,2);
+        for nc = 1:m
+            cont = cont + 1;
+            data(:,:,cont) = dat;
+        end
     end
 end
 dmedio = mean(data,3);
@@ -40,7 +55,7 @@ figure1 = figure()
 C=min(dados(:,1));
 D=max(dados(:,1))*1.01;
 
-dasp=[1 1.*(B-A)/(D-C) 200];
+dasp=[1 2.*(B-A)/(D-C) 200];
 % Create axes
 axes1 = axes('Parent',figure1,'FontSize',14,'FontName','Times New Roman',...
     'DataAspectRatio',dasp);
@@ -85,7 +100,7 @@ xlabel('$t (day)$','FontSize',16,'FontName','Times New Roman',...
     'FontAngle','italic','Interpreter','latex');
 
 % Create ylabel
-ylabel('Oil rate ($m^3/day$)','FontSize',16,'FontName',...
+ylabel('Pressure ($MPa$)','FontSize',16,'FontName',...
     'Times New Roman','FontAngle','italic','Interpreter','latex');
 % Create legend
 legend1 = legend(axes1,'show');
