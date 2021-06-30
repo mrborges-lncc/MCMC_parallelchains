@@ -2,7 +2,7 @@ clear;
 N=13005;
 %A=randn(N,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-line_file = '../gera_KL/FORTRAN_KL3D/out/theta.dat';
+line_file = '../gera_KL/FORTRAN_KL3D_2/out/theta.dat';
 
 for j=1:1
 %    line_file = '../forecast/3Dfields/thetasMC/thetaMC_';

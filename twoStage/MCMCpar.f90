@@ -2641,6 +2641,7 @@ SUBROUTINE GERATHETA(MK,TIPO,K,NK)
   IF(TIPO.EQ.1) FILETHE='../gera_KL/FORTRAN/out/thetanew'
   IF(TIPO.EQ.3) FILETHE='../gera_KL/FORTRAN_RW/out/thetanew'
   IF(TIPO.EQ.13)FILETHE='../gera_KL/FORTRAN_KL3D/out/thetanew'
+  IF(TIPO.EQ.14)FILETHE='../gera_KL/FORTRAN_KL3D_2/out/thetanew'
   IF(TIPO.EQ.31)FILETHE='../gera_KL/FORTRAN_RW1/out/thetanew'
   IF(TIPO.EQ.34)FILETHE='../gera_KL/FORTRAN_RW2/out/thetanew'
   IF(TIPO.EQ.32)FILETHE='../gera_KL/FORTRAN_RW3D/out/thetanew'
@@ -4681,6 +4682,8 @@ SUBROUTINE GERA_AMTHETA(MK,TIPO,K,NK)
   IF(TIPO.EQ.3) FILETHE=('../gera_KL/FORTRAN_RW/out/theta')//&
        TRIM(ADJUSTL(NUMB))//('.dat')
   IF(TIPO.EQ.13) FILETHE=('../gera_KL/FORTRAN_KL3D/out/theta')//&
+       TRIM(ADJUSTL(NUMB))//('.dat')
+  IF(TIPO.EQ.14) FILETHE=('../gera_KL/FORTRAN_KL3D_2/out/theta')//&
        TRIM(ADJUSTL(NUMB))//('.dat')
   IF(TIPO.EQ.31)FILETHE=('../gera_KL/FORTRAN_RW1/out/theta')//&
        TRIM(ADJUSTL(NUMB))//('.dat')
