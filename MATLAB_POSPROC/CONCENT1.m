@@ -1,14 +1,14 @@
 clear;
 close all
-base_name = 'prod_D1_KLfull_DE_RK1_0';
+base_name = 'prod_D1_TwoPhase3D_DE_RK0_198';
 %dados=load('../prod/prodF_ref_0.dat');
 %dados=load('../SIMULADOR_ELASTICO/exp/conc/conc_ref_0.dat');
 dados=load('../twophaseflow/exp/pres/pres_referencia_0.dat');
-%dados=load('/home/mrborges/MCMC/twophaseflow/exp/prod/prod_ref_0.dat');
+%dados=load('../twophaseflow/exp/prod/prod_ref_0.dat');
 ref=dados;
 %
 file_name = ['../twoStage/select_prod/' base_name '.dat']
-file_name = '../twophaseflow/exp/pres/pres_ref_0.dat'
+%file_name = '../twophaseflow/exp/pres/pres_ref_0.dat'
 %
 % Create figure
 figure1 = figure()
@@ -17,7 +17,7 @@ A=0.0;
 %B=1e-2;
 %A=1e-5;
 C=min(dados(:,1));
-C=-0
+C=-0;
 D=max(dados(:,1))*1.01;
 
 dasp=[1 2.*(B-A)/(D-C) 200];

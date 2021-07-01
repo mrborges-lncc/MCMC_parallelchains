@@ -1,7 +1,7 @@
 clear;
 close all
-loc=100;
-jump=3;
+loc=180;
+jump=2;
 N=60;
 B=150;
 A=0;
@@ -9,8 +9,8 @@ A=0;
 Nch_ini = 0;
 Nch_fim = 3;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(50, 1, Nchains);
-Nfim = [82 80 91 104];
+Nini = repmat(70, 1, Nchains);
+Nfim = [198 72 116 125];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -18,15 +18,15 @@ nome = 'TwoPhase3D_DE_RK';
 base_name = ['prod_D1_' nome];
 dados=load('../twophaseflow/exp/pres/pres_referencia_0.dat');
 ref=dados;
-home = '../twoStage/select_prod/'
+home = '../twoStage/select_prod/';
 %
 file_name   = [home base_name '0_0.dat'];
 data=load(file_name);
 total=0;
 for j=1:Nchains
-    n = num2str(chains(j),'%d')
+    n = num2str(chains(j),'%d');
     pchains = load([home '../out/nchain_' nome n '.dat']);
-    total = total + sum(pchains(Nini(j):Nfim(j),2))
+    total = total + sum(pchains(Nini(j):Nfim(j),2));
 end
 data = zeros(size(data,1),size(data,2),total);
 %% MEDIA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -36,7 +36,7 @@ for j=1:Nchains
     pchains = load([home '../out/nchain_' nome n '.dat']);
     for i=Nini(j):Nfim(j)
         istr=num2str(i,5);
-        file_name = [home base_name n '_' istr '.dat']
+        file_name = [home base_name n '_' istr '.dat'];
         dat  = load(file_name);
         m = pchains(i,2);
         for nc = 1:m
@@ -61,37 +61,18 @@ axes1 = axes('Parent',figure1,'FontSize',14,'FontName','Times New Roman',...
     'DataAspectRatio',dasp);
 box(axes1,'on');
 hold(axes1,'all');
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+plot(ref(:,1),ref(:,2),'Parent',axes1,'Color',[1 0 0],...
+    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1')
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dados = dmedio;
 errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
     'Parent',axes1,'Color',[1 0 0],'MarkerSize',4,'Marker','o',...
     'LineStyle','none','DisplayName','mean 1','LineWidth',1)
-% errorbar(dados(1:jump:end,1),dados(1:jump:end,3),erro(1:jump:end,3),...
-%     'Parent',axes1,'Color',[0 0 1],'MarkerSize',4,'Marker','s',...
-%     'LineStyle','none','DisplayName','mean 2','LineWidth',1)
-% errorbar(dados(1:jump:end,1),dados(1:jump:end,4),erro(1:jump:end,4),...
-%     'Parent',axes1,'Color',[0 0 0],'MarkerSize',4,'Marker','o',...
-%     'LineStyle','none','DisplayName','mean 3','LineWidth',1)
-% errorbar(dados(1:jump:end,1),dados(1:jump:end,5),erro(1:jump:end,4),...
-%     'Parent',axes1,'Color',[0 1 0],'MarkerSize',4,'Marker','s',...
-%     'LineStyle','none','DisplayName','mean 4','LineWidth',1)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dados=ref;
-%dados=load('../../MCMC/reject_prod/prod_chn0-20_16000.dat');
-%dados=load('../conc/conc_amostra_0.dat');
-plot(dados(:,1),dados(:,2),'Parent',axes1,'Color',[1 0 0],...
-    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1')
-% plot(dados(:,1),dados(:,3),'Parent',axes1,'Color',[0 0 1],...
-%     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  2')
-% plot(dados(:,1),dados(:,4),'Parent',axes1,'Color',[0 0 0],...
-%     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  3')
-% plot(dados(:,1),dados(:,5),'Parent',axes1,'Color',[0 1 0],...
-%     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  4')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
-%     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-%     'DisplayName','time to select')
-
+plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
+    'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
+    'DisplayName','time to select')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
 ylim(axes1,[A B])
@@ -108,14 +89,15 @@ set(legend1,'Location','NorthEast','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=['./../../figuras/pres_' base_name];
+base=['../figuras/pres_' base_name];
 %print('-djpeg90',base)
 print('-depsc','-r100',base)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NORMA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-norma=norm(ref(:,2:end))
-norma=norm(ref(:,2:end)-dados(:,2:end))/norma;
+N = min(size(ref,1),size(dados,1))
+norma=norm(ref(1:N,2:end))
+norma=norm(ref(1:N,2:end)-dados(1:N,2:end))/norma;
 fprintf('ERRO RELATIVO = %e\n',norma)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%clear
+clear

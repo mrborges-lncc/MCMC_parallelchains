@@ -7,12 +7,12 @@ NV  = 2;
 M   = fim-ini+1;
 home= '/home/mrborges/MCMC_par/trunk/twoStage/';
 home= '/home/mrborges/MCMC_parallelchains/twoStage/';
-home= '~/MCMCde/twoStage/';
+home= '../twoStage/';
 %
 homef='/home/mrborges/MCMC_parallelchains/';
 homef='~/MCMC_parallelchains/';
-homef='~/MCMCde/';
-base_name = 'KLfull_DE_RK';
+homef='../';
+base_name = 'TwoPhase3D_DE_RK';
 nome_extra = '';
 nchain=1;
 my=0.25;

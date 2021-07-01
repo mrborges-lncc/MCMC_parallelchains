@@ -1,12 +1,12 @@
 clear;
 close all;
-base_name = 'prod_D2_KLfull_DE_RK0_250';
+base_name = 'prod_D2_TwoPhase3D_DE_RK0_0';
 %dados=load('../prod/prodF_ref_0.dat');
 %dados=load('../SIMULADOR_ELASTICO/exp/conc/conc_ref_0.dat');
-dados=load('~/MCMCde/twophaseflow/exp/prod/prod_ref_0.dat');
+dados=load('../twophaseflow/exp/prod/prod_ref_0.dat');
 ref=dados;
 %
-file_name = ['~/MCMCde/twoStage/select_prod/' base_name '.dat']
+file_name = ['../twoStage/select_prod/' base_name '.dat']
 %
 % Create figure
 figure1 = figure()
