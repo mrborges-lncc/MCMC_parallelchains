@@ -13,10 +13,10 @@ inputbox = 10; % if == 1 display a dialog box to input data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tStart   = tic;
-home     = '~/Dropbox/GITdesenv/MCMC_parallelchains/twophaseflow/fields/';
-homeT    = '~/Dropbox/GITdesenv/MCMC_parallelchains/gera_KL/MATLAB/';
-homep    = '~/Dropbox/GITdesenv/MCMC_parallelchains/twophaseflow/fields/'; % folder to save fields
-home_fig = '~/Dropbox/GITdesenv/MCMC_parallelchains/figuras/'
+home     = '~/fields/';
+homeT    = '~/MCMC_parallelchains/gera_KL/MATLAB/';
+homep    = '~/fields/'; % folder to save fields
+home_fig = '~/MCMC_parallelchains/figuras/'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ntipo=1; 
 %% define the covariance function: if ntipo == 1 exponential;
@@ -38,15 +38,15 @@ ny  = 51;
 nz  = 5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Mesh for interpolation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NX  = 50;
-NY  = 50;
-NZ  = 10;
-interpolacao = 10; % if == 1 the eigenvector are interpolated to this mesh%%
+NX  = 51;
+NY  = 51;
+NZ  = 5;
+interpolacao = 1; % if == 1 the eigenvector are interpolated to this mesh%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 eta1  = 50; % correlation length in the x direction
 eta2  = 50; % correlation length in the y direction
 eta3  = 10; % correlation length in the z direction
-Nrand = 10;  % total number of realizations
+Nrand = 2000;  % total number of realizations
 M     = 0;  % number of terms used in the KL expansion. OBS: if == 0 it 
             % uses the maximum number of terms (nx^2 x ny^2 x nz^2)
 TIPOINPUT = 10; % if == 1 reads the conditioned points from the file
@@ -61,7 +61,7 @@ tipo_prt  = 1;         % if == 1 print the fields in the LNCC format,
                        % if == 0 print in the UW simulator format
                        % if == 3 print binary
                        % otherwise print both formats
-paraview_print = 1;    % if == 1 print paraview visualization
+paraview_print = 10;    % if == 1 print paraview visualization
 printa         = 1;    % if == 1 save the T matrix = sqrt(lambda)*phi
 printabin      = 1;    % if == 1 save the T in a binary file
 estatistica    = 1;
