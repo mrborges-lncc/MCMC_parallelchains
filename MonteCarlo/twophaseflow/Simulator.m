@@ -46,11 +46,11 @@ nx  = 51;
 ny  = 51;
 nz  = 5;
 well_r= 0.125;          %% well radius
-TT    = 360;            %% days
-nstep = 240;            %% number of time steps for pressure-velocity system
-nprint= 40;             %% Number of impressions
-ndata = 120;            %% Number of impressions of data
-ndt   = 10;
+TT    = 150;            %% days
+nstep = 300;            %% number of time steps for pressure-velocity system
+nprint= 25;             %% Number of impressions
+ndata = 75;             %% Number of impressions of data
+ndt   = 15;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
 [ndata njump] = ajusteImpress(ndata,nstep);
 PRbhp = 0.0;            %% production well pressure
@@ -59,8 +59,14 @@ patm  = 1.0*atm;        %% Pressure at 0m cote
 depth = 1.0e03*meter;   %% depth until the top of reservoir
 rhoR  = 2.70e03*kilogram/meter^3;  %% mean density of overload rocks
 overburden= 00.0*atm;   %% Load (overburden)
-phi   = 0.20;           %% Porosity
-fatk  = 100 * milli() * darcy();      %% Factor to permeability
+phi   = 0.12;           %% Porosity
+fatk  = milli() * darcy();      %% Factor to permeability
+rho   = 0.4432;
+beta  = 5.8675e-14;
+rho   = 0.413706;
+beta  = 5.6691e-14;
+phibeta = phi;
+phirho  = 0.2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dx  = Lx/double(nx);
@@ -86,8 +92,6 @@ nini = 0;
 TOL  = 1.0e-7;
 if heter == 1
     if fieldnz == 1, nD = '2D'; end
-    rho = 1.0;
-    beta= 1.0 * fatk;
     [K] = load_perm(G,filenx,fileny,filenz,depth,nini,nD);
     K   = beta * exp(rho * K);
     save([exper '/out/perm.mat'],'K');
@@ -99,8 +103,6 @@ else
     end
 end
 if phiheter == 1
-    phibeta = phi;
-    phirho  = 0.23;
     phi = load_poro(G,filephi,depth,nini,nD);
     phi = phibeta * exp(phirho * phi);
 end
@@ -114,25 +116,25 @@ fprintf('\n==============================================================\n\n')
 fprintf('Mean k_x....: %4.1f mD \t | \t std k_x....: %4.1f mD\n',mK(1),sK(1));
 fprintf('Mean k_y....: %4.1f mD \t | \t std k_y....: %4.1f mD\n',mK(2),sK(2));
 fprintf('Mean k_z....: %4.1f mD \t | \t std k_z....: %4.1f mD\n',mK(3),sK(3));
-fprintf('Mean phi....: %4.2f mD \t | \t std k_z....: %4.2f mD\n',mean(rock.poro),std(rock.poro));
+fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2f mD\n',mean(rock.poro),std(rock.poro));
 fprintf('\n==============================================================\n')
 clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if printa == 1 && heter == 1 
-    plot_rock(rock.perm(:,1),G,'Y','$\kappa_x$',color,lim,vw,1);
+    plot_rock(reverseKlog(rock.perm(:,1),beta,rho),G,'Yn','$\kappa_x$',color,lim,vw,1);
     base=['../figuras/permKx_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock(rock.perm(:,2),G,'Y','$\kappa_y$',color,lim,vw,2);
+    plot_rock(reverseKlog(rock.perm(:,2),beta,rho),G,'Yn','$\kappa_y$',color,lim,vw,2);
     base=['../figuras/permKy_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock(rock.perm(:,3),G,'Y','$\kappa_z$',color,lim,vw,3);
+    plot_rock(reverseKlog(rock.perm(:,3),beta,rho),G,'Yn','$\kappa_z$',color,lim,vw,3);
     base=['../figuras/permKz_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock_poro(rock.poro,G,'Yn',1,1,'$\phi$',color,[0 0],vw,4)
+    plot_rock_poro(rock.poro,G,'Yn',1,1,'$\phi$',color,[0 0],vw,4);
     base=['../figuras/phi_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
@@ -357,7 +359,11 @@ if printa == 1
     end
     water_prod_fig(sw_prod_wells(:,:,2:end));
     water_cut_fig(wcut(:,:,2:end));
+    close all
     oil_prod_fig(oil_prod(:,:,2:end));
+    base=['../figuras/prod_' nome];
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600', base);
 end
 
 %%

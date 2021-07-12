@@ -1,7 +1,7 @@
 clear;
 close all;
 ini = 0;
-fim = 3;
+fim = 1;
 N   = 0;
 NV  = 2;
 M   = fim-ini+1;
@@ -12,7 +12,7 @@ home= '../twoStage/';
 homef='/home/mrborges/MCMC_parallelchains/';
 homef='~/MCMC_parallelchains/';
 homef='../';
-base_name = 'TwoPhase3D_DE_RK';
+base_name = 'TwoPhase3D_RW_RK';
 nome_extra = '';
 nchain=1;
 my=0.25;

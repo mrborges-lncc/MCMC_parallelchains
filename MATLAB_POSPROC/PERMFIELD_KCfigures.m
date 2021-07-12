@@ -24,11 +24,11 @@ nz  = 5;
 depth = 1e3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nome= 'permKC';
-permrho = 0.6347;
-permbeta= 1.96e-14;      %% Factor to permeability
+permrho = 0.4432;
+permbeta= 5.8675e-14;      %% Factor to permeability
 permvar = '\kappa';
 phirho  = 0.2;
-phibeta = 0.1;
+phibeta = 0.12;
 phivar  = '\phi';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA PORO FIELD');

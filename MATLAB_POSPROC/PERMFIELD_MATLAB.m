@@ -23,14 +23,17 @@ ny  = 51;
 nz  = 5;
 depth = 1e3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rho = 1.0;
-beta= [100] * milli() * darcy();      %% Factor to permeability
+ini = 0;
+fim = 0;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+rho = 0.413706;
+beta= 5.6691e-14;      %% Factor to permeability
 nome= 'permref';
 variav = '\kappa';
-rho = 0.2;
-beta= 0.23;
-nome= 'phiref';
-variav = '\phi';
+% rho = 0.20;
+% beta= 0.12;
+% nome= 'phiref';
+% variav = '\phi';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
@@ -42,7 +45,7 @@ while filem(k) ~= '_'
     k = k-1;
 end
 filen = filen(1:k);
-nini = int32(str2num(filem(k+1:end)));
+nini = int32(str2num(filem(k+1:end)))
 try
    require incomp ad-mechanics
 catch %#ok<CTCH>
@@ -69,35 +72,40 @@ G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GEOLOGIC MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Y = load_perm(G,filen,filen,filen,depth,nini,nD);
-Y = Y(:,1);
-K = beta .* exp(rho * Y);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Rock model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rock = makeRock(G, K, 0.20);
-mK   = mean(rock.perm/(milli*darcy));
-sK   = std(rock.perm/(milli*darcy));
-fprintf('\n==============================================================\n')
-fprintf('Mean Y....: %4.1f    \t | \t std Y....: %4.1f   \n',mean(Y),std(Y));
-fprintf('Mean K....: %4.1f mD \t | \t std K....: %4.1f mD\n',mK,sK);
-fprintf('==============================================================\n')
-clear K
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-lim = [0 0];
-%plot_rock(Y,G,'Yn','$Y$',color,lim,vw,1);
-plot_rock_poro(rock.perm(:,1),G,'Y',beta,rho,['$Y_{' variav '}$'],...
-    color,lim,vw,2);
-base=['../figuras/Y_' nome];
-set(gcf,'PaperPositionMode','auto');
-print('-depsc','-r600', base);
-pause(1); close all
-% lim = [(mean(rock.perm(:,1)) - 0.0125*std(rock.perm(:,1)))...
-%     (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
-% plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
-plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],color,lim,vw,2);
-base=['../figuras/perm_' nome];
-set(gcf,'PaperPositionMode','auto');
-print('-depsc','-r600', base);
+for n = ini:fim
+    snum = num2str(n,'%d');
+    Y = load_perm(G,filen,filen,filen,depth,n,nD);
+    Y = Y(:,1);
+    K = beta .* exp(rho * Y);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% Rock model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    rock = makeRock(G, K, 0.20);
+    mK   = mean(rock.perm/(milli*darcy));
+    sK   = std(rock.perm/(milli*darcy));
+    fprintf('\n==============================================================\n')
+    fprintf('Mean Y....: %4.1f    \t | \t std Y....: %4.1f   \n',mean(Y),std(Y));
+    fprintf('Mean K....: %4.1f mD \t | \t std K....: %4.1f mD\n',mK,sK);
+    fprintf('==============================================================\n')
+    clear K
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    lim = [0 0];
+    %plot_rock(Y,G,'Yn','$Y$',color,lim,vw,1);
+    plot_rock_poro(rock.perm(:,1),G,'Y',beta,rho,['$Y_{' variav '}$'],...
+        color,lim,vw,2);
+    base=['../figuras/Y_' nome '_' snum];
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600', base);
+    pause(1); close all
+%     lim = [(mean(rock.perm(:,1)) - 0.0125*std(rock.perm(:,1)))...
+%         (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
+%     plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
+    plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],...
+        color,lim,vw,2);
+    base=['../figuras/perm_' nome];
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600', base);
+%     pause(1); close all
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

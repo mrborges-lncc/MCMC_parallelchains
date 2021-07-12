@@ -7,12 +7,12 @@ startup
 
 nome  = 'ref';
 
-wcut = load(['./prod/wcut_' nome '_0.dat']);
-oilp = load(['./prod/prod_' nome '_0.dat']);
-pres = load(['./pres/presinj_' nome '_0.dat']);
-cpres= load(['./pres/pres_' nome '_0.dat']);
-satw = load(['./conc/sw_' nome '_0.dat']);
-disp = load(['./disp/disp_' nome '_0.dat']);
+wcut = load(['./exp/prod/wcut_' nome '_0.dat']);
+oilp = load(['./exp/prod/prod_' nome '_0.dat']);
+pres = load(['./exp/pres/presinj_' nome '_0.dat']);
+cpres= load(['./exp/pres/pres_' nome '_0.dat']);
+satw = load(['./exp/conc/sw_' nome '_0.dat']);
+disp = load(['./exp/disp/disp_' nome '_0.dat']);
 
 fig_matrix(satw ,'time ($days$)','$\mathsf{s}_{w}$','p_',234)
 fig_matrix(cpres,'time ($days$)','Pressure ($\mathsf{MPa}$)','p_',135)

@@ -7,16 +7,16 @@ B=450;
 A=50;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
-Nch_fim = 3;
+Nch_fim = 1;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(70, 1, Nchains);
-Nfim = [198 72 116 125];
+Nini = repmat(10, 1, Nchains);
+Nfim = [30 24 116 125];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
-nome = 'TwoPhase3D_DE_RK';
+nome = 'TwoPhase3D_RW_RK';
 base_name = ['prod_D2_' nome];
-dados=load('../twophaseflow/exp/prod/prod_referencia_0.dat');
+dados=load('../twophaseflow/exp/prod/prod_ref_0.dat');
 ref=dados;
 home = '../twoStage/select_prod/'
 %
