@@ -6,17 +6,21 @@ N   = 0;
 NV  = 2;
 M   = fim-ini+1;
 home= '/home/mrborges/MCMC_par/trunk/twoStage/';
-home= '/home/mrborges/MCMC_parallelchains/twoStage/';
-home= '../twoStage/';
+home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
+% home= '../twoStage/';
 %
-homef='/home/mrborges/MCMC_parallelchains/';
-homef='~/MCMC_parallelchains/';
-homef='../';
+homef='~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+% homef='~/MCMC_parallelchains/';
+% homef='../';
 base_name = 'TwoPhase3D_RW_RK';
 nome_extra = '';
 nchain=1;
-my=0.25;
-my0=0.0;
+my_1  = 0.08;
+my0_1 = 0.00;
+my_2  = 0.4;
+my0_2 = 0.0;
+my_3 = 0.02;
+my0_3 = 0.00;
 lwd  = 2;
 xmaximo = 0;
 transp = 0;
@@ -60,9 +64,13 @@ if(transp==1)
     fig.InvertHardcopy = 'off';
 end
 % Create axes
-axes1 = axes('Parent',figure1,'LineWidth',2,'FontSize',16,...
+axes1 = axes('Parent',figure1,'LineWidth',1,'FontSize',16,...
     'FontName','Times New Roman','FontWeight','bold',...
-    'DataAspectRatio',[N/(my-my0) 3 1],'Color','none');
+    'DataAspectRatio',[N/(my_1-my0_1) 3 1],'Color','none');
+% Set the remaining axes properties
+set(axes1,'LineWidth',1,'TickDir','both',...
+    'TickLabelInterpreter','latex','XMinorTick','on',...
+    'YMinorTick','on');
 box(axes1,'on');
 hold(axes1,'all');
 mx = 0;
@@ -110,10 +118,11 @@ xlabel('Accepted iterations','FontWeight','bold','Interpreter','latex',...
     'LineWidth',lwd,'FontSize',16,...
     'FontName','Times New Roman');
 % Create ylabel
-ylabel('$\mathsf{Er}_{_{\ 1}}$','Interpreter','latex','LineWidth',lwd,...
+ylabel('$\mathsf{Er}_{{\ 1}}$','Interpreter','latex','LineWidth',lwd,...
     'FontSize',16,'FontName','Times New Roman');
+
 %ylim([ny*0.9 my]);
-ylim([my0 my]);
+ylim([my0_1 my_1]);
 xlim([0 N]);
 set(gcf,'PaperPositionMode','auto');
 base=[homef 'figuras/error1_' base_name '_' nome_extra]
@@ -121,7 +130,6 @@ print('-depsc','-r300',base);
 %print('-djpeg','-r300',base);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if(NV>1)
-    my=0.850;
     % Create figure
     figure2= figure;
     if(transp==1)
@@ -132,7 +140,11 @@ if(NV>1)
 % Create axes
     axes2 = axes('Parent',figure2,'LineWidth',2,'FontSize',16,...
         'FontName','Times New Roman','FontWeight','bold',...
-        'DataAspectRatio',[N/(my-my0) 3 1],'Color','none');
+        'DataAspectRatio',[N/(my_2-my0_2) 3 1],'Color','none');
+% Set the remaining axes properties
+    set(axes2,'LineWidth',1,'TickDir','both',...
+       'TickLabelInterpreter','latex','XMinorTick','on',...
+       'YMinorTick','on');
     box(axes2,'on');
     hold(axes2,'all');
 
@@ -170,11 +182,11 @@ if(NV>1)
         'Interpreter','latex','LineWidth',lwd,'FontSize',16,...
         'FontName','Times New Roman');
     % Create ylabel
-    ylabel('$\mathsf{Er}_{_{\ 2}}$','Interpreter','latex',...
+    ylabel('$\mathsf{Er}_{{\ 2}}$','Interpreter','latex',...
         'LineWidth',lwd,'FontSize',16,...
         'FontName','Times New Roman');
     %ylim([ny*0.9 my*1.1]);
-    ylim([my0 my]);
+    ylim([my0_2 my_2]);
     xlim([0 N]);
     base=[homef 'figuras/error2_' base_name '_' nome_extra]
     set(gcf,'PaperPositionMode','auto');
@@ -193,6 +205,10 @@ if(NV>2)
     axes3 = axes('Parent',figure3,'LineWidth',2,'FontSize',16,...
         'FontName','Times New Roman','FontWeight','bold',...
         'DataAspectRatio',[N/(my-my0) 3 1],'Color','none');
+% Set the remaining axes properties
+    set(axes3,'LineWidth',1,'TickDir','both',...
+       'TickLabelInterpreter','latex','XMinorTick','on',...
+       'YMinorTick','on');
     box(axes3,'on');
     hold(axes3,'all');
 
@@ -252,11 +268,14 @@ figure4= figure;
         fig.InvertHardcopy = 'off';
     end
 N=max(tm)+1;
-my=0.2;
 % Create axes
 axes3 = axes('Parent',figure4,'LineWidth',2,'FontSize',16,...
     'FontName','Times New Roman','FontWeight','bold',...
-    'DataAspectRatio',[N/(my-my0) 3 1],'Color','none');
+    'DataAspectRatio',[N/(my_3-my0_3) 3 1],'Color','none');
+% Set the remaining axes properties
+set(axes3,'LineWidth',1,'TickDir','both',...
+       'TickLabelInterpreter','latex','XMinorTick','on',...
+       'YMinorTick','on');
 box(axes3,'on');
 hold(axes3,'all');
 
@@ -300,11 +319,11 @@ xlabel('Accepted iterations','FontWeight','bold',...
     'LineWidth',lwd,'FontSize',16,...
     'FontName','Times New Roman');
 % Create ylabel
-ylabel('$\mathsf{Er}$','Interpreter','latex',...
+ylabel('{Error}','Interpreter','latex',...
     'LineWidth',lwd,'FontSize',16,...
     'FontName','Times New Roman');
 %ylim([ny*0.9 my]);
-ylim([my0 my]);
+ylim([my0_3 my_3]);
 xlim([0 N]);
 base=[homef 'figuras/error4_' base_name '_' nome_extra]
 %pause
