@@ -30,8 +30,9 @@ permvar = '\kappa';
 phirho  = 0.2;
 phibeta = 0.12;
 phivar  = '\phi';
+home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA PORO FIELD');
+[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PORO FIELD');
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
@@ -43,7 +44,7 @@ end
 phifilen = filen(1:k);
 nini = int32(str2num(filem(k+1:end)));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA PERM FIELD');
+[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
@@ -101,7 +102,7 @@ clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plotKC(phi,perm,0)
-base=['../figuras/perm_phi_KC_' nome]
+base=[home 'figuras/perm_phi_KC_' nome]
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600', base);
 

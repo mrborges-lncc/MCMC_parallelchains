@@ -1,7 +1,7 @@
 clear;
 close all;
 ini = 0;
-fim = 1;
+fim = 2;
 N   = 0;
 NV  = 2;
 M   = fim-ini+1;

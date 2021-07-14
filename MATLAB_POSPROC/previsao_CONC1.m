@@ -7,10 +7,10 @@ B=250;
 A=50;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
-Nch_fim = 1;
+Nch_fim = 2;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(150, 1, Nchains);
-Nfim = [287 277 116 125];
+Nini = repmat(200, 1, Nchains);
+Nfim = [333 305 333];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -96,7 +96,7 @@ set(legend1,'Location','NorthEast','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=[hom '/figuras/pres_' base_name];
+base=[hom '/figuras/' base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 
