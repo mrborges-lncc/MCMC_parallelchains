@@ -1,16 +1,16 @@
 clear;
 close all
 loc=150;
-jump=3;
+jump=4;
 N=0;
-B=250;
-A=50;
+B=230;
+A=70;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
 Nch_fim = 2;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(200, 1, Nchains);
-Nfim = [333 305 333];
+Nfim = [472 427 441];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -66,10 +66,10 @@ hold(axes1,'all');
 dados = dmedio;
 errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
     'Parent',axes1,'Color',[1 0 0],'MarkerSize',4,'Marker','o',...
-    'LineStyle','none','DisplayName','mean 1','LineWidth',0.5)
+    'LineStyle','none','DisplayName','mean','LineWidth',0.5)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plot(ref(2:end,1),ref(2:end,2),'Parent',axes1,'Color',[1 0 0],...
-    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1')
+    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...

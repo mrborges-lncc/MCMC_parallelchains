@@ -28,13 +28,16 @@ fim = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rho = 0.413706;
 beta= 5.6691e-14;      %% Factor to permeability
-nome= 'permref';
+rho = 0.4432;
+beta= 5.8675e-14;      %% Factor to permeability
+nome= 'permREF';
 variav = '\kappa';
 % rho = 0.20;
 % beta= 0.12;
-% nome= 'phiref';
+% nome= 'phiREF';
 % variav = '\phi';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/select_fields/*.dat'}, 'LOAD DATA');
 [FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
@@ -101,8 +104,8 @@ for n = ini:fim
 %         (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
 %     plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
     plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],...
-        color,lim,vw,2);
-    base=['../figuras/perm_' nome];
+        color,lim,vw,12);
+    base=['../figuras/' nome '_' snum];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
 %     pause(1); close all

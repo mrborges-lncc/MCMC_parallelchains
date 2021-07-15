@@ -105,6 +105,10 @@ plotKC(phi,perm,0)
 base=[home 'figuras/perm_phi_KC_' nome]
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600', base);
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+plotKC_Y(phiY,permY)
+base=[home 'figuras/Yperm_Yphi_KC_' nome]
+set(gcf,'PaperPositionMode','auto');
+print('-depsc','-r600', base);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
