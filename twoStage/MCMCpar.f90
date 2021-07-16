@@ -3204,7 +3204,7 @@ SUBROUTINE SIMULADOR_C(NK)
   END IF
 !
   IF(NSIMUL.EQ.7)THEN
-     COMMAND='cd ./twophaseflow/; octave --no-gui SimulatorOCT.m'
+     COMMAND='cd ./twophaseflow/; octave --no-gui -q -H -W SimulatorOCT.m'
      COMMAND=TRIM(COMMAND)//' '//TRIM(ADJUSTL(NUMB))
      COMMAND=TRIM(COMMAND)// (' ;')
   END IF
@@ -3439,7 +3439,7 @@ SUBROUTINE SIMULADOR_F(NK)
   END IF
 !
   IF(NSIMUL.EQ.7)THEN
-     COMMAND='cd ../twophaseflow/; octave --no-gui SimulatorOCT.m '
+     COMMAND='cd ../twophaseflow/; octave --no-gui -q -H -W SimulatorOCT.m '
      COMMAND=TRIM(COMMAND)//' '//TRIM(ADJUSTL(NUMB))
      COMMAND=TRIM(COMMAND)// (' ;')
   END IF
@@ -5045,13 +5045,12 @@ REAL FUNCTION RANDOM_WALK_METHOD(SIGK,CT,NFREQ,VP)
      CALL RANDOM_NUMBER(AUX)
      AUX = (SIGK-TOL)*AUX + TOL
   END IF
-  IF(MOD(CT,NFREQ).EQ.0) AUX = SIGK * 5
+  IF(MOD(CT,NFREQ).EQ.0) AUX = SIGK * 10.0
 !
   WRITE(*,100)SIGK,AUX
   RANDOM_WALK_METHOD = AUX
 !
-100 FORMAT('RANDOM WALK JUMP (roof)..: ',F5.2,/, &
-           'RANDOM WALK JUMP.........: ',F5.2)
+100 FORMAT('RANDOM WALK JUMP (',F5.4,')...: ',F5.4)
 !
 END FUNCTION RANDOM_WALK_METHOD
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -5073,13 +5072,12 @@ REAL FUNCTION GAMMA_DREAM_METHOD(SIGK,CT,NFREQ,VP)
      CALL RANDOM_NUMBER(AUX)
      AUX = (SIGK-TOL)*AUX + TOL
   END IF
-  IF(MOD(CT,NFREQ).EQ.0) AUX = 2.0 * SIGK
+  IF(MOD(CT,NFREQ).EQ.0) AUX = 10.0 * SIGK
 !
   WRITE(*,100)SIGK,AUX
   GAMMA_DREAM_METHOD = AUX
 !
-100 FORMAT('RANDOM WALK JUMP (roof)..: ',F5.2,/, &
-           'RANDOM WALK JUMP.........: ',F5.2)
+100 FORMAT('DE JUMP (',F5.4,')...: ',F5.4)
 !
 END FUNCTION GAMMA_DREAM_METHOD
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

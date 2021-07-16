@@ -10,13 +10,14 @@ Nch_ini = 0;
 Nch_fim = 0;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(0, 1, Nchains);
-Nfim = [1400];
+Nfim = [500];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 base_name = 'presinj_TwoPhase3DMC_only_perm'
-% base_name = 'presinj_TwoPhase3DMC_KC'
+base_name = 'presinj_TwoPhase3DMC_KC'
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'MonteCarlo/twophaseflow/exp000/pres/pres_referencia_0.dat']);
 ref=dados;
 home = [hom 'MonteCarlo/twophaseflow/exp000/pres/'];
@@ -101,7 +102,7 @@ set(legend1,'Location','NorthEast','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=[hom '/figuras/' base_name];
+base=[homf base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 

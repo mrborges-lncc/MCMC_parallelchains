@@ -1,6 +1,6 @@
 clear;
 close all
-loc=100;
+loc=150;
 jump=3;
 N=00;
 B=400.;
@@ -12,13 +12,14 @@ Nch_ini = 0;
 Nch_fim = 0;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(0, 1, Nchains);
-Nfim = [1400];
+Nfim = [500];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 base_name = 'prod_TwoPhase3DMC_only_perm'
-% base_name = 'prod_TwoPhase3DMC_KC'
+base_name = 'prod_TwoPhase3DMC_KC'
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'MonteCarlo/twophaseflow/exp000/prod/prod_referencia_0.dat']);
 ref=dados;
 home = [hom 'MonteCarlo/twophaseflow/exp000/prod/'];
@@ -78,7 +79,7 @@ plot(dados(2:end,1),dados(2:end,5),'Parent',axes1,'Color',[0 0 0],...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
 %     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-%     'DisplayName','time to select')
+%     'DisplayName','selection time')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
@@ -102,7 +103,7 @@ set(legend1,'Location','NorthEast','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=[hom '/figuras/' base_name];
+base=[homf base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -188,7 +189,7 @@ set(legend1,'Location','NorthWest','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=[hom 'figuras/total_' base_name];
+base=[homf 'total_' base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 

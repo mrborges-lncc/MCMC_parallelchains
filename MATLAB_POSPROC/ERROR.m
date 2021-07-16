@@ -9,7 +9,7 @@ home= '/home/mrborges/MCMC_par/trunk/twoStage/';
 home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
 % home= '../twoStage/';
 %
-homef='~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 % homef='~/MCMC_parallelchains/';
 % homef='../';
 base_name = 'TwoPhase3D_RW_RK';
@@ -125,7 +125,7 @@ ylabel('$\mathsf{Er}_{{\ 1}}$','Interpreter','latex','LineWidth',lwd,...
 ylim([my0_1 my_1]);
 xlim([0 N]);
 set(gcf,'PaperPositionMode','auto');
-base=[homef 'figuras/error1_' base_name '_' nome_extra]
+base=[homef 'error1_' base_name '_' nome_extra]
 print('-depsc','-r300',base);
 %print('-djpeg','-r300',base);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -188,7 +188,7 @@ if(NV>1)
     %ylim([ny*0.9 my*1.1]);
     ylim([my0_2 my_2]);
     xlim([0 N]);
-    base=[homef 'figuras/error2_' base_name '_' nome_extra]
+    base=[homef 'error2_' base_name '_' nome_extra]
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r300',base);
 %     print('-djpeg','-r300',base);
@@ -253,7 +253,7 @@ if(NV>2)
     %ylim([ny*0.9 my*1.1]);
     ylim([my0 my]);
     xlim([0 N]);
-    base=[homef 'figuras/error3_' base_name '_' nome_extra]
+    base=[homef 'error3_' base_name '_' nome_extra]
     %pause
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r300',base);
@@ -325,7 +325,7 @@ ylabel('{Error}','Interpreter','latex',...
 %ylim([ny*0.9 my]);
 ylim([my0_3 my_3]);
 xlim([0 N]);
-base=[homef 'figuras/error4_' base_name '_' nome_extra]
+base=[homef 'error4_' base_name '_' nome_extra]
 %pause
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r300',base);

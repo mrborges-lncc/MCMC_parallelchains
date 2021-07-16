@@ -23,8 +23,8 @@ ny  = 51;
 nz  = 5;
 depth = 1e3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-ini = 0;
-fim = 0;
+ini = 400;
+fim = 420;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rho = 0.413706;
 beta= 5.6691e-14;      %% Factor to permeability
@@ -100,14 +100,14 @@ for n = ini:fim
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     pause(1); close all
-%     lim = [(mean(rock.perm(:,1)) - 0.0125*std(rock.perm(:,1)))...
-%         (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
-%     plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
-    plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],...
-        color,lim,vw,12);
-    base=['../figuras/' nome '_' snum];
-    set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r600', base);
+% %     lim = [(mean(rock.perm(:,1)) - 0.0125*std(rock.perm(:,1)))...
+% %         (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
+% %     plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
+%     plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],...
+%         color,lim,vw,12);
+%     base=['../figuras/' nome '_' snum];
+%     set(gcf,'PaperPositionMode','auto');
+%     print('-depsc','-r600', base);
 %     pause(1); close all
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,7 +1,7 @@
 clear;
 close all
 loc=150;
-jump=4;
+jump=3;
 N=0;
 B=230;
 A=70;
@@ -9,14 +9,15 @@ A=70;
 Nch_ini = 0;
 Nch_fim = 2;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(200, 1, Nchains);
-Nfim = [472 427 441];
+Nini = repmat(300, 1, Nchains);
+Nfim = [561 509 512];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 nome = 'TwoPhase3D_RW_RK';
 base_name = ['prod_D1_' nome];
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'twophaseflow/exp/pres/pres_referencia_0.dat']);
 ref=dados;
 home = [hom 'twoStage/select_prod/'];
@@ -96,7 +97,7 @@ set(legend1,'Location','NorthEast','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=[hom '/figuras/' base_name];
+base=[homf base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 
