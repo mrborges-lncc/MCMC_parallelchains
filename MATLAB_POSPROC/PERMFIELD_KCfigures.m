@@ -31,6 +31,7 @@ phirho  = 0.2;
 phibeta = 0.12;
 phivar  = '\phi';
 home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+homef= '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PORO FIELD');
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
@@ -95,20 +96,21 @@ rock = makeRock(G, perm, phi);
 mK   = mean(rock.perm/(milli*darcy));
 sK   = std(rock.perm/(milli*darcy));
 fprintf('\n==============================================================\n')
-fprintf('Mean Yphi....: %4.1f    \t | \t std phi....: %4.1f   \n',mean(phi),std(phi));
-fprintf('Mean Yperm...: %4.1f mD \t | \t std K......: %4.1f mD\n',mK,sK);
+fprintf('Mean Yphi....: %4.3f    \t | \t std phi....: %4.3f   \n',mean(phi),std(phi));
+fprintf('Mean Yperm...: %4.3f mD \t | \t std K......: %4.3f mD\n',mK,sK);
 fprintf('==============================================================\n')
 clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plotKC(phi,perm,0)
-base=[home 'figuras/perm_phi_KC_' nome]
+base=[homef 'perm_phi_KC_' nome]
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600', base);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plotKC_Y(phiY,permY)
-base=[home 'figuras/Yperm_Yphi_KC_' nome]
+base=[homef 'Yperm_Yphi_KC_' nome]
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600', base);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear all
