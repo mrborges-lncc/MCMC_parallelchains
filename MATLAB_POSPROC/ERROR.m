@@ -1,12 +1,12 @@
 clear;
 close all;
 ini = 0;
-fim = 2;
+fim = 3;
 N   = 0;
 NV  = 2;
 M   = fim-ini+1;
-home= '/home/mrborges/MCMC_par/trunk/twoStage/';
-home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
+home= '/home/mrborges/MCMCrw/twoStage/';
+% home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
 % home= '../twoStage/';
 %
 homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
@@ -15,13 +15,10 @@ homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 base_name = 'TwoPhase3D_RW_RK';
 nome_extra = '';
 nchain=1;
-my_1  = 0.08;
-my0_1 = 0.00;
-my_2  = 0.40;
-my0_2 = 0.00;
-my_3  = 0.02;
-my0_3 = 0.00;
-lwd   = 2;
+razao = 4;
+my  = [0.02; 0.08; 0.3];
+my0 = [0.00; 0.00; 0.00];
+lwd = 2;
 xmaximo= 0;
 transp = 0;
 data = [];
@@ -49,171 +46,32 @@ for i=ini:fim
     info= [info; A(1) A(3)];
     fclose(fileID);
 end
-tm
+
 if(N==0)
     N = ceil(aux+aux/90);
 end
-% if(sum(rep(:,2))<(N-N*0.1))
-%     N = sum(rep(:,2));
-% end
+
+nvar = size(data,2) - 2;
+
 % Create figure
-figure1 = figure(1);
-if(transp==1)
-    fig = gcf;
-    fig.Color = 'none';
-    fig.InvertHardcopy = 'off';
-end
-% Create axes
-axes1 = axes('Parent',figure1,'LineWidth',1,'FontSize',16,...
-    'FontName','Times New Roman','FontWeight','bold',...
-    'DataAspectRatio',[N/(my_1-my0_1) 3 1],'Color','none');
-% Set the remaining axes properties
-set(axes1,'LineWidth',1,'TickDir','both',...
-    'TickLabelInterpreter','latex','XMinorTick','on',...
-    'YMinorTick','on');
-box(axes1,'on');
-hold(axes1,'all');
-mx = 0;
-ny = 1e32;
-final = 0;
-tempo = cputime;
-for i=1:M
-    cor    = [(M-i)/(M-1) 0 (i-1)/(M-1)];
-    %cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
-    inicio = final+1;
-    final  = inicio+tm(i+1)-1;
-    dx     = data(inicio:final,1);
-    dy     = data(inicio:final,3);
-    r      = rep(inicio:final,2);
-    sz     = size(r,1);
-    n=0;
-    if(nchain==1)
-        rsum = sum(r);
-        x = [1:1:rsum]';
-        y = zeros(rsum,1);
-    else
-        x = [1:1:tm(i+1)]';
-        r = 0*r+1;
-    end
-    for j=1:sz
-        for k=1:r(j)
-            n=n+1;
-            x(n) = n;
-            y(n) = dy(j);
-        end
-    end
-%     mx     = max(mx,max(x));
-%     my     = max(my,max(y));
-%     ny     = min(ny,min(y));
-    maxx = size(x,1);
-    if(maxx>N)
-        maxx=N
-    end
-    plot(x(1:maxx,1),y(1:maxx,1),'LineWidth',lwd,'Color',cor)
-    pause(0.01)
-    etempo = cputime-tempo
-end
-% Create xlabel
-xlabel('Accepted iterations','FontWeight','bold','Interpreter','latex',...
-    'LineWidth',lwd,'FontSize',16,...
-    'FontName','Times New Roman');
-% Create ylabel
-ylabel('$\mathsf{Er}_{{\ 1}}$','Interpreter','latex','LineWidth',lwd,...
-    'FontSize',16,'FontName','Times New Roman');
-
-%ylim([ny*0.9 my]);
-ylim([my0_1 my_1]);
-xlim([0 N]);
-set(gcf,'PaperPositionMode','auto');
-base=[homef 'error1_' base_name '_' nome_extra]
-print('-depsc','-r300',base);
-%print('-djpeg','-r300',base);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if(NV>1)
-    % Create figure
-    figure2= figure;
+for nf = 1:nvar + 1
+    figure1 = figure('PaperOrientation','landscape','PaperSize',[11 5]);
     if(transp==1)
         fig = gcf;
         fig.Color = 'none';
         fig.InvertHardcopy = 'off';
     end
-% Create axes
-    axes2 = axes('Parent',figure2,'LineWidth',2,'FontSize',16,...
+    % Create axes
+    dasp = [N/(my(nf)-my0(nf)) razao 1];
+    axes1 = axes('Parent',figure1,'LineWidth',1,'FontSize',16,...
         'FontName','Times New Roman','FontWeight','bold',...
-        'DataAspectRatio',[N/(my_2-my0_2) 3 1],'Color','none');
-% Set the remaining axes properties
-    set(axes2,'LineWidth',1,'TickDir','both',...
-       'TickLabelInterpreter','latex','XMinorTick','on',...
-       'YMinorTick','on');
-    box(axes2,'on');
-    hold(axes2,'all');
-
-    mx = 0;
-    ny =1e32;
-    final = 0;
-    for i=1:M
-        cor    = [(M-i)/(M-1) 0 (i-1)/(M-1)];
-        %cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
-        inicio = final+1;
-        final  = inicio+tm(i+1)-1;
-        dx      = data(inicio:final,1);
-        dy      = data(inicio:final,4);
-        r      = rep(inicio:final,2);
-        sz     = size(r,1);
-        x=[];
-        y=[];
-        n=0;
-        for j=1:sz
-            if(nchain~=1)r(j)=1;end
-            for k=1:r(j)
-                n=n+1;
-                x = [x;n];
-                y = [y;dy(j)];
-            end
-        end
-    %     mx     = max(mx,max(x));
-    %     my     = max(my,max(y));
-    %     ny     = min(ny,min(y));
-        plot(x,y,'LineWidth',lwd,'Color',cor)
-        hold on
-    end
-    % Create xlabel
-    xlabel('Accepted iterations','FontWeight','bold',...
-        'Interpreter','latex','LineWidth',lwd,'FontSize',16,...
-        'FontName','Times New Roman');
-    % Create ylabel
-    ylabel('$\mathsf{Er}_{{\ 2}}$','Interpreter','latex',...
-        'LineWidth',lwd,'FontSize',16,...
-        'FontName','Times New Roman');
-    %ylim([ny*0.9 my*1.1]);
-    ylim([my0_2 my_2]);
-    xlim([0 N]);
-    base=[homef 'error2_' base_name '_' nome_extra]
-    set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r300',base);
-%     print('-djpeg','-r300',base);
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if(NV>2)
-    % Create figure
-    figure3= figure;
-    if(transp==1)
-        fig = gcf;
-        fig.Color = 'none';
-        fig.InvertHardcopy = 'off';
-    end
-    axes3 = axes('Parent',figure3,'LineWidth',2,'FontSize',16,...
-        'FontName','Times New Roman','FontWeight','bold',...
-        'DataAspectRatio',[N/(my-my0) 3 1],'Color','none');
-% Set the remaining axes properties
-    set(axes3,'LineWidth',1,'TickDir','both',...
-       'TickLabelInterpreter','latex','XMinorTick','on',...
-       'YMinorTick','on');
-    box(axes3,'on');
-    hold(axes3,'all');
-
-    mx = 0;
-    ny = 1e32;
+        'DataAspectRatio',dasp,'Color','none');
+    % Set the remaining axes properties
+    set(axes1,'LineWidth',1,'TickDir','both',...
+        'TickLabelInterpreter','latex','XMinorTick','on',...
+        'YMinorTick','on');
+    box(axes1,'on');
+    hold(axes1,'all');
     final = 0;
     for i=1:M
         cor    = [(M-i)/(M-1) 0 (i-1)/(M-1)];
@@ -221,190 +79,48 @@ if(NV>2)
         inicio = final+1;
         final  = inicio+tm(i+1)-1;
         dx     = data(inicio:final,1);
-        dy     = data(inicio:final,5);
+        dy     = data(inicio:final,nf+1);
         r      = rep(inicio:final,2);
         sz     = size(r,1);
-        x=[];
-        y=[];
         n=0;
+        if(nchain==1)
+            rsum = sum(r);
+            x = [1:1:rsum]';
+            y = zeros(rsum,1);
+        else
+            x = [1:1:tm(i+1)]';
+            r = 0*r+1;
+        end
         for j=1:sz
-            if(nchain~=1)r(j)=1;end
             for k=1:r(j)
                 n=n+1;
-                x = [x;n];
-                y = [y;dy(j)];
+                x(n) = n;
+                y(n) = dy(j);
             end
         end
-    %     mx     = max(mx,max(x));
-    %     my     = max(my,max(y));
-    %     ny     = min(ny,min(y));
-        plot(x,y,'LineWidth',lwd,'Color',cor)
-        hold on
+        maxx = size(x,1);
+        if(maxx>N)
+            maxx=N;
+        end
+        plot(x(1:maxx,1),y(1:maxx,1),'LineWidth',lwd,'Color',cor)
     end
     % Create xlabel
-    xlabel('Accepted iterations','FontWeight','bold',...
-        'Interpreter','latex',...
+    xlabel('Accepted iterations','FontWeight','bold','Interpreter','latex',...
         'LineWidth',lwd,'FontSize',16,...
         'FontName','Times New Roman');
     % Create ylabel
-    ylabel('$\mathsf{Er}_{_{\ 3}}$','Interpreter','latex',...
-        'LineWidth',lwd,'FontSize',16,...
-        'FontName','Times New Roman');
-    %ylim([ny*0.9 my*1.1]);
-    ylim([my0 my]);
-    xlim([0 N]);
-    base=[homef 'error3_' base_name '_' nome_extra]
-    %pause
-    set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r300',base);
-%     print('-djpeg','-r300',base);
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Create figure
-figure4= figure;
-    if(transp==1)
-        fig = gcf;
-        fig.Color = 'none';
-        fig.InvertHardcopy = 'off';
-    end
-N=max(tm)+1;
-% Create axes
-axes3 = axes('Parent',figure4,'LineWidth',2,'FontSize',16,...
-    'FontName','Times New Roman','FontWeight','bold',...
-    'DataAspectRatio',[N/(my_3-my0_3) 3 1],'Color','none');
-% Set the remaining axes properties
-set(axes3,'LineWidth',1,'TickDir','both',...
-       'TickLabelInterpreter','latex','XMinorTick','on',...
-       'YMinorTick','on');
-box(axes3,'on');
-hold(axes3,'all');
+    name = ['$\mathsf{E}_{ ' num2str(nf-1,'%d') '}$'];
+    if nf == 1, name = ['$\mathsf{Er}$']; end
+    ylabel(name,'Interpreter','latex','LineWidth',lwd,...
+        'FontSize',16,'FontName','Times New Roman');
 
-mx = 0;
-ny = 1e32;
-final = 0;
-nchain = 10;
-Ninicial = 100;
-Y=[];
-%N=max(tm)
-for i=1:M
-    cor    = [(M-i)/(M-1) 0 (i-1)/(M-1)];
-    %cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
-    inicio = final+1;
-    final  = inicio+tm(i+1)-1;
-    dx     = data(inicio:final,1);
-    dy     = data(inicio:final,2);
-    r      = rep(inicio:final,2);
-    sz     = size(r,1);
-    x=[];
-    y=[];
-    n=0;
-    for j=1:sz
-        if(nchain~=1)r(j)=1;end
-        for k=1:r(j)
-            n=n+1;
-            x = [x;n];
-            y = [y;dy(j)];
-        end
-    end
-%     mx     = max(mx,max(x));
-%     my     = max(my,max(y));
-%     ny     = min(ny,min(y));
-    plot(x,y,'LineWidth',lwd,'Color',cor)
-    hold on
-    Y = [Y; y(Ninicial:end,1)];
+    ylim([my0(nf) my(nf)]);
+    xlim([0 N]);
+    set(gcf,'PaperPositionMode','manual','PaperPosition',[0.25 0.25 2.25*razao 3]);
+    base=[homef 'error' num2str(nf-1,'%d') '_' base_name nome_extra]
+    print('-depsc','-r300',base);
+    pause(1); clf; close all;
 end
-% Create xlabel
-xlabel('Accepted iterations','FontWeight','bold',...
-    'Interpreter','latex',...
-    'LineWidth',lwd,'FontSize',16,...
-    'FontName','Times New Roman');
-% Create ylabel
-ylabel('{Error}','Interpreter','latex',...
-    'LineWidth',lwd,'FontSize',16,...
-    'FontName','Times New Roman');
-%ylim([ny*0.9 my]);
-ylim([my0_3 my_3]);
-xlim([0 N]);
-base=[homef 'error4_' base_name '_' nome_extra]
-%pause
-set(gcf,'PaperPositionMode','auto');
-print('-depsc','-r300',base);
-% print('-djpeg','-r300',base);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-est=10;
-errm = zeros(M,1);
-nchain=1;
-if(est==1)
-    Ninicial = 1;
-    Y=[];
-    final=0;
-    errm = zeros(M,1);
-    %N=max(tm)
-    for i=1:M
-        cor    = [(M-i)/(M-1) 0 (i-1)/(M-1)];
-        cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
-        inicio = final+1;
-        final  = inicio+tm(i+1)-1;
-        dx     = data(inicio:final,1);
-        dy     = data(inicio:final,2);
-        r      = rep(inicio:final,2);
-        sz     = size(r,1);
-        x=[];
-        y=[];
-        n=0;
-        for j=1:sz
-            if(nchain~=1)r(j)=1;end
-            for k=1:r(j)
-                n=n+1;
-                x = [x;n];
-                y = [y;dy(j)];
-            end
-        end
-        Ninicial = floor(size(y,1)/2);
-        errm(i,1) = mean(log(y(Ninicial:end,1)));
-        %Y = [Y; y(Ninicial:end,1)];
-    end
-end
-% % Create figure
-% figure1 = figure(10);
-%     if(transp==1)
-%         fig = gcf;
-%         fig.Color = 'none';
-%         fig.InvertHardcopy = 'off';
-%     end
-% % Create axes
-% axes3 = axes('Parent',figure1,'LineWidth',2,'XTickLabel','',...
-%     'XTick',zeros(1,0),'FontSize',12,'FontName','Times New Roman',...
-%     'Position',[0.13 0.1529 0.6 0.8]);
-% boxplot(axes3,errm,'BoxStyle','outline','symbol','+',...
-%     'colors',[0 0 0],'widths',0.85)
-% ylabel('mean log error','FontWeight','bold',...
-%     'FontSize',14,...
-%     'FontName','Times New Roman');
-% base=[homef 'figuras/Boxplot_' base_name '_' nome_extra];
-% set(gcf,'PaperPositionMode','auto');
-% print('-depsc','-r300',base);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% q3 = quantile(errm,0.750);
-% median(errm);
-% tol = q3+2.0*iqr(errm);
-% tol = median(errm)+2.0*iqr(errm);
-% hold on
-% y=[tol tol];
-% x=[0.0 2];
-% plot(axes3,x,y,'LineWidth',lwd,'LineStyle','-','Color',[1 0 0])
-% ylabel('mean log error','FontWeight','bold',...
-%     'FontSize',14,...
-%     'FontName','Times New Roman');
-% outliers=[];
-% for i=1:M
-%     if(errm(i,1)>tol)
-%         outliers = [outliers; i-1];
-%     end
-% end
-% outliers;
-MIN = min(tm(2:end));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%clear
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%clear
 tm
