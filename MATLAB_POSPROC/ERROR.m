@@ -3,20 +3,23 @@ close all;
 ini = 0;
 fim = 3;
 N   = 0;
-NV  = 2;
+%
 M   = fim-ini+1;
 home= '/home/mrborges/MCMCrw/twoStage/';
-% home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
+home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
+home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
 % home= '../twoStage/';
 %
 homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 % homef='~/MCMC_parallelchains/';
 % homef='../';
 base_name = 'TwoPhase3D_RW_RK';
+base_name = 'TwoPhase3D_onlyPerm_RW_RK';
 nome_extra = '';
 nchain=1;
 razao = 4;
 my  = [0.02; 0.08; 0.3];
+my  = [0.12; 0.3; 0.4];
 my0 = [0.00; 0.00; 0.00];
 lwd = 2;
 xmaximo= 0;
@@ -40,7 +43,7 @@ for i=ini:fim
     aux = max(max(sum(dados(:,2))),aux);
     rep = [rep;dados];
     file_name =...
-        [home 'in/init_stat_' base_name num2str(i,'%1.1d') '.in']
+        [home 'in/init_stat_' base_name num2str(i,'%1.1d') '.in'];
     fileID = fopen(file_name);
     [A] = fscanf(fileID,'%d %d %d %d');
     info= [info; A(1) A(3)];
