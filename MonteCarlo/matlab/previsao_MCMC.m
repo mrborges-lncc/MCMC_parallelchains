@@ -9,34 +9,64 @@ A=50;
 fat = 6.2898105697751;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
-Nch_fim = 0;
+Nch_fim = 1;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(0, 1, Nchains);
-Nfim = [1999];
+Nini = repmat(800, 1, Nchains);
+Nfim = [1210 960 190];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
-base_name = 'prod_TwoPhase3DMC_only_perm'
-% base_name = 'prod_TwoPhase3DMC_KC'
+base_name = 'prod_TwoPhase3DMC_only_perm';
+% base_name = 'prod_TwoPhase3DMC_KC';
+base_name = 'prod_TwoPhase3D_MCMConlyPerm_RW_RK';
+base_name2= 'TwoPhase3D_onlyPerm_RW_RK';
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
-% homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
+hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
+homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'MonteCarlo/twophaseflow/exp000/prod/prod_referencia_0.dat']);
 ref=dados;
-home = [hom 'MonteCarlo/twophaseflow/exp000/prod/'];
+home = [hom 'MonteCarlo/twophaseflow/exp001/prod/'];
 %
-data=zeros(size(ref,1),size(ref,2),sum(Nt));
+data= zeros(size(ref,1),size(ref,2),sum(Nt));
+rep = [];
 k = 0;
 for j=1:Nchains
     n = num2str(chains(j),'%d');
+    file_name =...
+        [hom 'twoStage/out/nchain_' base_name2 n '.dat'];
+    r   = load(file_name);
+    rep = [rep; r(Nini(j)+1:Nfim(j)+1,2)];
     for i=Nini(j):Nfim(j)
         k = k+1;
         istr=num2str(i,5);
-        file_name   = [home base_name '_' istr '.dat']
+        file_name   = [home base_name n '_' istr '.dat']
         data(:,:,k) = load(file_name);
     end
 end
-dmedio = mean(data,3);
-erro   = std(data,0,3);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sumrep = sum(rep);
+sumtot = sum(sumrep);
+cont   = 0;
+k      = 1;
+soma   = 0.0;
+soma2  = 0.0;
+for j=1:Nchains
+    n = 0;
+    for i=Nini(j)+1:Nfim(j)+1
+        dat = data(:,:,k);
+        k   = k + 1;
+        n   = n + 1;
+        for m=1:rep(n)
+            cont = cont +1;
+            soma = soma + dat;
+            soma2= soma2 + dat.^2;
+        end
+    end
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+dmedio = soma/cont;
+d2med  = soma2/cont;
+erro   = sqrt(d2med - dmedio.^2);
 %
 % Create figure
 figure1 = figure()
@@ -106,6 +136,7 @@ set(legend1,'Box','off');
 base=[homf base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
+pause(2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Production

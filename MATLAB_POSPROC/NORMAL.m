@@ -1,4 +1,4 @@
-function LOGNORMAL(Y,mu,std,tipo)
+function NORMAL(Y,mu,std,tipo)
 %LOGNORMAL    Create plot of datasets and fits
 %   LOGNORMAL(Y)
 %   Creates a plot, similar to the plot in the main distribution fitting

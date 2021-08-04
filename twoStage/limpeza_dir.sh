@@ -21,6 +21,7 @@ rm -rf ./simuladorRigido/exp0*;
 rm -rf ./simuladorRigido/exp1*;
 rm -f  ./simuladorRigido/output*.out;
 rm -rf ../gera_KL/FORTRAN_KL3D/in0*;
+rm -rf ../gera_KL/FORTRAN_KL3D_2/in0*;
 rm -rf ../gera_KL/FORTRAN_RW/in0*;
 rm -rf ../gera_KL/FORTRAN_KL3D/output_0*;
 rm -rf ../gera_KL/FORTRAN_KL3D_2/output_0*;

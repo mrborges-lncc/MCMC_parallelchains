@@ -7,17 +7,20 @@ B=400;
 A=50;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
-Nch_fim = 2;
+Nch_fim = 3;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(1000, 1, Nchains);
-Nfim = [1049 1096 1160 971];
-Nfim = Nfim(Nch_ini+1:Nch_fim+1);
+Nini = repmat(500, 1, Nchains);
+Nfim = [852 909 695 761];
+% Nfim = repmat(501, 1, Nchains);
+Nfim = Nfim(Nch_ini+1:Nch_fim+1)-1;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 nome = 'TwoPhase3D_onlyPerm_RW_RK';
+nome = 'TwoPhase3D_RW_RK';
 base_name = ['prod_D2_' nome];
 hom = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
-hom = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
+% hom = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
+% hom = '../';
 homf= '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'twophaseflow/exp/prod/prod_referencia_0.dat']);
 ref=dados;
@@ -29,34 +32,39 @@ total=0;
 for j=1:Nchains
     n = num2str(chains(j),'%d');
     pchains = load([home '../out/nchain_' nome n '.dat']);
-    total = total + sum(pchains(Nini(j):Nfim(j),2));
+    sz = size(pchains,1) + 1;
+    total = total + sum(pchains(Nini(j)+1:Nfim(j)+1,2));
 end
+total= int64(total);
 data = zeros(size(data,1),size(data,2),total);
 %% MEDIA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cont = 0;
 for j=1:Nchains
-    n = num2str(chains(j),'%d')
-    pchains = load([home '../out/nchain_' nome n '.dat']);
+    n = num2str(chains(j),'%d');
+    name = [home '../out/nchain_' nome n '.dat']
+    pchains = load(name);
     for i=Nini(j):Nfim(j)
         istr=num2str(i,5);
         file_name = [home base_name n '_' istr '.dat'];
-        dat  = load(file_name);
-        m = pchains(i,2);
+        dat = load(file_name);
+        m   = pchains(i+1,2);
         for nc = 1:m
             cont = cont + 1;
             data(:,:,cont) = dat;
         end
     end
 end
+fprintf('\n=========================================')
+fprintf('\n=========================================')
+fprintf('\nNumero total de dados: %d | %d',cont,total);
 soma   = sum(data,2);
 dmedio = mean(data,3);
 erro   = std(data,0,3);
-soma(:,1) = dmedio(:,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create figure
-figure1 = figure()
+figure1 = figure();
 
-C=min(dados(:,1));
+C=min(dados(:,1));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 D=max(dados(:,1))*1.01;
 
 dasp=[1 1.*(B-A)/(D-C) 200];
@@ -65,34 +73,34 @@ axes1 = axes('Parent',figure1,'FontSize',14,'FontName','Times New Roman',...
     'DataAspectRatio',dasp);
 box(axes1,'on');
 hold(axes1,'all');
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dados = dmedio;
 errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
     'Parent',axes1,'Color',[0.85 0.33 0.10],'MarkerSize',4,'Marker','o',...
-    'LineStyle','none','DisplayName','mean 1','LineWidth',0.5)
+    'LineStyle','none','DisplayName','mean 1','LineWidth',0.5);
 errorbar(dados(1:jump:end,1),dados(1:jump:end,3),erro(1:jump:end,3),...
     'Parent',axes1,'Color',[0.07 0.62 1],'MarkerSize',4,'Marker','s',...
-    'LineStyle','none','DisplayName','mean 2','LineWidth',0.5)
+    'LineStyle','none','DisplayName','mean 2','LineWidth',0.5);
 errorbar(dados(1:jump:end,1),dados(1:jump:end,4),erro(1:jump:end,4),...
-    'Parent',axes1,'Color',[0.93 0.69 0.13],'MarkerSize',4,'Marker','o',...
-    'LineStyle','none','DisplayName','mean 3','LineWidth',0.5)
+    'Parent',axes1,'Color',[0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 .93 0.69 0.13],'MarkerSize',4,'Marker','o',...
+    'LineStyle','none','DisplayName','mean 3','LineWidth',0.5);
 errorbar(dados(1:jump:end,1),dados(1:jump:end,5),erro(1:jump:end,4),...
     'Parent',axes1,'Color',[0 0 0],'MarkerSize',4,'Marker','s',...
-    'LineStyle','none','DisplayName','mean 4','LineWidth',0.5)
+    'LineStyle','none','DisplayName','mean 4','LineWidth',0.5);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plot(ref(2:end,1),ref(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
-    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1')
+    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1');
 plot(ref(2:end,1),ref(2:end,3),'Parent',axes1,'Color',[0.07 0.62 1],...
-    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  2')
+    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  2');
 plot(ref(2:end,1),ref(2:end,4),'Parent',axes1,'Color',[0.93 0.69 0.13],...
-    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  3')
+    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  3');
 plot(ref(2:end,1),ref(2:end,5),'Parent',axes1,'Color',[0 0 0],...
-    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  4')
+    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  4');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-    'DisplayName','selection time')
+    'DisplayName','selection time');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
 ylim(axes1,[A B])
@@ -118,6 +126,14 @@ set(legend1,'Box','off');
 base=[homf base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ERROM = mean(mean(erro(:,2:end)));
+fprintf('\n=========================================')
+fprintf('\n=========================================')
+fprintf('\nDesvio padrao medio: %5.4f',ERROM)
+fprintf('\n=========================================')
+fprintf('\n=========================================\n')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Production
@@ -151,7 +167,7 @@ end
 % Create figure
 pause(1)
 close all
-figure2 = figure()
+figure2 = figure();
 
 C=min(min(prodref(:,1,:)));
 D=max(max(prodref(:,1,:)))*1.01;
@@ -165,9 +181,10 @@ axes1 = axes('Parent',figure2,'FontSize',14,'FontName','Times New Roman',...
 box(axes1,'on');
 hold(axes1,'all');
 % for k = 1:size(data,3)
-%     plot(producao(1:end,1,k),producao(1:end,2,k),'Parent',axes1,...
+%     h=plot(producao(1:end,1,k),producao(1:end,2,k),'Parent',axes1,...
 %         'Color',[0.65 0.65 0.65],'MarkerSize',6,'LineWidth',0.5,...
-%         'DisplayName','ref.  1')
+%         'DisplayName','ref.  1');
+%     h.Annotation.LegendInformation.IconDisplayStyle = 'off';
 % end
 plot(prodref(1:end,1),prodref(1:end,2),'Parent',axes1,...
     'Color',[1 0 0],'MarkerSize',6,'LineWidth',2,...
@@ -204,7 +221,7 @@ set(legend1,'Box','off');
 % Print
 base=[homf 'total_' base_name];
 %print('-djpeg90',base)
-print('-depsc','-r300',base)
+print('-depsc','-r300',base);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -212,9 +229,9 @@ print('-depsc','-r300',base)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NORMA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-N = min(size(ref,1),size(dados,1))
-norma=norm(ref(1:N,2:end))
+N = min(size(ref,1),size(dados,1));
+norma=norm(ref(1:N,2:end));
 norma=norm(ref(1:N,2:end)-dados(1:N,2:end))/norma;
-fprintf('ERRO RELATIVO = %e\n',norma)
+fprintf('ERRO RELATIVO = %e\n',norma);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear

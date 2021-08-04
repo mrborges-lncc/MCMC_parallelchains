@@ -36,6 +36,7 @@ monitorsat  = 1;  %% if == 1 saturation monitors at some points
 nome  = 'amostra';
 % nome  = 'ref';
 et    = 0;
+verb  = false;
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,8 +62,8 @@ rhoR  = 2.70e03*kilogram/meter^3;  %% mean density of overload rocks
 overburden= 00.0*atm;   %% Load (overburden)
 phi   = 0.12;           %% Porosity
 fatk  = milli() * darcy();      %% Factor to permeability
-rho   = 0.4432;
-beta  = 5.8675e-14;
+rho   = 0.435808;
+beta  = 5.9355e-14;
 rho   = 0.413706;
 beta  = 5.6691e-14;
 phibeta = phi;
@@ -269,9 +270,9 @@ t = 0;
 for n=1:nstep
     t = t + dt(n);
     fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
-    sol  = incompTPFA(sol, G, hT, fluid, 'wells', W);
+    sol  = incompTPFA(sol, G, hT, fluid, 'wells', W, 'verbose', verb);
     sol  = explicitTransport(sol, G, dt(n), rock, fluid,...
-        'wells', W, 'verbose', true, 'dt_factor', 0.75);
+        'wells', W, 'verbose', verb, 'dt_factor', 0.75);
     npk  = PandSfigures(sol,G,W,printa,vw,nome,et,n,nprjump,(t/day),npk,ndt,lim);
     wellSols{n+1} = getWellSol(W, sol, fluid);
     oip(n+1) = sum(sol.s(:,2).*pv);

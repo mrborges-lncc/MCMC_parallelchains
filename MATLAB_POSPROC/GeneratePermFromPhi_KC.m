@@ -28,8 +28,8 @@ prt = 1; % print for simulation
 ckc = 2.5e-11;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nome= 'permKC';
-permrho = 1.0;
-permbeta= milli() * darcy();      %% Factor to permeability
+permrho = 0.42;
+permbeta= 5.7e-14;      %% Factor to permeability
 permvar = '\kappa';
 phirho  = 0.2;
 phibeta = 0.12;
@@ -46,7 +46,7 @@ G.nodes.coords(:, 1) = G.nodes.coords(:, 1)*meter;
 G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-home = '~/MCMC_parallelchains/MonteCarlo/twophaseflow/fields';
+home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/MonteCarlo/twophaseflow/fields';
 permname = 'perm';
 phiname  = 'phi';
 [FILENAME, PATHNAME] =uigetfile({'~/fields/*.dat'}, 'LOAD DATA PORO FIELD');

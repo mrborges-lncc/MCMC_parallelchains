@@ -7,7 +7,7 @@ dados=load('../twophaseflow/exp/prod/prod_referencia_0.dat');
 ref=dados;
 %
 file_name = ['../twoStage/select_prod/' base_name '.dat']
-%file_name = '../twophaseflow/exp/prod/prod_ref_0.dat'
+file_name = '../twophaseflow/exp000/prod/prod_amostra_0.dat'
 %
 % Create figure
 figure1 = figure()

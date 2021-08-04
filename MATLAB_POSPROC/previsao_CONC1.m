@@ -9,16 +9,18 @@ A=70;
 Nch_ini = 0;
 Nch_fim = 3;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(1000, 1, Nchains);
-Nfim = [1049 1096 1160 971];
-Nfim = Nfim(Nch_ini+1:Nch_fim+1);
+Nini = repmat(500, 1, Nchains);
+Nfim = [852 909 695 761];
+% Nfim = repmat(501, 1, Nchains);
+Nfim = Nfim(Nch_ini+1:Nch_fim+1)-1;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 nome = 'TwoPhase3D_RW_RK';
-nome = 'TwoPhase3D_onlyPerm_RW_RK';
+% nome = 'TwoPhase3D_onlyPerm_RW_RK';
 base_name = ['prod_D1_' nome];
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
-hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
+% hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
+hom  = '../';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'twophaseflow/exp/pres/pres_referencia_0.dat']);
 ref=dados;
@@ -30,33 +32,39 @@ total=0;
 for j=1:Nchains
     n = num2str(chains(j),'%d');
     pchains = load([home '../out/nchain_' nome n '.dat']);
-    total = total + sum(pchains(Nini(j):Nfim(j),2));
+    sz = size(pchains,1) + 1;
+    total = total + sum(pchains(Nini(j)+1:Nfim(j)+1,2));
 end
+total= int64(total);
 data = zeros(size(data,1),size(data,2),total);
 %% MEDIA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cont = 0;
 for j=1:Nchains
-    n = num2str(chains(j),'%d')
-    pchains = load([home '../out/nchain_' nome n '.dat']);
+    n = num2str(chains(j),'%d');
+    name = [home '../out/nchain_' nome n '.dat']
+    pchains = load(name);
     for i=Nini(j):Nfim(j)
         istr=num2str(i,5);
         file_name = [home base_name n '_' istr '.dat'];
-        dat  = load(file_name);
-        m = pchains(i,2);
+        dat = load(file_name);
+        m   = pchains(i+1,2);
         for nc = 1:m
             cont = cont + 1;
             data(:,:,cont) = dat;
         end
     end
 end
+fprintf('\n=========================================')
+fprintf('\n=========================================')
+fprintf('\nNumero total de dados: %d | %d',cont,total);
+soma   = sum(data,2);
 dmedio = mean(data,3);
 erro   = std(data,0,3);
-%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create figure
-figure1 = figure()
-%B=1e-2;
-%A=1e-5;
-C=min(dados(:,1));
+figure1 = figure();
+
+C=min(dados(:,1));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 D=max(dados(:,1))*1.01;
 
 dasp=[1 1.*(B-A)/(D-C) 200];
@@ -69,14 +77,14 @@ hold(axes1,'all');
 dados = dmedio;
 errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
     'Parent',axes1,'Color',[1 0 0],'MarkerSize',4,'Marker','o',...
-    'LineStyle','none','DisplayName','mean','LineWidth',0.5)
+    'LineStyle','none','DisplayName','mean','LineWidth',0.5);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plot(ref(2:end,1),ref(2:end,2),'Parent',axes1,'Color',[1 0 0],...
-    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.')
+    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-    'DisplayName','selection time')
+    'DisplayName','selection time');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
 ylim(axes1,[A B])
@@ -105,8 +113,8 @@ print('-depsc','-r300',base)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NORMA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-N = min(size(ref,1),size(dados,1))
-norma=norm(ref(1:N,2:end))
+N = min(size(ref,1),size(dados,1));
+norma=norm(ref(1:N,2:end));
 norma=norm(ref(1:N,2:end)-dados(1:N,2:end))/norma;
 fprintf('ERRO RELATIVO = %e\n',norma)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

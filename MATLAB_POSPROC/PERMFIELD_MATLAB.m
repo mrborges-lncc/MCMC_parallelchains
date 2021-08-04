@@ -23,13 +23,13 @@ ny  = 51;
 nz  = 5;
 depth = 1e3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-ini = 400;
-fim = 420;
+ini = 0;
+fim = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rho = 0.413706;
 beta= 5.6691e-14;      %% Factor to permeability
-rho = 0.4432;
-beta= 5.8675e-14;      %% Factor to permeability
+rho = 0.41;
+beta= 5.70e-14;      %% Factor to permeability
 nome= 'permREF';
 variav = '\kappa';
 % rho = 0.20;

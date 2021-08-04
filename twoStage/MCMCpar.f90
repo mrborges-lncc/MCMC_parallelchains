@@ -1896,7 +1896,7 @@ REAL FUNCTION NORMA_L2(K)
               AUX =AUX+AUXR*AUXR
            ENDDO
         ENDDO
-        NORMA_L2=SQRT(AUX)
+        NORMA_L2=(AUX)
      ENDIF
 !
      IF(LIKETIPO(K).EQ.3)THEN
@@ -1912,7 +1912,7 @@ REAL FUNCTION NORMA_L2(K)
 !
      write(*,100)k,NORMA_L2
 !
-100  FORMAT('DATA no....:',I3,2X,'NORMA L2..:',E10.3)
+100  FORMAT('DATA no....:',I3,2X,'NORMA L2........:',E10.3)
 !
    END FUNCTION NORMA_L2
   
@@ -1975,7 +1975,8 @@ SUBROUTINE GERAFILEIN(NERROREAD,NRK,NPROC,K)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   NPROP = NPROPOSAL(K)
   IF(NPROPOSAL(K).EQ.2)THEN
-     SIGK = RANDOM_WALK_METHOD(SIG(K),CONTADORC,NFREQ(K),VARPROP(K))
+     SIGK = RANDOM_WALK_METHOD(SIG(K),MKL(K),CONTADORC,&
+          NFREQ(K),VARPROP(K))
      JUMP = SIGK
      NPROP= 2
   END IF
@@ -3307,7 +3308,7 @@ SUBROUTINE LIKELIHOOD_C()
 !
   DO K=1,NDTYPE
      ERRORCC(K)=NORMA_L2(K)/NORMA_L2_REF(K)
-     LRATIOC(K)=((0.5d0/SIGMA2C(K))*&
+     LRATIOC(K)=((1.0d0/SIGMA2C(K))*&
           (ERRORNC(K)-ERRORCC(K)))
      WRITE(*,100)K,ERRORCC(K)
   END DO
@@ -3485,10 +3486,10 @@ SUBROUTINE LIKELIHOOD_F()
   REAL   ,EXTERNAL :: NORMA_L2
 !
   WRITE(*,*)'####################################################'
-  WRITE(*,*)'################### LIKELIHOOD #####################'
+  WRITE(*,*)'##================= LIKELIHOOD ===================##'
   DO K=1,NDTYPE
      ERRORCF(K)=NORMA_L2(K)/NORMA_L2_REF(K)
-     LRATIOF(K)=((0.5d0/SIGMA2F(K))*(ERRORNF(K)-ERRORCF(K)))
+     LRATIOF(K)=((1.0d0/SIGMA2F(K))*(ERRORNF(K)-ERRORCF(K)))
      write(*,100)K,ERRORCF(K)
   END DO
   WRITE(*,*)'####################################################'
@@ -3499,14 +3500,12 @@ SUBROUTINE LIKELIHOOD_F()
      TERRORCF = ERRORCF(K)*TERRORCF
      TLRATIOF = LRATIOF(K)+TLRATIOF
   END DO
-  WRITE(*,101)TERRORCF
 !
   TLRATIOF = EXP(TLRATIOF)
 !
   RETURN
 !
-100 FORMAT('DATAr no...:',I3,2X,'ERROR.....:',E10.3)
-101 FORMAT('ERROR TOTAL...............:',E10.3)
+100 FORMAT('DATAr no...:',I3,2X,'RELATIVE ERROR..:',E10.3)
 !
 END SUBROUTINE LIKELIHOOD_F
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -4979,7 +4978,7 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
   USE VARIAVEIS, ONLY:  GERATIPO,THETAN,CONT,VETCONT
   USE VARIAVEIS, ONLY:  CONTADORC,NFREQ,JUMP,VARPROP
 !
-  REAL                 :: XEPS,XCS
+  REAL                 :: XEPS,XCS,TOL
   INTEGER              :: K,I,N,DIM,NK,DESTART
   INTEGER              :: IERROR,TAG,NPROC
   REAL,DIMENSION(DIM)  :: XVET
@@ -4988,15 +4987,16 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
   INTEGER, EXTERNAL    :: INTMIN
   REAL, EXTERNAL       :: GAMMA_DREAM_METHOD
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  TOL    = 1E-08
   FIRST  = .TRUE.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  XEPS   = 2.38/SQRT(2.0*REAL(DIM))
-!  XEPS   = SIG(K)
+  IF(SIG(K).LE.TOL)THEN
+     XEPS = 2.38/SQRT(2.0*REAL(DIM))
+  ELSE
+     XEPS = SIG(K)
+  END IF
   XEPS   = GAMMA_DREAM_METHOD(XEPS,&
        CONTADORC,NFREQ(K),VARPROP(K))
-!  XEPS   = GAMMA_DREAM_METHOD(SIG(K),&
-!       CONTADORC,NFREQ(K),VARPROP(K))
-!  WRITE(*,100)XEPS
   IERROR = 0
   XCS    = SQRT(1.0E-03)
   XVET   = 0.0
@@ -5028,24 +5028,35 @@ END SUBROUTINE DE_METHOD
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-REAL FUNCTION RANDOM_WALK_METHOD(SIGK,CT,NFREQ,VP)
+REAL FUNCTION RANDOM_WALK_METHOD(SIGK,MKLK,CT,NFREQ,VP)
 !
   USE RANDOM
 !
   REAL,    INTENT(IN) :: SIGK
-  INTEGER, INTENT(IN) :: CT
+  INTEGER, INTENT(IN) :: CT,MKLK
   REAL                :: AUX,TOL
   INTEGER             :: NFREQ,VP
 !
   !  CALL RANDOM_SEED()
-  AUX = SIGK
+  TOL = 1.0E-08
+  IF(SIGK.LT.TOL)THEN
+     AUX = 2.38/SQRT(REAL(MKLK))
+  ELSE
+     AUX = SIGK
+  END IF
   IF(CT.LE.20) AUX = AUX*2.0
   IF(VP.EQ.1)THEN
      TOL = (5.0D-01)*SIGK
      CALL RANDOM_NUMBER(AUX)
      AUX = (SIGK-TOL)*AUX + TOL
   END IF
-  IF(MOD(CT,NFREQ).EQ.0) AUX = SIGK * 10.0
+  IF(MOD(CT,NFREQ).EQ.0)THEN
+     IF(AUX.LT.1.0)THEN
+        AUX = 1.0
+     ELSE
+        AUX = SIGK * 2.0
+     END IF
+  END IF
 !
   WRITE(*,100)SIGK,AUX
   RANDOM_WALK_METHOD = AUX
@@ -5066,13 +5077,20 @@ REAL FUNCTION GAMMA_DREAM_METHOD(SIGK,CT,NFREQ,VP)
 !
   !  CALL RANDOM_SEED()
   AUX = SIGK
+  IF(CT.LE.20) AUX = AUX*2.0
 !
   IF(VP.EQ.1)THEN
      TOL   = (5.0D-01)*SIGK
      CALL RANDOM_NUMBER(AUX)
      AUX = (SIGK-TOL)*AUX + TOL
   END IF
-  IF(MOD(CT,NFREQ).EQ.0) AUX = 10.0 * SIGK
+  IF(MOD(CT,NFREQ).EQ.0)THEN
+     IF(AUX.LT.1.0)THEN
+        AUX = 1.0
+     ELSE
+        AUX = 2.0 * SIGK
+     END IF
+  END IF
 !
   WRITE(*,100)SIGK,AUX
   GAMMA_DREAM_METHOD = AUX

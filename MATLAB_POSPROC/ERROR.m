@@ -1,25 +1,25 @@
 clear;
 close all;
 ini = 0;
-fim = 3;
+fim = 1;
 N   = 0;
 %
 M   = fim-ini+1;
 home= '/home/mrborges/MCMCrw/twoStage/';
 home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
-home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
+% home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
 % home= '../twoStage/';
 %
 homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 % homef='~/MCMC_parallelchains/';
 % homef='../';
 base_name = 'TwoPhase3D_RW_RK';
-base_name = 'TwoPhase3D_onlyPerm_RW_RK';
+% base_name = 'TwoPhase3D_onlyPerm_RW_RK';
 nome_extra = '';
-nchain=1;
-razao = 4;
-my  = [0.02; 0.08; 0.3];
-my  = [0.12; 0.3; 0.4];
+nchain= 1;
+razao = 3;
+my  = [0.0008; 0.003; 0.15];
+% my  = [0.03; 0.14; 0.4];
 my0 = [0.00; 0.00; 0.00];
 lwd = 2;
 xmaximo= 0;
@@ -56,6 +56,8 @@ end
 
 nvar = size(data,2) - 2;
 
+erro = [];
+
 % Create figure
 for nf = 1:nvar + 1
     figure1 = figure('PaperOrientation','landscape','PaperSize',[11 5]);
@@ -77,7 +79,7 @@ for nf = 1:nvar + 1
     hold(axes1,'all');
     final = 0;
     for i=1:M
-        cor    = [(M-i)/(M-1) 0 (i-1)/(M-1)];
+        cor    = [(M-i)/(M) 0 (i-1)/(M)];
         %cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
         inicio = final+1;
         final  = inicio+tm(i+1)-1;
@@ -85,7 +87,6 @@ for nf = 1:nvar + 1
         dy     = data(inicio:final,nf+1);
         r      = rep(inicio:final,2);
         sz     = size(r,1);
-        n=0;
         if(nchain==1)
             rsum = sum(r);
             x = [1:1:rsum]';
@@ -94,6 +95,7 @@ for nf = 1:nvar + 1
             x = [1:1:tm(i+1)]';
             r = 0*r+1;
         end
+        n=0;
         for j=1:sz
             for k=1:r(j)
                 n=n+1;
@@ -105,7 +107,10 @@ for nf = 1:nvar + 1
         if(maxx>N)
             maxx=N;
         end
-        plot(x(1:maxx,1),y(1:maxx,1),'LineWidth',lwd,'Color',cor)
+        plot(x(1:maxx,1),y(1:maxx,1),'LineWidth',lwd,'Color',cor);
+        if(1 == nf)
+            erro = [erro; (y(maxx/1.5:maxx))];
+        end
     end
     % Create xlabel
     xlabel('Accepted iterations','FontWeight','bold','Interpreter','latex',...
@@ -124,8 +129,11 @@ for nf = 1:nvar + 1
     print('-depsc','-r300',base);
     pause(1); clf; close all;
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%clear
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%clear
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LOGNORMAL(erro,mean(erro),std(erro),'')
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tm
 taxa=100.0*double(info(:,2))./double(info(:,1));
 fprintf('#################################\n');
