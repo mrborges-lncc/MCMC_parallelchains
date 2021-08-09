@@ -1,7 +1,7 @@
 clear;
 close all;
 ini = 0;
-fim = 1;
+fim = 3;
 N   = 0;
 %
 M   = fim-ini+1;
@@ -19,7 +19,7 @@ nome_extra = '';
 nchain= 1;
 razao = 3;
 my  = [0.0008; 0.003; 0.15];
-% my  = [0.03; 0.14; 0.4];
+my  = [0.03; 0.14; 0.4];
 my0 = [0.00; 0.00; 0.00];
 lwd = 2;
 xmaximo= 0;
