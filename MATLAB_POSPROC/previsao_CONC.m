@@ -7,11 +7,10 @@ B=400;
 A=50;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
-Nch_fim = 1;
+Nch_fim = 5;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(600, 1, Nchains);
-Nfim = [852 909 695 761];
-Nfim = [902 890 761];
+Nini = repmat(1000, 1, Nchains);
+Nfim = [2288 2379 2391 2499 2461 2369];
 % Nfim = repmat(501, 1, Nchains);
 Nfim = Nfim(Nch_ini+1:Nch_fim+1)-1;
 Nt   = (Nfim-Nini)+1;
@@ -22,7 +21,7 @@ base_name = ['prod_D2_' nome];
 hom = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 % hom = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
 % hom = '../';
-hom = '~/MCMCrw1/';
+% hom = '~/MCMCrw/';
 homf= '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'twophaseflow/exp/prod/prod_referencia_0.dat']);
 ref=dados;
@@ -85,7 +84,7 @@ errorbar(dados(1:jump:end,1),dados(1:jump:end,3),erro(1:jump:end,3),...
     'Parent',axes1,'Color',[0.07 0.62 1],'MarkerSize',4,'Marker','s',...
     'LineStyle','none','DisplayName','mean 2','LineWidth',0.5);
 errorbar(dados(1:jump:end,1),dados(1:jump:end,4),erro(1:jump:end,4),...
-    'Parent',axes1,'Color',[0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 .93 0.69 0.13],'MarkerSize',4,'Marker','o',...
+    'Parent',axes1,'Color',[0.93 0.69 0.13],'MarkerSize',4,'Marker','o',...
     'LineStyle','none','DisplayName','mean 3','LineWidth',0.5);
 errorbar(dados(1:jump:end,1),dados(1:jump:end,5),erro(1:jump:end,4),...
     'Parent',axes1,'Color',[0 0 0],'MarkerSize',4,'Marker','s',...
@@ -234,6 +233,7 @@ print('-depsc','-r300',base);
 N = min(size(ref,1),size(dados,1));
 norma=norm(ref(1:N,2:end));
 norma=norm(ref(1:N,2:end)-dados(1:N,2:end))/norma;
-fprintf('ERRO RELATIVO = %e\n',norma);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+fprintf('ERRO RELATIVO = %e',norma);
+fprintf('\n=========================================')
+fprintf('\n=========================================')%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear

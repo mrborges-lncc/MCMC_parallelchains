@@ -77,6 +77,11 @@ et = 3;
 param  = [];
 medias = [];
 desvios= [];
+E0      =  10 * giga * Pascal;         %% Young's module
+spriggs = 2.50;% E = E0 * exp(-spriggs * phi)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Setup material parameters for Biot and mechanics %%%%%%%%%%%%%%%%%%%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for n = ini:fim
     snum    = num2str(n,'%d');
@@ -85,11 +90,12 @@ for n = ini:fim
     if (max(phi) > 0.95 || min(phi) < 0.0)
         error('Problema nos valores max e min de phi')
     end
-    perm = ckc * (phi.^3) ./ ((1.0 - phi).^2);
-    sv   = 1e-03;
-    perm = perm + lhsnorm(0,sv,G.cells.num).*perm;
-    mk   = mean((perm));
-    vk   = var((perm));
+    %
+    perm  = ckc * (phi.^3) ./ ((1.0 - phi).^2);
+    sv    = 1e-03;
+    perm  = perm + lhsnorm(0,sv,G.cells.num).*perm;
+    mk    = mean((perm));
+    vk    = var((perm));
     mlk   = mean(log(perm));
     rho   = var(log(perm));
     beta  = exp(mlk);
@@ -99,7 +105,13 @@ for n = ini:fim
     fprintf('\n==============================================================\n')
     fprintf('Mean Yphi....: %4.3f    \t | \t std phi....: %4.2e   \n',mean(phi),std(phi));
     fprintf('Mean Yperm...: %4.3f mD \t | \t std K......: %4.3f mD\n',mk/permbeta,sqrt(vk)/permbeta);
+    %% Sprigg’s representation
+    E  = E0 * exp(-spriggs * phi);
+    sv = 1e-05;
+    E  = E + lhsnorm(0,sv,G.cells.num).*E;
+    fprintf('Mean E.......: %4.3e N/m^2 \t | \t std K......: %4.3e N/m^2\n',mean(E),std(E));
     fprintf('==============================================================\n')
+    %
     savefields(Lx,Ly,Lz,nx,ny,nz,1,reverseKlog(perm,beta,rho),...
         reverseKlog(phi,phibeta,phirho),n,home,permname,phiname,prt)
 end

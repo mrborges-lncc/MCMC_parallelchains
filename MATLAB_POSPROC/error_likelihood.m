@@ -21,6 +21,6 @@ norma_ref = (norm(ref).^2)
 norma_l2  = sum(sum((ref - dat).^2))
 erro = (norma_l2)/norma_ref
 lratio = (0.5/sig)*sqrt(erro)
-lratio = (1/(0.65*sig))*erro
+lratio = (1/(sig))*erro
 
 clear dados

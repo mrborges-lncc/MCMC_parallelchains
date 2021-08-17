@@ -9,10 +9,10 @@ A=70;
 Nch_ini = 0;
 Nch_fim = 1;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(800, 1, Nchains);
-Nfim = [852 909 695 761];
-Nfim = [1484 1484 695 761];
-Nfim = [902 890 761];
+Nini = repmat(900, 1, Nchains);
+Nfim = [510 517 541 530 532 505];
+Nfim = [1777 1785];
+% Nfim = [1047 1070];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1)-1;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -22,7 +22,7 @@ base_name = ['prod_D1_' nome];
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 % hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
 hom  = '../';
-hom  = '~/MCMCrw1/'
+hom  = '~/MCMCrw/'
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'twophaseflow/exp/pres/pres_referencia_0.dat']);
 ref=dados;
@@ -118,6 +118,10 @@ print('-depsc','-r300',base)
 N = min(size(ref,1),size(dados,1));
 norma=norm(ref(1:N,2:end));
 norma=norm(ref(1:N,2:end)-dados(1:N,2:end))/norma;
-fprintf('ERRO RELATIVO = %e\n',norma)
+fprintf('\n=========================================')
+fprintf('\n=========================================')
+fprintf('\nERRO RELATIVO = %e',norma)
+fprintf('\n=========================================')
+fprintf('\n=========================================')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear

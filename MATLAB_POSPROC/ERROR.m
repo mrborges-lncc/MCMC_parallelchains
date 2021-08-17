@@ -1,7 +1,8 @@
 clear;
 close all;
+repet = 10;
 ini = 0;
-fim = 3;
+fim = 5;
 N   = 0;
 %
 M   = fim-ini+1;
@@ -19,7 +20,7 @@ nome_extra = '';
 nchain= 1;
 razao = 3;
 my  = [0.0008; 0.003; 0.15];
-my  = [0.03; 0.14; 0.4];
+my  = [0.000001; 0.01; 0.005];
 my0 = [0.00; 0.00; 0.00];
 lwd = 2;
 xmaximo= 0;
@@ -41,13 +42,17 @@ for i=ini:fim
     dados=load(file_name);
     dados=[dados; sz 1];
     aux = max(max(sum(dados(:,2))),aux);
-    rep = [rep;dados];
+    rep = [rep;dados(:,2)];
     file_name =...
         [home 'in/init_stat_' base_name num2str(i,'%1.1d') '.in'];
     fileID = fopen(file_name);
     [A] = fscanf(fileID,'%d %d %d %d');
     info= [info; A(1) A(3)];
     fclose(fileID);
+end
+
+if(repet == 0)
+    rep = ones(length(rep),1);
 end
 
 if(N==0)
@@ -85,7 +90,7 @@ for nf = 1:nvar + 1
         final  = inicio+tm(i+1)-1;
         dx     = data(inicio:final,1);
         dy     = data(inicio:final,nf+1);
-        r      = rep(inicio:final,2);
+        r      = rep(inicio:final);
         sz     = size(r,1);
         if(nchain==1)
             rsum = sum(r);
