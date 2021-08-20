@@ -26,10 +26,8 @@ depth = 1e3;
 ini = 0;
 fim = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rho = 0.413706;
-beta= 5.6691e-14;      %% Factor to permeability
-rho = 0.41;
-beta= 5.70e-14;      %% Factor to permeability
+rho = 0.81;
+beta= 8.950e-14;      %% Factor to permeability
 nome= 'permREF';
 variav = '\kappa';
 % rho = 0.20;
@@ -38,8 +36,8 @@ variav = '\kappa';
 % variav = '\phi';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/select_fields/*.dat'}, 'LOAD DATA');
-[FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
-%[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
+%[FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
+[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/*.dat'}, 'LOAD DATA');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);
@@ -96,7 +94,7 @@ for n = ini:fim
     %plot_rock(Y,G,'Yn','$Y$',color,lim,vw,1);
     plot_rock_poro(rock.perm(:,1),G,'Y',beta,rho,['$Y_{' variav '}$'],...
         color,lim,vw,2);
-    base=['../figuras/Y_' nome '_' snum];
+    base=['../../figuras/Y_' nome '_' snum];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     pause(1); close all

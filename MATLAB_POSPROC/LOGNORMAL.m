@@ -25,7 +25,8 @@ set(f_,'Units','Pixels','Position',[655 332 674 674]);
 legh_ = []; legt_ = {};   % handles and text for legend
 ax_ = newplot;
 set(ax_,'Box','on',...
-    'FontSize',24,'FontName','Times New Roman');
+    'FontSize',20,'FontName','Times New Roman',...
+    'TickLabelInterpreter','latex');
 hold on;
 
 % --- Plot data originally in dataset "Y data"
@@ -34,14 +35,14 @@ Data_ = Y(t_);
 [F_,X_] = ecdf(Data_,'Function','cdf'...
               );  % compute empirical cdf
 Bin_.rule = 3;
-Bin_.nbins = 60;
+Bin_.nbins = 50;
 [C_,E_] = dfswitchyard('dfhistbins',Data_,[],[],Bin_,F_,X_);
 [N_,C_] = ecdfhist(F_,X_,'edges',E_); % empirical pdf from cdf
 h_ = bar(C_,N_,'hist');
 set(h_,'FaceColor','none','EdgeColor',[0.333333 0 0.666667],...
        'LineStyle','-', 'LineWidth',1);
-xlabel(tipo,'FontSize',34,'Interpreter','tex','FontAngle','italic');
-ylabel('Density','FontSize',34,'Interpreter','tex','FontAngle','italic')
+xlabel(tipo,'FontSize',30,'Interpreter','latex','FontAngle','italic');
+ylabel('Density','FontSize',30,'Interpreter','latex','FontAngle','italic')
 legh_(end+1) = h_;
 legt_{end+1} = [tipo ' data'];
 
@@ -82,6 +83,7 @@ else
     end
 end
 hold off;
-leginfo_ = {'Orientation', 'vertical', 'Location', 'NorthEast','Interpreter','tex','FontAngle','italic'}; 
+leginfo_ = {'Orientation', 'vertical', 'Location', 'NorthEast',...
+    'Interpreter','latex','FontAngle','italic'}; 
 h_ = legend(ax_,legh_,legt_,leginfo_{:});  % create legend
-set(h_,'FontSize',20,'Interpreter','tex');
+set(h_,'FontSize',20,'Interpreter','latex', 'Box', 'off');

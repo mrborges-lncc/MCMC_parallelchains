@@ -8,7 +8,7 @@ A=50;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
 Nch_fim = 5;
-Nchains = Nch_fim - Nch_ini + 1;
+Nchains = Nch_fim - Nch_ini + 1;q
 Nini = repmat(1000, 1, Nchains);
 Nfim = [2288 2379 2391 2499 2461 2369];
 % Nfim = repmat(501, 1, Nchains);

@@ -24,17 +24,23 @@ nz  = 5;
 depth = 1e3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nome= 'permKC';
-permrho = 0.4432;
-permbeta= 5.8675e-14;      %% Factor to permeability
+permrho = 0.597;
+permbeta= 9.1098e-14;      %% Factor to permeability
 permvar = '\kappa';
-phirho  = 0.2;
-phibeta = 0.12;
+phirho  = 0.23;
+phibeta = 0.146;
 phivar  = '\phi';
+Erho    = 0.23;
+Ebeta   = 1.7245e10;
+E0      = 5e10;
+Evar    = '\mathsf{E}';
 home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 homef= '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
+home = '~/MCMC_parallelchains/';
+homef= '~/MCMC_parallelchains/figuras/';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PORO FIELD');
-%[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
+%[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PORO FIELD');
+[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/phi*.dat'}, 'LOAD DATA PORO FIELD');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);
@@ -45,8 +51,8 @@ end
 phifilen = filen(1:k);
 nini = int32(str2num(filem(k+1:end)));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
-%[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
+%[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
+[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/pe*.dat'}, 'LOAD DATA PERM FIELD');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);
@@ -55,7 +61,22 @@ while filem(k) ~= '_'
     k = k-1;
 end
 permfilen = filen(1:k);
-nini = int32(str2num(filem(k+1:end)));
+nini2 = int32(str2num(filem(k+1:end)));
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
+[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/E*.dat'}, 'LOAD DATA PERM FIELD');
+filen=sprintf('%s%s', PATHNAME,FILENAME);
+lf = length(filen);
+filem = filen(1:end-4);
+k = length(filem);
+while filem(k) ~= '_'
+    k = k-1;
+end
+Efilen = filen(1:k);
+nini3 = int32(str2num(filem(k+1:end)));
+if nini ~= nini2 || nini ~= nini3
+    error('Campos não compatíveis')
+end
 try
    require incomp ad-mechanics
 catch %#ok<CTCH>
@@ -90,6 +111,10 @@ phi  = phibeta .* exp(phirho * phiY);
 Y    = load_perm(G,permfilen,permfilen,permfilen,depth,nini,nD);
 permY= Y(:,1);
 perm = permbeta .* exp(permrho * permY);
+%% YOUNG
+Y    = load_perm(G,Efilen,Efilen,Efilen,depth,nini,nD);
+EY= Y(:,1);
+E = Ebeta .* exp(Erho * EY);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rock model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rock = makeRock(G, perm, phi);
@@ -107,8 +132,18 @@ base=[homef 'perm_phi_KC_' nome]
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600', base);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+plotEphi(phi,E,E0);
+base=[homef 'perm_phi_E_' nome]
+set(gcf,'PaperPositionMode','auto');
+print('-depsc','-r600', base);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plotKC_Y(phiY,permY)
 base=[homef 'Yperm_Yphi_KC_' nome]
+set(gcf,'PaperPositionMode','auto');
+print('-depsc','-r600', base);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+plotE_Y(phiY,EY)
+base=[homef 'Yperm_Yphi_YE_' nome]
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600', base);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

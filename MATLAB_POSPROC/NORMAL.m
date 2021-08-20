@@ -24,7 +24,8 @@ figure(f_);
 set(f_,'Units','Pixels','Position',[655 332 674 469.975]);
 legh_ = []; legt_ = {};   % handles and text for legend
 ax_ = newplot;
-set(ax_,'Box','on','FontSize',24,'FontName','Times New Roman');
+set(ax_,'Box','on','FontSize',20,'FontName','Times New Roman',...
+    'TickLabelInterpreter','latex');
 hold on;
 
 % --- Plot data originally in dataset "Y data"
@@ -39,8 +40,8 @@ Bin_.nbins = 40;
 h_ = bar(C_,N_,'hist');
 set(h_,'FaceColor','none','EdgeColor',[0.333333 0 0.666667],...
        'LineStyle','-', 'LineWidth',1);
-xlabel(tipo,'FontSize',34,'Interpreter','latex');
-ylabel('Density','FontSize',34,'Interpreter','latex')
+xlabel(tipo,'FontSize',30,'Interpreter','latex');
+ylabel('Density','FontSize',30,'Interpreter','latex')
 legh_(end+1) = h_;
 legt_{end+1} = '$Y$ data';
 
@@ -71,6 +72,7 @@ legh_(end+1) = h_;
 legt_{end+1} = ['$\mathbf{N}(' num2str(mu,'%1.2f') ',\,' num2str(std*std,'%1.2f') ')$'];
 
 hold off;
-leginfo_ = {'Orientation', 'vertical', 'Location', 'NorthEast','Interpreter','latex'}; 
+leginfo_ = {'Orientation', 'vertical', 'Location', 'NorthEast',...
+    'Interpreter','latex'}; 
 h_ = legend(ax_,legh_,legt_,leginfo_{:});  % create legend
-set(h_,'FontSize',20,'Interpreter','latex');
+set(h_,'FontSize',20,'Interpreter','latex','Box','off');

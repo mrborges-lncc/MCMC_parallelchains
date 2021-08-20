@@ -11,6 +11,7 @@ tstart =  tic;
 
 addpath ~/Dropbox/mrst_borges_tools/
 addpath ~/Dropbox/mrst-2021a/
+addpath ../../MATLAB_POSPROC/
 startup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,15 +24,18 @@ ny  = 51;
 nz  = 5;
 depth = 1e3;
 ini = 0;
-fim = 0;
+fim = 1999;
 prt = 1; % print for simulation
-ckc = 2.11e-11;
+printa = 10;
+Ss  = 68798.072;
+c   = 10;
+ckc = 1/(c * Ss^2);
 a   = 7.12;
 E0  = 5e10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nome= 'permKC';
-permrho = 0.808;
-permbeta= 8.987e-14;      %% Factor to permeability
+permrho = 0.81;
+permbeta= 8.950e-14;      %% Factor to permeability
 permvar = '\kappa';
 phirho  = 0.23;
 phibeta = 0.146;
@@ -93,9 +97,14 @@ fat = 1/(milli * darcy);
 for n = ini:fim
     snum    = num2str(n,'%d');
     Y   = load_perm(G,phifilen,phifilen,phifilen,depth,n,nD);
+%     Y   = Y(:,1);
+    Y   = Y(:,1) - mean(Y(:,1));
+    Y   = Y/std(Y);
+    if printa == 1, NORMAL(Y,mean(Y),std(Y),'$Y$'); end 
     meanY = mean(Y);
     stdY  = std(Y);
-    phi = phibeta * exp(phirho * Y(:,1));
+    phi = phibeta * exp(phirho * Y);
+    if printa == 1, LOGNORMAL(phi,mean(phi),std(phi),'$\phi$'); end 
     if (max(phi) > 0.95 || min(phi) < 0.0)
         error('Problema nos valores max e min de phi')
     end
@@ -103,6 +112,7 @@ for n = ini:fim
     perm  = ckc * (phi.^3) ./ ((1.0 - phi).^2);
     sv    = 1e-03;
     perm  = perm + lhsnorm(0,sv,G.cells.num).*perm;
+    if printa == 1, LOGNORMAL(perm,mean(perm),std(perm),'$\kappa$'); end 
     mk    = mean((perm));
     vk    = var((perm));
     mlk   = mean(log(perm));
@@ -110,17 +120,27 @@ for n = ini:fim
     beta  = exp(mlk);
     param = [param; beta rho];
     fprintf('\n==============================================================\n')
-    fprintf('Mean Y......: %4.3f    \t\t | \t std Y......: %4.2f   \n',meanY,stdY);
-    fprintf('Mean phi....: %4.3f    \t\t | \t std phi....: %4.2f   \n',mean(phi),std(phi));
+    fprintf('Mean Y......: %4.3f    \t | \t std Y......: %4.2f   \n',meanY,stdY);
+    fprintf('Mean phi....: %4.2f    \t\t | \t std phi....: %4.2f   \n',mean(phi),std(phi));
     fprintf('Mean perm...: %4.3f mD \t | \t std perm...: %4.3f mD\n',mk*fat,sqrt(vk)*fat);
     %% Sprigg’s representation
     E  = E0 * exp(-a * phi);
-    sv = 1e-05;
+    sv = 2.5e-05;
     E  = E + lhsnorm(0,sv,G.cells.num).*E;
-    paramE = [paramE; exp(mean(log(E))) var(log(E))];
+    mu_E = mean(E);
+    std_E= std(E);
+    muY  = log(mu_E) - (1/2) * log((std_E^2)/(mu_E^2) + 1);
+    varY = log((std_E^2)/(mu_E^2) + 1);
+    stdY = sqrt(varY);
+    betaE= exp(muY);
+    rhoE = sqrt(varY);
+    if printa == 1, NORMAL(E,mean(E),std(E),'$\mathsf{E}$'); end 
+    paramE = [paramE; betaE rhoE];
     fprintf('Mean E.......: %4.3fe9 N/m^2 \t | \t std E......: %4.3fe9 N/m^2\n',mean(E)/1e9,std(E)/1e9);
     fprintf('==============================================================\n')
     %
+    if printa == 1, NORMAL(reverseKlog(E,Ebeta,Erho),...
+            mean(reverseKlog(E,Ebeta,Erho)),std(reverseKlog(E,Ebeta,Erho)),'$Y_{\mathsf{E}}$'); end
     savefields3(Lx,Ly,Lz,nx,ny,nz,1,reverseKlog(perm,beta,rho),...
         reverseKlog(phi,phibeta,phirho),reverseKlog(E,Ebeta,Erho),n,...
         home,permname,phiname,Ename,prt)
@@ -129,9 +149,12 @@ for n = ini:fim
 end
 pbeta = 1.0; % pbeta = permbeta;
 plotKC(phi,perm/pbeta,0)
+base=['../../figuras/perm_phi_KC_' nome];
+set(gcf,'PaperPositionMode','auto');
+print('-depsc','-r600', base);
 
 plotEphi(phi,E,E0);
-base=['../figuras/perm_phi_KC_' nome];
+base=['../../figuras/perm_phi_E_' nome];
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600', base);
 beta = mean(param(:,1));
@@ -145,9 +168,9 @@ fprintf('PERM ====> Mean = %5.4e\t Std = %5.4e\n',mean(medias(:,2)),mean(desvios
 fprintf('E =======> Mean = %5.4e\t Std = %5.4e\n',mean(medias(:,3)),mean(desvios(:,3)))
 fprintf('==============================================================\n')
 fprintf('==============================================================\n')
-fprintf('PHI =====> beta = %5.4f\t rho = %f\n',phibeta,phirho)
-fprintf('PERM ====> beta = %5.4e\t rho = %f\n',beta,rho)
-fprintf('E =======> beta = %5.4e\t rho = %f\n',betaE,rhoE)
+fprintf('PHI =====> beta = %5.4f\t rho = %5.3f\n',phibeta,phirho)
+fprintf('PERM ====> beta = %5.4e\t rho = %5.3f\n',beta,rho)
+fprintf('E =======> beta = %5.4e\t rho = %5.3f\n',betaE,rhoE)
 fprintf('==============================================================\n')
 fprintf('==============================================================\n')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,5 +178,9 @@ figure(22)
 hist(param(:,1),30);
 figure(23)
 hist(param(:,2),30);
+figure(24)
+hist(paramE(:,1),30);
+figure(25)
+hist(paramE(:,2),30);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
