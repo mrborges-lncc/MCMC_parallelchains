@@ -6,7 +6,7 @@ addpath ../../MATLAB_POSPROC/
 startup
 
 %% Porosity %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Y = lhsnorm(0,1,500);
+Y = lhsnorm(0,1,50000);
 mu_phi  = 0.15;
 std_phi = 0.035;  
 muY  = log(mu_phi) - (1/2) * log((std_phi^2)/(mu_phi^2) + 1);
@@ -67,16 +67,16 @@ plotKC(p,k,1);
 %% Young modulus %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % dados obtidos em Flavia (Tese) pg. 134
 nu        = 0.20;
-c_calcita = 1.002e-11;
+c_calcita = 1.302e-11;
 c_bulk    = 2.897e-10;
 E0_calcita= (1.0/c_calcita) * (3.0*(1.0 - 2*nu));
 E         = (1.0/c_bulk) * (3.0*(1.0 - 2*nu));
-phi= [0:0.02:0.18].';
-x  = [0.0 0.05 0.1 0.15];
+phi= [0.0:0.05:0.5].';
+x  = [0 0.05 0.1 0.15];
 mm = [37 25 13];
 fm = 2/31;
-y  = (2e6 + fm * mm * 1e6) * 6894.75729;
-E0 = 5.e10;
+y  = 0.55*(2e6 + fm * mm * 1e6) * 6894.75729;
+E0 = 25.e9;
 y  = [E0 y];
 
 syms f a
@@ -87,6 +87,7 @@ err(a)= sum(log(y) - lnf)^2;
 derr  =  diff(err,a) == 0;
 sp    = double(solve(derr,a));
 
+%p = [0; p];
 E = E0 * exp(-sp * p);
 
 Bulk = mean(E)/(3.0*(1.0 - 2*mean(nu)));
