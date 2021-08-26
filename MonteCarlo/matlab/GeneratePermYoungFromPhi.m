@@ -30,8 +30,8 @@ printa = 10;
 Ss  = 68798.072;
 c   = 10;
 ckc = 1/(c * Ss^2);
-a   = 6.171;
-E0  = 2.5e10;
+a   = 15.351;
+E0  = 1.0e11;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nome= 'permKC';
 permrho = 0.597;
@@ -40,8 +40,8 @@ permvar = '\kappa';
 phirho  = 0.23;
 phibeta = 0.146;
 phivar  = '\phi';
-Erho    = 0.201;
-Ebeta   = 9.9313e09;
+Erho    = 0.458;
+Ebeta   = 1.024e10;
 Evar    = '\mathsf{E}';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -120,9 +120,9 @@ for n = ini:fim
     beta  = exp(mlk);
     param = [param; beta rho];
     fprintf('\n==============================================================\n')
-    fprintf('Mean Y......: %4.3f    \t | \t std Y......: %4.2f   \n',meanY,stdY);
-    fprintf('Mean phi....: %4.2f    \t\t | \t std phi....: %4.2f   \n',mean(phi),std(phi));
-    fprintf('Mean perm...: %4.3f mD \t | \t std perm...: %4.3f mD\n',mk*fat,sqrt(vk)*fat);
+    fprintf('Mean Y.........: %4.3f    \t\t |  std Y......: %4.2f   \n',meanY,stdY);
+    fprintf('Mean phi.......: %4.2f    \t\t |  std phi....: %4.2f   \n',mean(phi),std(phi));
+    fprintf('Mean perm......: %4.3f mD \t\t |  std perm...: %4.3f mD\n',mk*fat,sqrt(vk)*fat);
     %% Sprigg’s representation
     E  = E0 * exp(-a * phi);
     sv = 2.5e-05;
@@ -136,7 +136,7 @@ for n = ini:fim
     rhoE = sqrt(varY);
     if printa == 1, NORMAL(E,mean(E),std(E),'$\mathsf{E}$'); end 
     paramE = [paramE; betaE rhoE];
-    fprintf('Mean E.......: %4.3fe9 N/m^2 \t | \t std E......: %4.3fe9 N/m^2\n',mean(E)/1e9,std(E)/1e9);
+    fprintf('Mean E.........: %4.3fe9 N/m^2 \t\t |  std E......: %4.3fe9 N/m^2\n',mean(E)/1e9,std(E)/1e9);
     fprintf('==============================================================\n')
     %
     if printa == 1, NORMAL(reverseKlog(E,Ebeta,Erho),...

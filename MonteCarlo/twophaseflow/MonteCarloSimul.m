@@ -1,31 +1,57 @@
 clear all
 close all
 
-N = 2000;
-nome = 'TwoPhase3DMC_only_perm';
+delete(gcp('nocreate'))
 
+N = 4;
+nome = 'GeoTwoPhase3DMC';
+
+home = '~/fields/campos/';
+
+currentDir = home;
+finpe   = [currentDir 'perm_'];
+finpo   = [currentDir 'phi_'];
+finyo   = [currentDir 'E_'];
 currentDir = pwd;
-finpe   = [currentDir '/fields/e510x510x20_51x51x5_l50x50x10_'];
-finpo   = [currentDir '/fields/e510x510x20_51x51x5_l50x50x10_'];
-fperm   = [currentDir '/exp000/fields/perm_amostra_0.dat'];
-fporo   = [currentDir '/exp000/fields/poro_amostra_0.dat'];
 direct  = dir(fullfile([currentDir '/exp000/fields/*.dat']));
 
-for i = 0:N-1
-    n = num2str(i,'%d')
-    fper = [finpe num2str(i,'%d') '.dat'];
-    fpor = [finpo num2str(i,'%d') '.dat'];
-    copyfile(fper, fperm);
-    copyfile(fpor, fporo);
-    Simulator(0);
-    movefile([currentDir '/exp000/conc/sw_amostra_0.dat'],...
-        [currentDir '/exp000/conc/sw_' nome '_' n '.dat']);
-    movefile([currentDir '/exp000/pres/pres_amostra_0.dat'],...
-        [currentDir '/exp000/pres/pres_' nome '_' n '.dat']);
-    movefile([currentDir '/exp000/pres/presinj_amostra_0.dat'],...
-        [currentDir '/exp000/pres/presinj_' nome '_' n '.dat']);
-    movefile([currentDir '/exp000/prod/prod_amostra_0.dat'],...
-        [currentDir '/exp000/prod/prod_' nome '_' n '.dat']);
-    movefile([currentDir '/exp000/prod/wcut_amostra_0.dat'],...
-        [currentDir '/exp000/prod/wcut_' nome '_' n '.dat']);
+Npar = 2;
+
+parpool('local',Npar);
+for i = 0:Npar:N-1
+    parfor (j = 0:Npar-1, Npar)
+        n = j;
+        k = i + j
+        fper = [finpe num2str(k,'%d') '.dat'];
+        fpor = [finpo num2str(k,'%d') '.dat'];
+        fyou = [finyo num2str(k,'%d') '.dat'];
+        fperm= [currentDir '/exp' num2str(n,'%4.3d') '/fields/perm_amostra_0.dat'];
+        fporo= [currentDir '/exp' num2str(n,'%4.3d') '/fields/poro_amostra_0.dat'];
+        fyoun= [currentDir '/exp' num2str(n,'%4.3d') '/fields/young_amostra_0.dat'];
+        
+        fprintf('\n%d %d\n',n,k)
+        fprintf('%s\n',fyou)
+        fprintf('%s\n',fperm)
+        fprintf('%s\n',fporo)
+        fprintf('%s\n',fyoun)
+        
+        copyfile(fper, fperm);
+        copyfile(fpor, fporo);
+        copyfile(fyou, fyoun);
+        fprintf('%s => %s\n',fyou,fyoun)
+        Simulator(n);
+        movefile([currentDir '/exp' num2str(n,'%4.3d') '/conc/sw_amostra_0.dat'],...
+            [currentDir '/exp/conc/sw_' nome '_' num2str(k,'%d') '.dat']);
+        movefile([currentDir '/exp' num2str(n,'%4.3d') '/pres/pres_amostra_0.dat'],...
+            [currentDir '/exp/pres/pres_' nome '_' num2str(k,'%d') '.dat']);
+        movefile([currentDir '/exp' num2str(n,'%4.3d') '/pres/presinj_amostra_0.dat'],...
+            [currentDir '/exp/pres/presinj_' nome '_' num2str(k,'%d') '.dat']);
+        movefile([currentDir '/exp' num2str(n,'%4.3d') '/prod/prod_amostra_0.dat'],...
+            [currentDir '/exp/prod/prod_' nome '_' num2str(k,'%d') '.dat']);
+        movefile([currentDir '/exp' num2str(n,'%4.3d') '/prod/wcut_amostra_0.dat'],...
+            [currentDir '/exp/prod/wcut_' nome '_' num2str(k,'%d') '.dat']);
+        fprintf('\n\n %s\n',[currentDir '/exp' num2str(n,'%4.3d') '/conc/sw_amostra_0.dat'])
+        fprintf('\n\n %s\n',[currentDir '/exp/conc/sw_' nome '_' num2str(k,'%d') '.dat'])
+    end
 end
+delete(gcp('nocreate'))

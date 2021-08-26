@@ -6,7 +6,7 @@ addpath ../../MATLAB_POSPROC/
 startup
 
 %% Porosity %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Y = lhsnorm(0,1,50000);
+Y = lhsnorm(0,1,5000);
 mu_phi  = 0.15;
 std_phi = 0.035;  
 muY  = log(mu_phi) - (1/2) * log((std_phi^2)/(mu_phi^2) + 1);
@@ -76,7 +76,7 @@ x  = [0 0.05 0.1 0.15];
 mm = [37 25 13];
 fm = 2/31;
 y  = 0.55*(2e6 + fm * mm * 1e6) * 6894.75729;
-E0 = 25.e9;
+E0 = 1.e11;
 y  = [E0 y];
 
 syms f a
@@ -86,6 +86,10 @@ syms err(a) derr
 err(a)= sum(log(y) - lnf)^2;
 derr  =  diff(err,a) == 0;
 sp    = double(solve(derr,a));
+syms f(a) a
+Emed = 10e09;
+f(a) = E0 * exp(-a .* 0.15) - Emed;
+sp   = double(solve(f,a));
 
 %p = [0; p];
 E = E0 * exp(-sp * p);
