@@ -36,12 +36,11 @@ function np = PandSfigures(sol,G,W,printa,vw,nome,et,num,nprj,t,npk,ndt,lim)
     t = ['$\quad t = ' num2str(t,'%4.2f') '\ days$ '];
     if printa == 1 && mod(num-ndt,nprj) == 0 && num > ndt
         figure(4);
-%         plotCellData(G, convertTo(sol.pressure, barsa()),...
-        plotCellData(G, convertTo(sol.pressure, mega()),...
+        plotCellData(G, convertTo(sol.pressure, barsa()),...
             'FaceAlpha', 0.95, 'EdgeAlpha', 0.4, 'EdgeColor', 'none');
         plotWell(G, W, 'height', Z*0.2,'FontSize',10,'Interpreter','latex')
         colorbar('horiz'); colormap(jet(55)); axis equal tight; view(vw);
-        set(gca,'ZDir', 'reverse'), title(['Pressure [$MPa$],' t],...
+        set(gca,'ZDir', 'reverse'), title(['Pressure [$bar$],' t],...
             'FontSize',12,'Interpreter','latex',...
             'Position', [20 5.5 1150]);
         set(gca, 'DataAspect',[1 1 1],'Color','none','Box','on');
@@ -52,13 +51,13 @@ function np = PandSfigures(sol,G,W,printa,vw,nome,et,num,nprj,t,npk,ndt,lim)
         zlabel('$z (m)$','FontSize',14,'Interpreter','latex');
         ylabel('$y (m)$','FontSize',14,'Interpreter','latex');
         xlabel('$x (m)$','FontSize',14,'Interpreter','latex');
-        base=['../figuras/pressure_' nome '-' num2str(npk,'%d')];
+        base=['figuras/pressure_' nome '-' num2str(npk,'%d')];
         set(gcf,'PaperPositionMode','auto');
         print('-dpng','-r600', base);
         pause(et);
         clf; close all;
         figure(5);
-        plotCellData(G, sol.s(:,1),find(sol.s(:,1)>=0.05),...
+        plotCellData(G, sol.s(:,1),find(sol.s(:,1)>=0.10),...
             'FaceAlpha', 0.95, 'EdgeAlpha', 0.4, 'EdgeColor', 'k');
         plotWell(G, W, 'height', Z*0.2,'FontSize',10,'Interpreter','latex')
         colorbar('horiz'); colormap(colorm); axis equal tight; view(vw);
@@ -72,7 +71,7 @@ function np = PandSfigures(sol,G,W,printa,vw,nome,et,num,nprj,t,npk,ndt,lim)
         zlabel('$z (m)$','FontSize',14,'Interpreter','latex');
         ylabel('$y (m)$','FontSize',14,'Interpreter','latex');
         xlabel('$x (m)$','FontSize',14,'Interpreter','latex');
-        base=['../figuras/wsat_' nome '-' num2str(npk,'%d')];
+        base=['figuras/wsat_' nome '-' num2str(npk,'%d')];
         set(gcf,'PaperPositionMode','auto');
         print('-dpng','-r600', base);
         pause(et);

@@ -9,15 +9,14 @@ clear;
 %base_aux = '/home/mrborges/Congressos/cilamce2011/figuras/';
 %base_aux = '/home/mrborges/THERMOHIDRO/simulador/figuras/';
 base_aux = '../figuras/'
-nz=100;
 NFi=0;
-NFf=99;
-Lz=1000;
-Lx=100;
-Ly=100;
-nx=50;
-ny=50;
-nz=100;
+NFf=9;
+Lz=20;
+Lx=510;
+Ly=510;
+nx=51;
+ny=51;
+nz=5;
 dx=Lx/nx;
 dy=Ly/ny;
 dz=Lz/nz;
@@ -55,7 +54,7 @@ end
 %**************************************************************************
 %** ENTRADA DE DADOS DO CONDICIONAMENTO ***********************************
 % vet(n,i) coordenada i da posicao do dado condicionado n
-inp = load('../gera_KL/MATLAB/input_cond.dat');
+%inp = load('../gera_KL/MATLAB/input_cond.dat');
 %
 if(TIPOINPUT2 == 1)
     name = '../simul_comp/exp/input_cond.in'
@@ -96,6 +95,7 @@ disp(' LOADING FIELD ');
 line_file='../forecast/3Dfields/fields/MC_0_0.dat'
 line_file='../forecast/3Dfields/fields/MC_0_0.dat'
 line_file='../forecast/FORTRAN_LBD3D/campos/MCMC_0_0.dat'
+line_file='~/fields/campos/perm_0.dat'
 n=0;
 %
 % for i=size(line_file,2):-1:1
@@ -128,7 +128,7 @@ for i=size(line_file,2):-1:1
 end
 
 %str_k=34
-file_base=line_file(1:str_k)
+file_base=line_file(1:end-5)
 %in='0'
 %
 for i=size(file_base,2):-1:1
@@ -145,7 +145,8 @@ fim=ini+nz-1;
 for nf=NFi:NFf
     cont=0;
     for II=ini:1:fim
-        line_file = [file_base num2str(nf,5) '_' num2str(II,5) '.dat']
+%         line_file = [file_base num2str(nf,5) '_' num2str(II,5) '.dat']
+        line_file = [file_base num2str(II,5) '.dat']
         fid = fopen(line_file,'r');
         mattamp = fscanf(fid,'%f');
         cont=cont+1;
@@ -206,12 +207,12 @@ media    =permmap/(NFf-NFi+1);
 media = 0.0*media;
 %variancia=permmapv/(NFf-NFi+1)-permmap.^2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-covx=zeros(nx/2,1);
-covy=zeros(ny/2,1);
-covz=zeros(nz/2,1);
-contx=zeros(nx/2,1);
-conty=zeros(ny/2,1);
-contz=zeros(nz/2,1);
+covx=zeros(floor(nx/2),1);
+covy=zeros(floor(ny/2),1);
+covz=zeros(floor(nz/2),1);
+contx=zeros(floor(nx/2),1);
+conty=zeros(floor(ny/2),1);
+contz=zeros(floor(nz/2),1);
 for nf=NFi:NFf
     cont=0;
     for II=ini:1:fim

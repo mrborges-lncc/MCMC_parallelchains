@@ -53,13 +53,13 @@ nx  = 51;
 ny  = 51;
 nz  = 5;
 prod_dirichlet = false; %% if true, production wells defined as dirichlet bc
-TT        = 600.00;     %% days
+TT        = 800.00;     %% days
 Tinjstart = 100;        %% days
 Tinjup    = 200;        %% days
 Tinjstop  = 1700;       %% days
-nstep     = 150;        %% number of time steps for pressure-velocity system
+nstep     = 200;        %% number of time steps for pressure-velocity system
 nprint    = 20;         %% Number of impressions
-ndata     = 150;
+ndata     = 200;
 ndt       = 20;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
 [ndata  njump]   = ajusteImpress(ndata,nstep);
@@ -154,23 +154,28 @@ params = poroParams(mean(rock.poro), true, 'E', mean(rock.E),...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if printa == 1
-    plot_rock(rock.perm(:,1),G,'Yn','$\kappa_x$',color,lim,vw,1);
+    plot_rock_poro(rock.perm(:,1),G,'Yn',permbeta,permrho,...
+        '$\kappa_x$',color,lim,vw,1);
     base=['../../figuras/permKx_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock(rock.perm(:,2),G,'Yn','$\kappa_y$',color,lim,vw,2);
+    plot_rock_poro(rock.perm(:,2),G,'Yn',permbeta,permrho,...
+        '$\kappa_y$',color,lim,vw,2);
     base=['../../figuras/permKy_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock(rock.perm(:,3),G,'Yn','$\kappa_z$',color,lim,vw,3);
+    plot_rock_poro(rock.perm(:,3),G,'Yn',permbeta,permrho,...
+        '$\kappa_z$',color,lim,vw,3);
     base=['../../figuras/permKz_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock(rock.poro,G,'Yn','$\phi$',color,[0 0],vw,10)
+    plot_rock_poro(rock.poro,G,'Yn',phibeta,phirho,...
+        '$\phi$',color,[0 0],vw,10);
     base=['../../figuras/poro_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock(rock.E,G,'Yn','$\mathsf{E}$',color,[0 0],vw,11)
+    plot_rock_poro(rock.E,G,'Yn',Ebeta,Erho,...
+        '$\mathsf{E}$',color,[0 0],vw,11);
     base=['../../figuras/young_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
