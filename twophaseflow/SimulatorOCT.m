@@ -39,7 +39,7 @@ monitorsat  = 1;  %% if == 1 saturation monitors at some points
 nome  = 'amostra';
 % nome  = 'ref';
 et    = 0;
-verb = false;
+verb  = false;
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -60,17 +60,19 @@ ndt   = 15;
 PRbhp = 0.0;            %% production well pressure
 vinj  = 1.0e3/day;      %% Injection rate
 patm  = 1.0*atm;        %% Pressure at 0m cote
-depth = 1.0e03*meter;   %% depth until the top of reservoir
+depth = 7.0e03*meter;   %% depth until the top of reservoir
 rhoR  = 2.70e03*kilogram/meter^3;  %% mean density of overload rocks
 overburden= 00.0*atm;   %% Load (overburden)
 phi   = 0.12;           %% Porosity
 fatk  = milli() * darcy();      %% Factor to permeability
-rho   = 0.4432;
-beta  = 5.8675e-14;
-rho   = 0.413706;
-beta  = 5.6691e-14;
 phibeta = phi;
 phirho  = 0.2;
+phibeta = 0.146;
+phirho  = 0.23;
+permbeta= 9.1098e-14;
+permrho = 0.597;
+Ebeta   = 1.0225e10;
+Erho    = 0.457;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dx  = Lx/double(nx);
@@ -97,7 +99,7 @@ TOL  = 1.0e-7;
 if heter == 1
     if fieldnz == 1, nD = '2D'; end
     [K] = load_perm(G,filenx,fileny,filenz,depth,nini,nD);
-    K   = beta * exp(rho * K);
+    K   = permbeta * exp(permrho * K);
     save([exper '/out/perm.mat'],'K');
 else
     if heter == 2
@@ -120,7 +122,7 @@ fprintf('\n==============================================================\n\n')
 fprintf('Mean k_x....: %4.1f mD \t | \t std k_x....: %4.1f mD\n',mK(1),sK(1));
 fprintf('Mean k_y....: %4.1f mD \t | \t std k_y....: %4.1f mD\n',mK(2),sK(2));
 fprintf('Mean k_z....: %4.1f mD \t | \t std k_z....: %4.1f mD\n',mK(3),sK(3));
-fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2f mD\n',mean(rock.poro),std(rock.poro));
+fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2f   \n',mean(rock.poro),std(rock.poro));
 fprintf('\n==============================================================\n')
 clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -180,14 +182,14 @@ if overburden < TOL
 end
 p_at_topR = overburden;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-E     = 1 * giga * Pascal; %% Young's module
+E     = 10 * giga * Pascal; %% Young's module
 nu    = 0.3;               %% Poisson's ratio
 alpha = 1;                 %% Biot's coefficient
-CompO = 1.0e-05/psia;      %% Oil compressibility
+CompO = 1.0e-15/psia;      %% Oil compressibility
 % params = poroParams(mean(rock.poro), true, 'E', mean(E),...
 %     'nu', mean(nu), 'alpha', mean(alpha), 'K_f', 1/CompO);
-params.gamma = 0.804877129495150;
-ptop = overburden * params.gamma;
+params.B = 1.0;
+ptop = overburden * params.B;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Compute BHPressure
 if PRbhp < TOL
@@ -271,7 +273,7 @@ nstep    = numel(dt);
 wellSols = cell(nstep+1,1);  wellSols{1} = getWellSol(W, sol, fluid);
 oip      = zeros(nstep+1,1); oip(1) = sum(sol.s(:,2).*pv);
 t = 0;
-%hwb = waitbar(t,'Simulation ..');
+% hwb = waitbar(t,'Simulation ..');
 for n=1:nstep
     t = t + dt(n);
     fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));

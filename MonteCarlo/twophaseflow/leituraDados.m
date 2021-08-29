@@ -21,6 +21,7 @@ plot(prod2(:,1),prod2(:,2),'ok','LineWidth',1)
 plot(prod2(:,1),prod2(:,3),'or','LineWidth',1)
 plot(prod2(:,1),prod2(:,4),'ob','LineWidth',1)
 plot(prod2(:,1),prod2(:,5),'og','LineWidth',1)
+pause(2)
 close all
 
 disp =  load(['./exp/disp/disp_' name '_0.dat']);
