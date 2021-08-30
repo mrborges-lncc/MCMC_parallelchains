@@ -8,11 +8,11 @@ dados=load('../twophaseflow/exp/pres/pres_referencia_0.dat');
 ref=dados;
 %
 file_name = ['../twoStage/select_prod/' base_name '.dat']
-%file_name = '../twophaseflow/exp/pres/pres_ref_0.dat'
+file_name = '../twophaseflow/exp/pres/pres_ref_0.dat'
 %
 % Create figure
 figure1 = figure()
-B=150.;
+B=250.;
 A=0.0;
 %B=1e-2;
 %A=1e-5;

@@ -41,7 +41,7 @@ else
         D = D + D*0.1;
     end
 end
-asp = [(B-A)/(D-C) 2 1];
+asp = [(B-A)/(D-C) 1 1];
 set(axes1,'DataAspectRatio',asp,...
     'FontName','Times','FontSize',12,'XMinorTick','on','YMinorTick','on',...
     'ZMinorTick','on');

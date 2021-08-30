@@ -50,23 +50,20 @@ nx  = 51;
 ny  = 51;
 nz  = 5;
 well_r= 0.125;          %% well radius
-TT    = 150;            %% days
+TT    = 300.0;            %% days
 nstep = 300;            %% number of time steps for pressure-velocity system
 nprint= 25;             %% Number of impressions
-ndata = 75;             %% Number of impressions of data
-ndt   = 15;
+ndata = 150;             %% Number of impressions of data
+ndt   = 10;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
 [ndata njump] = ajusteImpress(ndata,nstep);
 PRbhp = 0.0;            %% production well pressure
-vinj  = 1.0e3/day;      %% Injection rate
+vinj  = 0.5e3/day;      %% Injection rate
 patm  = 1.0*atm;        %% Pressure at 0m cote
-depth = 7.0e03*meter;   %% depth until the top of reservoir
+depth = 1.0e03*meter;   %% depth until the top of reservoir
 rhoR  = 2.70e03*kilogram/meter^3;  %% mean density of overload rocks
 overburden= 00.0*atm;   %% Load (overburden)
-phi   = 0.12;           %% Porosity
 fatk  = milli() * darcy();      %% Factor to permeability
-phibeta = phi;
-phirho  = 0.2;
 phibeta = 0.146;
 phirho  = 0.23;
 permbeta= 9.1098e-14;
@@ -128,19 +125,19 @@ clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if printa == 1 && heter == 1 
-    plot_rock(reverseKlog(rock.perm(:,1),beta,rho),G,'Yn','$\kappa_x$',color,lim,vw,1);
+    plot_rock(reverseKlog(rock.perm(:,1),permbeta,permrho),G,'Yn','$\kappa_x$',color,lim,vw,1);
     base=['../figuras/permKx_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock(reverseKlog(rock.perm(:,2),beta,rho),G,'Yn','$\kappa_y$',color,lim,vw,2);
+    plot_rock(reverseKlog(rock.perm(:,2),permbeta,permrho),G,'Yn','$\kappa_y$',color,lim,vw,2);
     base=['../figuras/permKy_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock(reverseKlog(rock.perm(:,3),beta,rho),G,'Yn','$\kappa_z$',color,lim,vw,3);
+    plot_rock(reverseKlog(rock.perm(:,3),permbeta,permrho),G,'Yn','$\kappa_z$',color,lim,vw,3);
     base=['../figuras/permKz_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    plot_rock_poro(rock.poro,G,'Yn',1,1,'$\phi$',color,[0 0],vw,4);
+    plot_rock_poro(rock.poro,G,'Yn',1,1,'$\phi$',color,[0 0],vw,14);
     base=['../figuras/phi_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);

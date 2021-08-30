@@ -3,8 +3,8 @@ close all
 loc=150;
 jump=3;
 N=00;
-B=400.;
-A=50;
+B=250.;
+A=0;
 % 1 m3 = 6.2898105697751 bbl
 fat = 6.2898105697751;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -12,17 +12,18 @@ Nch_ini = 0;
 Nch_fim = 0;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(0, 1, Nchains);
-Nfim = [1999];
+Nfim = [235];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
-base_name = 'prod_TwoPhase3DMC_only_perm'
+base_name = 'prod_TwoPhase3D_KC_MC'
 % base_name = 'prod_TwoPhase3DMC_KC'
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
-% homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
-dados=load([hom 'MonteCarlo/twophaseflow/exp000/prod/prod_referencia_0.dat']);
+homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
+%dados=load([hom 'MonteCarlo/twophaseflow/exp/prod/prod_referencia_0.dat']);
+dados=load(['~/MCMC_parallelchains/twophaseflow/exp/prod/prod_referencia_0.dat']);
 ref=dados;
-home = [hom 'MonteCarlo/twophaseflow/exp000/prod/'];
+home = [hom 'MonteCarlo/twophaseflow/exp/prod/'];
 %
 data=zeros(size(ref,1),size(ref,2),sum(Nt));
 k = 0;
@@ -30,9 +31,17 @@ for j=1:Nchains
     n = num2str(chains(j),'%d');
     for i=Nini(j):Nfim(j)
         k = k+1;
-        istr=num2str(i,5);
-        file_name   = [home base_name '_' istr '.dat']
+        istr=num2str(i,5)
+        file_name   = [home base_name '_' istr '.dat'];
         data(:,:,k) = load(file_name);
+%         close all
+%         figure(33)
+%         plot(data(:,1,k),data(:,2,k),'-k','LineWidth',3);
+%         hold on
+%         plot(data(:,1,k),data(:,3,k),'-r','LineWidth',3);
+%         plot(data(:,1,k),data(:,4,k),'-b','LineWidth',3);
+%         plot(data(:,1,k),data(:,5,k),'-g','LineWidth',3);
+%         ylim([0 300]);
     end
 end
 dmedio = mean(data,3);
@@ -143,7 +152,7 @@ figure2 = figure(2)
 C=min(min(prodref(:,1,:)));
 D=max(max(prodref(:,1,:)))*1.01;
 A=min(min(prodref(:,2,:)));
-B=max(max(prodref(:,2,:)))*1.01;
+B=max(max(prodref(:,2,:)))*1.2;
 
 dasp=[1 1.*(B-A)/(D-C) 200];
 % Create axes
