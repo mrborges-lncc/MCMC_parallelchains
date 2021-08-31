@@ -1,7 +1,7 @@
 clear;
 close all
-loc=150;
-jump=3;
+loc=300;
+jump=8;
 N=00;
 B=250.;
 A=0;
@@ -12,7 +12,7 @@ Nch_ini = 0;
 Nch_fim = 0;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(0, 1, Nchains);
-Nfim = [235];
+Nfim = [555];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -20,8 +20,8 @@ base_name = 'prod_TwoPhase3D_KC_MC'
 % base_name = 'prod_TwoPhase3DMC_KC'
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
-%dados=load([hom 'MonteCarlo/twophaseflow/exp/prod/prod_referencia_0.dat']);
-dados=load(['~/MCMC_parallelchains/twophaseflow/exp/prod/prod_referencia_0.dat']);
+dados=load([hom 'MonteCarlo/twophaseflow/exp/prod/prod_referencia_0.dat']);
+%dados=load(['~/MCMC_parallelchains/twophaseflow/exp/prod/prod_referencia_0.dat']);
 ref=dados;
 home = [hom 'MonteCarlo/twophaseflow/exp/prod/'];
 %
@@ -31,7 +31,7 @@ for j=1:Nchains
     n = num2str(chains(j),'%d');
     for i=Nini(j):Nfim(j)
         k = k+1;
-        istr=num2str(i,5)
+        istr=num2str(i,5);
         file_name   = [home base_name '_' istr '.dat'];
         data(:,:,k) = load(file_name);
 %         close all
@@ -86,9 +86,9 @@ plot(dados(2:end,1),dados(2:end,4),'Parent',axes1,'Color',[0.93 0.69 0.13],...
 plot(dados(2:end,1),dados(2:end,5),'Parent',axes1,'Color',[0 0 0],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  4')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
-%     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-%     'DisplayName','selection time')
+plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
+    'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
+    'DisplayName','selection time')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
@@ -108,13 +108,13 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthEast','FontSize',8);
+set(legend1,'Location','NorthEast','FontSize',10);
 set(legend1,'Box','off');
 
 % Print
 base=[homf base_name];
 %print('-djpeg90',base)
-print('-depsc','-r300',base)
+print('-depsc','-r600',base)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Production
@@ -194,13 +194,13 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthWest','FontSize',8);
+set(legend1,'Location','NorthWest','FontSize',10);
 set(legend1,'Box','off');
 
 % Print
 base=[homf 'total_' base_name];
 %print('-djpeg90',base)
-print('-depsc','-r300',base)
+print('-depsc','-r600',base)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
