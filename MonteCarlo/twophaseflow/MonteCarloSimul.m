@@ -3,10 +3,10 @@ close all
 
 delete(gcp('nocreate'))
 
-ini = 0;
+ini = 1700;
 fim = 1999;
 N   = fim - ini + 1;
-nome = 'GeoTwoPhase3DMC';
+nome = 'TwoPhase3D_KC_MC';
 
 home = '~/fields/campos/';
 
@@ -17,12 +17,12 @@ finyo   = [currentDir 'E_'];
 currentDir = pwd;
 direct  = dir(fullfile([currentDir '/exp/fields/*.dat']));
 
-Npar = 1;
+Npar = 4;
 
-% parpool('local',Npar);
+parpool('local',Npar);
 for i = ini:Npar:fim
-%    parfor (j = 0:Npar-1, Npar)
-    for j = 0:Npar-1
+    parfor (j = 0:Npar-1, Npar)
+%    for j = 0:Npar-1
         n = j;
         k = i + j
         fper = [finpe num2str(k,'%d') '.dat'];
@@ -42,7 +42,7 @@ for i = ini:Npar:fim
         copyfile(fpor, fporo);
         copyfile(fyou, fyoun);
         fprintf('%s => %s\n',fyou,fyoun)
-        Simulator2(n);
+        Simulator(n);
         movefile([currentDir '/exp' num2str(n,'%4.3d') '/conc/sw_amostra_0.dat'],...
             [currentDir '/exp/conc/sw_' nome '_' num2str(k,'%d') '.dat']);
         movefile([currentDir '/exp' num2str(n,'%4.3d') '/pres/pres_amostra_0.dat'],...

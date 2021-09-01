@@ -1,7 +1,7 @@
 clear;
 close all
-loc=300;
-jump=8;
+loc=150;
+jump=3;
 N=00;
 B=250.;
 A=0;
@@ -9,47 +9,63 @@ A=0;
 fat = 6.2898105697751;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
-Nch_fim = 0;
+Nch_fim = 5;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(0, 1, Nchains);
-Nfim = [100];
-Nfim = Nfim(Nch_ini+1:Nch_fim+1);
+Nini = repmat(250, 1, Nchains);
+Nfim = [530 546 570 560 553 549];
+Nfim = Nfim(Nch_ini+1:Nch_fim+1)-1;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
-base_name = 'prod_TwoPhase3D_KC_MC'
-% base_name = 'prod_TwoPhase3DMC_KC'
+base_name = 'TwoPhase3D_RW_RK';
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
-dados=load([hom 'MonteCarlo/twophaseflow/exp/prod/prod_referencia_0.dat']);
-%dados=load(['~/MCMC_parallelchains/twophaseflow/exp/prod/prod_referencia_0.dat']);
-ref=dados;
-home = [hom 'MonteCarlo/twophaseflow/exp/prod/'];
+ref  = load([hom 'MonteCarlo/twophaseflow/exp/prod/prod_ref_0.dat']);
+home = [hom 'twoStage/select_prod/'];
 %
-data=zeros(size(ref,1),size(ref,2),sum(Nt));
+data= zeros(size(ref,1),size(ref,2),sum(Nt));
+rep = [];
 k = 0;
 for j=1:Nchains
     n = num2str(chains(j),'%d');
+    file_name =...
+        [hom 'twoStage/out/nchain_' base_name n '.dat']
+    r   = load(file_name);
+    rep = [rep; r(Nini(j)+1:Nfim(j)+1,2)];
     for i=Nini(j):Nfim(j)
         k = k+1;
         istr=num2str(i,5);
-        file_name   = [home base_name '_' istr '.dat'];
+        file_name   = [home 'prod_D2_' base_name n '_' istr '.dat']
         data(:,:,k) = load(file_name);
-%         close all
-%         figure(33)
-%         plot(data(:,1,k),data(:,2,k),'-k','LineWidth',3);
-%         hold on
-%         plot(data(:,1,k),data(:,3,k),'-r','LineWidth',3);
-%         plot(data(:,1,k),data(:,4,k),'-b','LineWidth',3);
-%         plot(data(:,1,k),data(:,5,k),'-g','LineWidth',3);
-%         ylim([0 300]);
     end
 end
-dmedio = mean(data,3);
-erro   = std(data,0,3);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sumrep = sum(rep);
+sumtot = sum(sumrep);
+cont   = 0;
+k      = 1;
+soma   = 0.0;
+soma2  = 0.0;
+for j=1:Nchains
+    n = 0;
+    for i=Nini(j)+1:Nfim(j)+1
+        dat = data(:,:,k);
+        k   = k + 1;
+        n   = n + 1;
+        for m=1:rep(n)
+            cont = cont +1;
+            soma = soma + dat;
+            soma2= soma2 + dat.^2;
+        end
+    end
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+dmedio = soma/cont;
+d2med  = soma2/cont;
+erro   = sqrt(d2med - dmedio.^2);
 %
 % Create figure
 figure1 = figure()
-
+dados = ref;
 C=min(dados(:,1));
 D=max(dados(:,1))*1.01;
 
@@ -86,9 +102,9 @@ plot(dados(2:end,1),dados(2:end,4),'Parent',axes1,'Color',[0.93 0.69 0.13],...
 plot(dados(2:end,1),dados(2:end,5),'Parent',axes1,'Color',[0 0 0],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  4')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
-    'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-    'DisplayName','selection time')
+% plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
+%     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
+%     'DisplayName','selection time')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
@@ -108,13 +124,14 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthEast','FontSize',10);
+set(legend1,'Location','NorthEast','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=[homf base_name];
+base=[homf 'chain_' base_name];
 %print('-djpeg90',base)
-print('-depsc','-r600',base)
+print('-depsc','-r300',base)
+pause(2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Production
@@ -152,7 +169,7 @@ figure2 = figure(2)
 C=min(min(prodref(:,1,:)));
 D=max(max(prodref(:,1,:)))*1.01;
 A=min(min(prodref(:,2,:)));
-B=max(max(prodref(:,2,:)))*1.2;
+B=max(max(prodref(:,2,:)))*1.01;
 
 dasp=[1 1.*(B-A)/(D-C) 200];
 % Create axes
@@ -194,11 +211,11 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthWest','FontSize',10);
+set(legend1,'Location','NorthWest','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=[homf 'total_' base_name];
+base=[homf 'chain_total_' base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 
