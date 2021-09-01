@@ -33,7 +33,7 @@ lim = [0 0];
 heter = 1;   %% if 0 => homog.; 1 => heter.; 2 => read *.mat
 phiheter = 1;
 printa= 10;
-salva = 1;   %% if == 1 save well informations
+salva = 1;        %% if == 1 save well informations
 monitorpres = 1;  %% if == 1 pressure monitors at some points
 monitorsat  = 1;  %% if == 1 saturation monitors at some points
 nome  = 'amostra';

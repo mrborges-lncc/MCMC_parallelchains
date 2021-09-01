@@ -2,23 +2,24 @@
 %% CORRELACAO ENTRE THETAS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[FILENAME, PATHNAME] =uigetfile('../twoStage/select_thetas/*.dat',...
+hom = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+[FILENAME, PATHNAME] =uigetfile([hom 'twoStage/select_thetas/*v1*.dat'],...
     'LOAD DATA');
 nc=getNAME(FILENAME)
 namet1 = FILENAME(1:nc);
-[FILENAME, PATHNAME] =uigetfile('../twoStage/select_thetas/*.dat',...
+[FILENAME, PATHNAME] =uigetfile([hom 'twoStage/select_thetas/*v2*.dat'],...
     'LOAD DATA');
 namet2 = FILENAME(1:nc);
 ini=00;
-fim=21;
-Nthetas1=50;
-Nthetas2=50;
+fim=10;
+Nthetas1=13005;
+Nthetas2=13005;
 Nthetas=min(Nthetas1,Nthetas2);
 NT =fim-ini+1;
 cut1=0;
-cut2=40;
+cut2=0;
 NTth=Nthetas-cut1-cut2;
-base_name='KL20'
+base_name='teste'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('ELEMENTOS COMPARADOS')
 1+cut1:Nthetas-cut2

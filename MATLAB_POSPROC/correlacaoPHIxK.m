@@ -19,9 +19,9 @@ disp(' LOADING FIELD ');
 %permeabilidade=sprintf('%s%s', PATHNAME,FILENAME);
 permeabilidade='../KL/campos/ec50x50_01_0.dat'
 permeabilidade='../../FORTRAN/LABTRANGEO_COND/campos/p512x512_0.dat'
-permeabilidade='../simul_comp/exp/fields/ref_0.dat'
+permeabilidade='../twophaseflow/exp/fields/perm_ref_0.dat'
 %permeabilidade='../simuladorBTMM/exp01/fields/phiamostra_0.dat'
-porosidade='../simul_comp/exp/fields/phiref_0.dat'
+porosidade='../twophaseflow/exp/fields/poro_ref_0.dat'
 
 
 M=1.0;

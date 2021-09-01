@@ -3,6 +3,7 @@
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 file_base = '../twoStage/select_fields/'
+file_base = '~/fields/campos/';
 [FILENAME, PATHNAME] =uigetfile([file_base '*.dat'], 'LOAD DATA');
 nc=getNAME(FILENAME);
 namet1 = FILENAME(1:nc);

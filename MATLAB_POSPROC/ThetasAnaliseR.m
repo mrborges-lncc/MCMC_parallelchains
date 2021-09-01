@@ -3,14 +3,14 @@ close all
 jump=3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nthetas = 2;
-M       = 10;
+M       = 1;
 Nch_ini = 0;
 Nch_fim = 5;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(800, 1, Nchains);
-Nfim = [947 993 984 1017 998 957];
-Nfim = repmat(900, 1, Nchains);
-Nfim = Nfim(Nch_ini+1:Nch_fim+1)-1;
+Nini = repmat(0, 1, Nchains);
+Nfim = [18 20 18 21 13 20];
+%Nfim = repmat(900, 1, Nchains);
+Nfim = Nfim(Nch_ini+1:Nch_fim+1)-2;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 nome = 'TwoPhase3D_onlyPerm_RW_RK';
@@ -30,23 +30,28 @@ for i=1:Nthetas
 end
 %
 total=0;
+pmax = -1e10;
+pmin = 1e10;
 for j=1:Nchains
     n = num2str(chains(j),'%d');
     pchains = load([home '../out/nchain_' nome n '.dat']);
     sz = size(pchains,1) + 1;
     total = total + sum(pchains(Nini(j)+1:Nfim(j)+1,2));
+    pmax  = max(pmax,sum(pchains(Nini(j)+1:Nfim(j)+1,2)));
+    pmin  = min(pmin,sum(pchains(Nini(j)+1:Nfim(j)+1,2)));
 end
-total= int64(total);
-data1 = zeros(total,M,Nchains);
-if(Nthetas == 2), data2 = zeros(total,M,Nchains); end
+total = int64(total);
+pmin  = int64(pmin);
+data1 = zeros(pmin,M,Nchains);
+if(Nthetas == 2), data2 = zeros(pmin,M,Nchains); end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for k=1:Nthetas
-    file_name = [filename(k,:)]
-    cont = 0;
+    file_name = [filename(k,:)];
     for j=1:Nchains
-        n = num2str(chains(j),'%d')
+        n = num2str(chains(j),'%d');
         name = [home '../out/nchain_' nome n '.dat'];
         pchains = load(name);
+        cont = 0;
         for i=Nini(j):Nfim(j)
             istr=num2str(i,5);
             fname = [file_name n '_' istr '.dat'];
@@ -54,8 +59,9 @@ for k=1:Nthetas
             m   = pchains(i+1,2);
             for nc = 1:m
                 cont = cont + 1;
+                if cont > pmin, break; end
                 if(k == 1)
-                    data1(cont,:,j) = dat(1:M);
+                    data1(cont,:,j) = lhsnorm(0,1,M).';%dat(1:M);
                 else
                     data2(cont,:,j) = dat(1:M);
                 end
