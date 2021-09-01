@@ -12,7 +12,7 @@ Nch_ini = 0;
 Nch_fim = 0;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(0, 1, Nchains);
-Nfim = [555];
+Nfim = [1700];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -200,7 +200,7 @@ set(legend1,'Box','off');
 % Print
 base=[homf 'total_' base_name];
 %print('-djpeg90',base)
-print('-depsc','-r600',base)
+print('-depsc','-r300',base)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
