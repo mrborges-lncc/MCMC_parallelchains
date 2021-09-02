@@ -105,6 +105,9 @@ end
 if phiheter == 1
     phi = load_poro(G,filephi,depth,nini,nD);
     phi = phibeta * exp(phirho * phi);
+else
+    phi = lhsnorm(0,1,G.cells.num);
+    phi = mean(phibeta * exp(phirho * phi));
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rock model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
