@@ -28,16 +28,16 @@ vw  = [-35 20];
 verbose = true;
 grav  = 1;
 lim   = [0 0];
-permheter  = 1;        %% if 0 => homog.; 1 => heter.
-poroheter  = 1;        %% if 0 => homog.; 1 => heter.
-youngheter = 1;        %% if 0 => homog.; 1 => heter.
+permheter  = 1;   %% if 0 => homog.; 1 => heter.
+poroheter  = 1;   %% if 0 => homog.; 1 => heter.
+youngheter = 1;   %% if 0 => homog.; 1 => heter.
 printa= 1;
 salva = 1;
 monitorpres = 1;  %% if == 1 pressure monitors at some points
 monitorsat  = 1;  %% if == 1 saturation monitors at some points
 monitordisp = 1;  %% if == 1 displacement monitors at some points
 
-nome  = 'amostra';
+nome  = 'ref';
 et    = 0;
 isCompr = true;
 if exist('isCompr','var')~=1
@@ -84,7 +84,7 @@ phirho  = 0.23;
 permbeta= 9.1098e-14;
 permrho = 0.597;
 Ebeta   = 1.0225e10;
-Erho    = 0.457                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ;
+Erho    = 0.457;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dx = Lx/double(nx);
@@ -106,7 +106,7 @@ nD  = '3D';
 if permheter == 1
     K = load_perm(G,filenx,fileny,filenz,depth,nini,nD);
 else
-    K = zeros(G.cells.num,1);
+    K = zeros(G.cells.num,3);
 end
 K   = permbeta * exp(permrho * K);
 %% porosity

@@ -26,16 +26,16 @@ vw  = [-35 20];
 verbose = true;
 grav  = 1;
 lim   = [0 0];
-permheter  = 1;        %% if 0 => homog.; 1 => heter.
-poroheter  = 1;        %% if 0 => homog.; 1 => heter.
-youngheter = 1;        %% if 0 => homog.; 1 => heter.
-printa= 10;
+permheter  = 1;   %% if 0 => homog.; 1 => heter.
+poroheter  = 1;   %% if 0 => homog.; 1 => heter.
+youngheter = 1;   %% if 0 => homog.; 1 => heter.
+printa= 1;
 salva = 1;
 monitorpres = 1;  %% if == 1 pressure monitors at some points
 monitorsat  = 1;  %% if == 1 saturation monitors at some points
 monitordisp = 1;  %% if == 1 displacement monitors at some points
 
-nome  = 'amostra';
+nome  = 'ref';
 et    = 0;
 isCompr = true;
 if exist('isCompr','var')~=1
@@ -104,7 +104,7 @@ nD  = '3D';
 if permheter == 1
     K = load_perm(G,filenx,fileny,filenz,depth,nini,nD);
 else
-    K = zeros(G.cells.num,1);
+    K = zeros(G.cells.num,3);
 end
 K   = permbeta * exp(permrho * K);
 %% porosity

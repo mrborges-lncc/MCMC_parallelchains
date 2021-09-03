@@ -1,16 +1,25 @@
 function plot_rock_poro(rock,g,flag,alpha,rho,titlen,color,lim,vw,n)
     fig = figure(n);
+    TOL = 1e-8;
+    if flag == 'Y'
+        perm = (log(rock) - log(alpha))/rho;
+    else
+        perm = rock;
+    end
+    if abs(lim(1) - lim(2)) < TOL
+        lim = [min(perm) max(perm)];
+        if abs(lim(1) - lim(2)) < TOL
+            aux = abs(max(perm))*0.1;
+            lim = [(min(perm)-aux) (max(perm)+aux)];
+        end
+    end
     Lx0 = min(g.nodes.coords(:,1));
     Lx  = max(g.nodes.coords(:,1));
     Ly0 = min(g.nodes.coords(:,2));
     Ly  = max(g.nodes.coords(:,2));
     Lz0 = min(g.nodes.coords(:,3));
     Lz  = max(g.nodes.coords(:,3));
-    if flag == 'Y'
-        perm = (log(rock) - log(alpha))/rho;
-    else
-        perm = rock;
-    end
+
     axes('DataAspectRatio',[1 1 1],'FontName','Times','FontSize',12,...
         'PlotBoxAspectRatio',g.cartDims,'TickDir','both',...
         'TickLabelInterpreter','latex','XTick',[Lx0:100:Lx],...
@@ -19,7 +28,6 @@ function plot_rock_poro(rock,g,flag,alpha,rho,titlen,color,lim,vw,n)
         'ZDir','reverse','ZMinorTick','on');
     plotCellData(g,perm,'EdgeColor', color);
     colorbar('horiz'); axis equal tight; view(vw); box 'on';
-    lim = [min(perm) max(perm)];
     caxis([lim(1) lim(2)]); colormap(jet(55));
     title(titlen,'FontSize',14,'Interpreter','latex');
     % Create labels
