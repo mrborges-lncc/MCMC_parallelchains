@@ -6,19 +6,20 @@ addpath ./mrst-2021a/
 startup
 
 nome1 = 'ref';
-nome2 = 'amostra';
+nome2 = 'ref';
+home  = '../MonteCarlo/twophaseflow/'
 
-wcut = load(['./exp/prod/wcut_' nome1 '_0.dat']);
-oilp = load(['./exp/prod/prod_' nome1 '_0.dat']);
-pres = load(['./exp/pres/presinj_' nome1 '_0.dat']);
-cpres= load(['./exp/pres/pres_' nome1 '_0.dat']);
-satw = load(['./exp/conc/sw_' nome1 '_0.dat']);
+wcut = load([home './exp/prod/wcut_' nome1 '_0.dat']);
+oilp = load([home './exp/prod/prod_' nome1 '_0.dat']);
+pres = load([home './exp/pres/presinj_' nome1 '_0.dat']);
+cpres= load([home './exp/pres/pres_' nome1 '_0.dat']);
+satw = load([home './exp/conc/sw_' nome1 '_0.dat']);
 
-wcut2 = load(['./exp000/prod/wcut_' nome2 '_0.dat']);
-oilp2 = load(['./exp000/prod/prod_' nome2 '_0.dat']);
-pres2 = load(['./exp000/pres/presinj_' nome2 '_0.dat']);
-cpres2= load(['./exp000/pres/pres_' nome2 '_0.dat']);
-satw2 = load(['./exp000/conc/sw_' nome2 '_0.dat']);
+wcut2 = load([home './exp/prod/wcut_' nome2 '_0.dat']);
+oilp2 = load([home './exp/prod/prod_' nome2 '_0.dat']);
+pres2 = load([home './exp/pres/presinj_' nome2 '_0.dat']);
+cpres2= load([home './exp/pres/pres_' nome2 '_0.dat']);
+satw2 = load([home './exp/conc/sw_' nome2 '_0.dat']);
 
 wcut  = [wcut wcut2(:,2:end)];
 oilp  = [oilp oilp2(:,2:end)];
