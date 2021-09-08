@@ -1,6 +1,6 @@
 clear;
 close all
-loc=100;
+loc=300;
 jump=8;
 N=60;
 B=80;
@@ -62,9 +62,9 @@ dados=ref;
 plot(dados(2:end,1),dados(2:end,2),'Parent',axes1,'Color',[1 0 0],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
-%     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-%     'DisplayName','time to select')
+plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
+    'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
+    'DisplayName','$t_s$')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
@@ -84,7 +84,7 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthEast','FontSize',10);
+set(legend1,'Location','NorthEast','FontSize',11,'Interpreter','latex');
 set(legend1,'Box','off');
 
 % Print

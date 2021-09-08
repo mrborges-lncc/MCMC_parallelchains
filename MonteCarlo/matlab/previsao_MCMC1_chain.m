@@ -1,7 +1,7 @@
 clear;
 close all
 loc=150;
-jump=3;
+jump=4;
 N=00;
 B=80.;
 A=20;
@@ -80,10 +80,10 @@ hold(axes1,'all');
 dados = dmedio;
 errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
     'Parent',axes1,'Color',[0.85 0.33 0.10],'MarkerSize',4,'Marker','o',...
-    'LineStyle','none','DisplayName','mean 1','LineWidth',0.5)
+    'LineStyle','none','DisplayName','mean','LineWidth',0.5)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plot(ref(2:end,1),ref(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
-    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1')
+    'MarkerSize',6,'LineWidth',2,'DisplayName','ref.')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
 %     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
@@ -107,11 +107,11 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthEast','FontSize',8);
+set(legend1,'Location','NorthEast','FontSize',11,'Interpreter','latex');
 set(legend1,'Box','off');
 
 % Print
-base=[homf 'chain_' base_name];
+base=[homf 'chain_pres_' base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 pause(2)

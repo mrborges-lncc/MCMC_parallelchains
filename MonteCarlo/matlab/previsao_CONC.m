@@ -76,8 +76,6 @@ errorbar(dados(1:jump:end,1),dados(1:jump:end,5),erro(1:jump:end,4),...
     'LineStyle','none','DisplayName','mean 4','LineWidth',0.5)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dados=ref;
-%dados=load('../../MCMC/reject_prod/prod_chn0-20_16000.dat');
-%dados=load('../conc/conc_amostra_0.dat');
 plot(dados(2:end,1),dados(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1')
 plot(dados(2:end,1),dados(2:end,3),'Parent',axes1,'Color',[0.07 0.62 1],...
@@ -89,8 +87,7 @@ plot(dados(2:end,1),dados(2:end,5),'Parent',axes1,'Color',[0 0 0],...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-    'DisplayName','selection time')
-
+    'DisplayName','$t_s$')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
 ylim(axes1,[A B])
@@ -109,7 +106,7 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthEast','FontSize',10);
+set(legend1,'Location','NorthEast','FontSize',11,'Interpreter','latex');
 set(legend1,'Box','off');
 
 % Print

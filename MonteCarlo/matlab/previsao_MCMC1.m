@@ -1,45 +1,73 @@
 clear;
 close all
-loc=100;
-jump=4;
-N=60;
-B=230;
-A=70;
+loc=300;
+jump=8;
+N=00;
+B=80.;
+A=20;
+% 1 m3 = 6.2898105697751 bbl
+fat = 6.2898105697751;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
-Nch_fim = 0;
+Nch_fim = 1;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(0, 1, Nchains);
-Nfim = [1999];
+Nini = repmat(200, 1, Nchains);
+Nfim = [400 400 600];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
-base_name = 'presinj_TwoPhase3DMC_only_perm'
-base_name = 'presinj_TwoPhase3DMC_KC'
+base_name = 'TwoPhase3D_RW_RK';
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
-dados=load([hom 'MonteCarlo/twophaseflow/exp000/pres/pres_referencia_0.dat']);
+dados=load([hom 'twophaseflow/exp/pres/pres_referencia_0.dat']);
 ref=dados;
-home = [hom 'MonteCarlo/twophaseflow/exp000/pres/'];
+home = [hom 'MonteCarlo/twophaseflow/exp/pres/'];
 %
-data=zeros(size(ref,1),size(ref,2),sum(Nt));
+data= zeros(size(ref,1),size(ref,2),sum(Nt));
+rep = [];
 k = 0;
 for j=1:Nchains
     n = num2str(chains(j),'%d');
+    file_name =...
+        [hom 'twoStage/out/nchain_' base_name n '.dat'];
+    r   = load(file_name);
+    rep = [rep; r(Nini(j)+1:Nfim(j)+1,2)];
     for i=Nini(j):Nfim(j)
         k = k+1;
         istr=num2str(i,5);
-        file_name   = [home base_name '_' istr '.dat']
+        fprintf('\nChain %s <=> Sample no. %s',n,istr);        
+        file_name   = [home 'pres_MCMC_' base_name n '_' istr '.dat'];
         data(:,:,k) = load(file_name);
     end
 end
-dmedio = mean(data,3);
-erro   = std(data,0,3);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sumrep = sum(rep);
+sumtot = sum(sumrep);
+cont   = 0;
+k      = 1;
+soma   = 0.0;
+soma2  = 0.0;
+for j=1:Nchains
+    n = 0;
+    for i=Nini(j)+1:Nfim(j)+1
+        dat = data(:,:,k);
+        k   = k + 1;
+        n   = n + 1;
+        for m=1:rep(n)
+            cont = cont +1;
+            soma = soma + dat;
+            soma2= soma2 + dat.^2;
+        end
+    end
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+dmedio = soma/cont;
+d2med  = soma2/cont;
+erro   = sqrt(d2med - dmedio.^2);
 %
 % Create figure
 figure1 = figure()
-%B=1e-2;
-%A=1e-5;
+
 C=min(dados(:,1));
 D=max(dados(:,1))*1.01;
 
@@ -52,33 +80,15 @@ hold(axes1,'all');
 
 dados = dmedio;
 errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
-    'Parent',axes1,'Color',[1 0 0],'MarkerSize',4,'Marker','o',...
+    'Parent',axes1,'Color',[0.85 0.33 0.10],'MarkerSize',4,'Marker','o',...
     'LineStyle','none','DisplayName','mean','LineWidth',0.5)
-% errorbar(dados(1:jump:end,1),dados(1:jump:end,3),erro(1:jump:end,3),...
-%     'Parent',axes1,'Color',[0 0 1],'MarkerSize',4,'Marker','s',...
-%     'LineStyle','none','DisplayName','mean 2','LineWidth',1)
-% errorbar(dados(1:jump:end,1),dados(1:jump:end,4),erro(1:jump:end,4),...
-%     'Parent',axes1,'Color',[0 0 0],'MarkerSize',4,'Marker','o',...
-%     'LineStyle','none','DisplayName','mean 3','LineWidth',1)
-% errorbar(dados(1:jump:end,1),dados(1:jump:end,5),erro(1:jump:end,4),...
-%     'Parent',axes1,'Color',[0 1 0],'MarkerSize',4,'Marker','s',...
-%     'LineStyle','none','DisplayName','mean 4','LineWidth',1)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dados=ref;
-%dados=load('../../MCMC/reject_prod/prod_chn0-20_16000.dat');
-%dados=load('../conc/conc_amostra_0.dat');
-plot(dados(2:end,1),dados(2:end,2),'Parent',axes1,'Color',[1 0 0],...
+plot(ref(2:end,1),ref(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.')
-% plot(dados(:,1),dados(:,3),'Parent',axes1,'Color',[0 0 1],...
-%     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  2')
-% plot(dados(:,1),dados(:,4),'Parent',axes1,'Color',[0 0 0],...
-%     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  3')
-% plot(dados(:,1),dados(:,5),'Parent',axes1,'Color',[0 1 0],...
-%     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  4')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
-%     'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
-%     'DisplayName','time to select')
+plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
+    'MarkerSize',6,'LineWidth',1,'LineStyle','--',...
+    'DisplayName','$t_s$')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xlim(axes1,[0 D])
@@ -98,18 +108,19 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthEast','FontSize',8);
+set(legend1,'Location','NorthEast','FontSize',11,'Interpreter','latex');
 set(legend1,'Box','off');
 
 % Print
-base=[homf base_name];
+base=[homf base_name '_MCMC'];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
-
+pause(2)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NORMA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 norma=norm(ref(:,2:end))
 norma=norm(ref(:,2:end)-dados(:,2:end))/norma;
 fprintf('ERRO RELATIVO = %e\n',norma)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%clear
+clear

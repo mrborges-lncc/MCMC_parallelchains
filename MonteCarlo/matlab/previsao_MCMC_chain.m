@@ -1,7 +1,7 @@
 clear;
 close all
 loc=150;
-jump=3;
+jump=4;
 N=00;
 B=250.;
 A=0;
@@ -11,8 +11,7 @@ fat = 6.2898105697751;
 Nch_ini = 0;
 Nch_fim = 5;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(0, 1, Nchains);
-Nfim = repmat(3, 1, Nchains);
+Nini = repmat(500, 1, Nchains);
 Nfim = [1046 1166 1159 1144 1156 1059];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1)-2;
 Nt   = (Nfim-Nini)+1;
@@ -123,11 +122,11 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthEast','FontSize',8);
+set(legend1,'Location','NorthEast','FontSize',11,'Interpreter','latex');
 set(legend1,'Box','off');
 
 % Print
-base=[homf 'chain_' base_name];
+base=[homf 'chain_prod_' base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 pause(2)
@@ -214,7 +213,7 @@ set(legend1,'Location','NorthWest','FontSize',8);
 set(legend1,'Box','off');
 
 % Print
-base=[homf 'chain_total_' base_name];
+base=[homf 'chain_total_prod_' base_name];
 %print('-djpeg90',base)
 print('-depsc','-r300',base)
 
