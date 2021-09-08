@@ -28,11 +28,11 @@ vw  = [-35 20];
 verbose = true;
 grav  = 1;
 lim   = [0 0];
-permheter  = 1;   %% if 0 => homog.; 1 => heter.
-poroheter  = 1;   %% if 0 => homog.; 1 => heter.
-youngheter = 1;   %% if 0 => homog.; 1 => heter.
-printa= 10;
-salva = 1;
+permheter   = 1;   %% if 0 => homog.; 1 => heter.
+poroheter   = 1;   %% if 0 => homog.; 1 => heter.
+youngheter  = 1;   %% if 0 => homog.; 1 => heter.
+printa      = 10;
+salva       = 1;
 monitorpres = 1;  %% if == 1 pressure monitors at some points
 monitorsat  = 1;  %% if == 1 saturation monitors at some points
 monitordisp = 1;  %% if == 1 displacement monitors at some points
@@ -53,13 +53,13 @@ nx  = 51;
 ny  = 51;
 nz  = 5;
 prod_dirichlet = false; %% if true, production wells defined as dirichlet bc
-TT        = 800.00;     %% days
+TT        = 400.00;     %% days
 Tinjstart = 100;        %% days
 Tinjup    = 200;        %% days
 Tinjstop  = 1700;       %% days
 nstep     = 200;        %% number of time steps for pressure-velocity system
 nprint    = 20;         %% Number of impressions
-ndata     = 200;
+ndata     = 100;
 ndt       = 20;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
 [ndata  njump]   = ajusteImpress(ndata,nstep);
@@ -219,7 +219,7 @@ optlist = reshape(vertcat(fieldnames(opt)', optvals'), [], 1);
     overburden,p_at_surface,depth,rhoR,grav,vinj,vprod,PRbhp,...
     well_r*meter,TT,Tinjstart,Tinjup,Tinjstop,nstep,CompW,CompO,CompR,...
     ndt,printa,prod_dirichlet,optlist{:});
-plotMechanic(model, states, opt);
+%plotMechanic(model, states, opt);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 telapsed = toc(tstart);
 Totaltime= seconds(telapsed);

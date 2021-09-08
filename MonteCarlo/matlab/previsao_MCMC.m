@@ -11,21 +11,21 @@ fat = 6.2898105697751;
 Nch_ini = 0;
 Nch_fim = 1;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(800, 1, Nchains);
-Nfim = [1210 960 190];
+Nini = repmat(500, 1, Nchains);
+Nfim = [600 600 600];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 %base_name = 'prod_TwoPhase3DMC_only_perm';
-base_name = 'prod_TwoPhase3D_KC_MC';
+base_name = 'TwoPhase3D_RW_RK';
 % base_name = 'prod_TwoPhase3D_MCMConlyPerm_RW_RK';
 %base_name2= 'TwoPhase3D_onlyPerm_RW_RK';
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 % hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
-dados=load([hom 'MonteCarlo/twophaseflow/exp/prod/prod_ref_0.dat']);
+dados=load([hom 'twophaseflow/exp/prod/prod_referencia_0.dat']);
 ref=dados;
-home = [hom 'MonteCarlo/twophaseflow/exp001/prod/'];
+home = [hom 'MonteCarlo/twophaseflow/exp/prod/'];
 %
 data= zeros(size(ref,1),size(ref,2),sum(Nt));
 rep = [];
@@ -39,7 +39,7 @@ for j=1:Nchains
     for i=Nini(j):Nfim(j)
         k = k+1;
         istr=num2str(i,5);
-        file_name   = [home base_name n '_' istr '.dat']
+        file_name   = [home 'prod_MCMC_' base_name n '_' istr '.dat']
         data(:,:,k) = load(file_name);
     end
 end
@@ -95,16 +95,13 @@ errorbar(dados(1:jump:end,1),dados(1:jump:end,5),erro(1:jump:end,4),...
     'Parent',axes1,'Color',[0 0 0],'MarkerSize',4,'Marker','s',...
     'LineStyle','none','DisplayName','mean 4','LineWidth',0.5)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dados=ref;
-%dados=load('../../MCMC/reject_prod/prod_chn0-20_16000.dat');
-%dados=load('../conc/conc_amostra_0.dat');
-plot(dados(2:end,1),dados(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
+plot(ref(2:end,1),ref(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1')
-plot(dados(2:end,1),dados(2:end,3),'Parent',axes1,'Color',[0.07 0.62 1],...
+plot(ref(2:end,1),ref(2:end,3),'Parent',axes1,'Color',[0.07 0.62 1],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  2')
-plot(dados(2:end,1),dados(2:end,4),'Parent',axes1,'Color',[0.93 0.69 0.13],...
+plot(ref(2:end,1),ref(2:end,4),'Parent',axes1,'Color',[0.93 0.69 0.13],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  3')
-plot(dados(2:end,1),dados(2:end,5),'Parent',axes1,'Color',[0 0 0],...
+plot(ref(2:end,1),ref(2:end,5),'Parent',axes1,'Color',[0 0 0],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  4')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...

@@ -11,9 +11,9 @@ fat = 6.2898105697751;
 Nch_ini = 0;
 Nch_fim = 5;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(250, 1, Nchains);
-Nfim = [530 546 570 560 553 549];
-Nfim = Nfim(Nch_ini+1:Nch_fim+1)-1;
+Nini = repmat(500, 1, Nchains);
+Nfim = [1046 1166 1159 1144 1156 1059];
+Nfim = Nfim(Nch_ini+1:Nch_fim+1)-2;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 base_name = 'TwoPhase3D_RW_RK';
@@ -28,13 +28,14 @@ k = 0;
 for j=1:Nchains
     n = num2str(chains(j),'%d');
     file_name =...
-        [hom 'twoStage/out/nchain_' base_name n '.dat']
+        [hom 'twoStage/out/nchain_' base_name n '.dat'];
     r   = load(file_name);
     rep = [rep; r(Nini(j)+1:Nfim(j)+1,2)];
     for i=Nini(j):Nfim(j)
         k = k+1;
         istr=num2str(i,5);
-        file_name   = [home 'prod_D1_' base_name n '_' istr '.dat']
+        fprintf('\nChain %s <=> Sample no. %s',n,istr);
+        file_name   = [home 'prod_D1_' base_name n '_' istr '.dat'];
         data(:,:,k) = load(file_name);
     end
 end
@@ -81,10 +82,7 @@ errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
     'Parent',axes1,'Color',[0.85 0.33 0.10],'MarkerSize',4,'Marker','o',...
     'LineStyle','none','DisplayName','mean 1','LineWidth',0.5)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dados=ref;
-%dados=load('../../MCMC/reject_prod/prod_chn0-20_16000.dat');
-%dados=load('../conc/conc_amostra_0.dat');
-plot(dados(2:end,1),dados(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
+plot(ref(2:end,1),ref(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
     'MarkerSize',6,'LineWidth',2,'DisplayName','ref.  1')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % plot([loc loc],[A B],'Parent',axes1,'Color',[0 0 0],...
@@ -119,40 +117,9 @@ print('-depsc','-r300',base)
 pause(2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Production
-sz = size(data);
-producao = zeros(sz(1),2,sz(3));
-for k = 1:size(data,3)
-    t = data(:,1,k);
-    p = sum(data(:,2:end,k),2);
-    pa= 0.0;
-    prod = [0.0 0.0];
-    for j = 2:size(t,1)
-        dt = t(j) - t(j-1);
-        pr = 0.5*(p(j) + p(j-1));
-        pa = pa + pr * dt;
-        prod = [prod; t(j) pa];
-    end
-    producao(:,:,k) = prod;
-end
-t = ref(:,1);
-p = sum(ref(:,2:end),2);
-prodref = [0.0 0.0];
-pa= 0.0;
-for j = 2:size(t,1)
-    dt = t(j) - t(j-1);
-    pr = 0.5*(p(j) + p(j-1));
-    pa = pa + pr * dt;
-    prodref = [prodref; t(j) pa];
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% NORMA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-norma=norm(ref(:,2:end))
+norma=norm(ref(:,2:end));
 norma=norm(ref(:,2:end)-dados(:,2:end))/norma;
 fprintf('ERRO RELATIVO = %e\n',norma)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -12,7 +12,7 @@ Nch_ini = 0;
 Nch_fim = 0;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(0, 1, Nchains);
-Nfim = [1900];
+Nfim = [1999];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -32,6 +32,7 @@ for j=1:Nchains
     for i=Nini(j):Nfim(j)
         k = k+1;
         istr=num2str(i,5);
+        fprintf('\nSample no. %s',istr);
         file_name   = [home base_name '_' istr '.dat'];
         data(:,:,k) = load(file_name);
 %         close all
@@ -203,11 +204,5 @@ base=[homf 'total_' base_name];
 print('-depsc','-r300',base)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% NORMA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-norma=norm(ref(:,2:end))
-norma=norm(ref(:,2:end)-dados(:,2:end))/norma;
-fprintf('ERRO RELATIVO = %e\n',norma)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear

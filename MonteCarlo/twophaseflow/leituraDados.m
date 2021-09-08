@@ -2,8 +2,8 @@ clear all
 close all
 name = 'ref';
 name2= 'amostra';
-pres = load(['./exp/pres/pres_' name '_0.dat']);
-pres2= load(['./exp/pres/pres_' name2 '_0.dat']);
+pres = load(['exp/pres/pres_' name '_0.dat']);
+pres2= load(['exp/pres/pres_' name2 '_0.dat']);
 plot(pres(:,1),pres(:,2),'-k','LineWidth',2)
 hold on
 plot(pres2(:,1),pres2(:,2),'ob','LineWidth',1)
