@@ -11,8 +11,8 @@ fat = 6.2898105697751;
 Nch_ini = 0;
 Nch_fim = 1;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(200, 1, Nchains);
-Nfim = [400 400 600];
+Nini = repmat(300, 1, Nchains);
+Nfim = [415 419 600];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
@@ -183,7 +183,7 @@ for k = 1:size(data,3)
     h.Annotation.LegendInformation.IconDisplayStyle = 'off';
 end
 plot(prodref(1:end,1),prodref(1:end,2),'Parent',axes1,...
-    'Color',[1 0 0],'MarkerSize',6,'LineWidth',2,...
+    'Color',[1 0 0],'MarkerSize',6,'LineWidth',3,...
     'DisplayName','ref.');
 prod = mean(producao,3);
 plot(prod(1:end,1),prod(1:end,2),'Parent',axes1,...

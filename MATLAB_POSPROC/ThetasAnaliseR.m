@@ -2,13 +2,14 @@ clear;
 close all
 jump=3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+repet   = 0;
 Nthetas = 2;
 M       = 1;
 Nch_ini = 0;
 Nch_fim = 5;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(0, 1, Nchains);
-Nfim = [18 20 18 21 13 20];
+Nini = repmat(600, 1, Nchains);
+Nfim = [1256 1423 1378 1367 1335 1273];
 %Nfim = repmat(900, 1, Nchains);
 Nfim = Nfim(Nch_ini+1:Nch_fim+1)-2;
 Nt   = (Nfim-Nini)+1;
@@ -36,6 +37,9 @@ for j=1:Nchains
     n = num2str(chains(j),'%d');
     pchains = load([home '../out/nchain_' nome n '.dat']);
     sz = size(pchains,1) + 1;
+    if repet == 0
+        pchains(:,2) = ones(sz-1,1);
+    end
     total = total + sum(pchains(Nini(j)+1:Nfim(j)+1,2));
     pmax  = max(pmax,sum(pchains(Nini(j)+1:Nfim(j)+1,2)));
     pmin  = min(pmin,sum(pchains(Nini(j)+1:Nfim(j)+1,2)));
@@ -54,6 +58,7 @@ for k=1:Nthetas
         cont = 0;
         for i=Nini(j):Nfim(j)
             istr=num2str(i,5);
+            fprintf('\n Chain: %s <=> sample: %s',n,istr)
             fname = [file_name n '_' istr '.dat'];
             dat = load(fname);
             m   = pchains(i+1,2);
