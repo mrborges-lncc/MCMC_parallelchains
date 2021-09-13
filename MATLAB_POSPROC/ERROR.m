@@ -5,7 +5,7 @@ ini = 0;
 fim = 5;
 N   = 0;
 %
-M   = fim-ini+1;
+M   = fim-ini&+1;
 home= '/home/mrborges/MCMCrw/twoStage/';
 home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
 % home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
