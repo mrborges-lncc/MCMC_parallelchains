@@ -56,11 +56,11 @@ G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/MonteCarlo/twophaseflow/fields';
-home = '~/fields/campos/';
+home = '/media/mrborges/HD-E1/fields/campos/';
 permname = 'perm';
 phiname  = 'phi';
 Ename    = 'E';
-[FILENAME, PATHNAME] =uigetfile({'~/fields/*.dat'}, 'LOAD DATA PORO FIELD');
+[FILENAME, PATHNAME] =uigetfile({'/media/mrborges/HD-E1/fields/*.dat'}, 'LOAD DATA PORO FIELD');
 %[FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA PORO FIELD');
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/mrstBorges/out/*.dat'}, 'LOAD DATA');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
@@ -122,10 +122,10 @@ for n = ini:fim
     fprintf('\n==============================================================\n')
     fprintf('Mean Y.........: %4.3f    \t\t |  std Y......: %4.2f   \n',meanY,stdY);
     fprintf('Mean phi.......: %4.2f    \t\t |  std phi....: %4.2f   \n',mean(phi),std(phi));
-    fprintf('Mean perm......: %4.3f mD \t\t |  std perm...: %4.3f mD\n',mk*fat,sqrt(vk)*fat);
+    fprintf('Mean perm......: %4.3f mD \t |  std perm...: %4.3f mD\n',mk*fat,sqrt(vk)*fat);
     %% Sprigg’s representation
     E  = E0 * exp(-a * phi);
-    sv = 2.5e-05;
+    sv = 5.0e-05;
     E  = E + lhsnorm(0,sv,G.cells.num).*E;
     mu_E = mean(E);
     std_E= std(E);

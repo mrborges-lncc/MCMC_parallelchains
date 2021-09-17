@@ -77,9 +77,13 @@ for nf = 1:nvar + 1
         'FontName','Times New Roman','FontWeight','bold',...
         'DataAspectRatio',dasp,'Color','none');
     % Set the remaining axes properties
+    n = int64((-log(my0(nf))/log(10)));
+    n = [0:int64(n/3):n];
+    n = 10.^n;
+    eixoy = my0(nf)*double(n);
     set(axes1,'LineWidth',1,'TickDir','both',...
         'TickLabelInterpreter','latex','XMinorTick','on',...
-        'YMinorTick','on','YScale','log');
+        'YMinorTick','on','YScale','log','YTick',eixoy);
     box(axes1,'on');
     hold(axes1,'all');
     final = 0;

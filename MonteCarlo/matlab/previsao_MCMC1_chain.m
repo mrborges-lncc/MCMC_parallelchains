@@ -12,12 +12,15 @@ Nch_ini = 0;
 Nch_fim = 5;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(600, 1, Nchains);
-Nfim = [1254 1418 1376 1367 1332 1271];
+Nfim = [1256 1423 1378 1367 1335 1273];
+Nfim = [1905 1863 1889 1802 1730 1791];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1)-2;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 base_name = 'TwoPhase3D_RW_RK';
+base_name = 'TwoPhase3D_onlyPerm_RW_RK';
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 ref  = load([hom 'MonteCarlo/twophaseflow/exp/pres/pres_ref_0.dat']);
 home = [hom 'twoStage/select_prod/'];
@@ -65,7 +68,7 @@ d2med  = soma2/cont;
 erro   = sqrt(d2med - dmedio.^2);
 %
 % Create figure
-figure1 = figure()
+figure1 = figure();
 dados   = ref;
 C=min(dados(:,1));
 D=max(dados(:,1))*1.01;

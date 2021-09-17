@@ -12,12 +12,15 @@ Nch_ini = 0;
 Nch_fim = 1;
 Nchains = Nch_fim - Nch_ini + 1;
 Nini = repmat(300, 1, Nchains);
-Nfim = [415 419 600];
-Nfim = Nfim(Nch_ini+1:Nch_fim+1);
+Nfim = repmat(634, 1, Nchains);
+%Nfim = [1256 1423 1378 1367 1335 1273];
+Nfim = Nfim(Nch_ini+1:Nch_fim+1)-2;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 base_name = 'TwoPhase3D_RW_RK';
+base_name = 'TwoPhase3D_onlyPerm_RW_RK';
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'twophaseflow/exp/prod/prod_referencia_0.dat']);
 ref=dados;
@@ -210,7 +213,7 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthWest','FontSize',8);
+set(legend1,'Location','NorthWest','FontSize',11,'Interpreter','latex');
 set(legend1,'Box','off');
 
 % Print

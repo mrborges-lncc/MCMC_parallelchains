@@ -4,11 +4,11 @@ jump=3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 repet   = 0;
 Nthetas = 2;
-M       = 1;
+M       = 10;
 Nch_ini = 0;
 Nch_fim = 5;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(600, 1, Nchains);
+Nini = repmat(1000, 1, Nchains);
 Nfim = [1256 1423 1378 1367 1335 1273];
 %Nfim = repmat(900, 1, Nchains);
 Nfim = Nfim(Nch_ini+1:Nch_fim+1)-2;
@@ -66,7 +66,7 @@ for k=1:Nthetas
                 cont = cont + 1;
                 if cont > pmin, break; end
                 if(k == 1)
-                    data1(cont,:,j) = lhsnorm(0,1,M).';%dat(1:M);
+                    data1(cont,:,j) = dat(1:M);%lhsnorm(0,1,M).';
                 else
                     data2(cont,:,j) = dat(1:M);
                 end

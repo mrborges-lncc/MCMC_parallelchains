@@ -31,7 +31,7 @@ lim   = [0 0];
 permheter   = 1;   %% if 0 => homog.; 1 => heter.
 poroheter   = 1;   %% if 0 => homog.; 1 => heter.
 youngheter  = 1;   %% if 0 => homog.; 1 => heter.
-printa      = 10;
+printa      = 1;
 salva       = 1;
 monitorpres = 1;  %% if == 1 pressure monitors at some points
 monitorsat  = 1;  %% if == 1 saturation monitors at some points

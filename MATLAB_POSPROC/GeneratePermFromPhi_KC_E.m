@@ -23,21 +23,21 @@ ny  = 51;
 nz  = 5;
 depth = 1e3;
 ini = 0;
-fim = 0;
+fim = 1999;
 prt = 1; % print for simulation
 ckc = 2.11e-11;
 a   = 7.12;
 E0  = 5e10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nome= 'permKC';
-permrho = 0.808;
-permbeta= 8.987e-14;      %% Factor to permeability
+permrho = 0.597;
+permbeta= 9.1098e-14;      %% Factor to permeability
 permvar = '\kappa';
 phirho  = 0.23;
 phibeta = 0.146;
 phivar  = '\phi';
-Erho    = 0.23;
-Ebeta   = 1.722e10;
+Erho    = 0.457;
+Ebeta   = 1.0225e10;
 Evar    = '\mathsf{E}';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,7 +52,7 @@ G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/MonteCarlo/twophaseflow/fields';
-home = '~/fields/campos/';
+home = '/media/mrborges/HD-E1/fields/campos/';
 permname = 'perm';
 phiname  = 'phi';
 Ename    = 'E';
@@ -115,7 +115,7 @@ for n = ini:fim
     fprintf('Mean perm...: %4.3f mD \t | \t std perm...: %4.3f mD\n',mk*fat,sqrt(vk)*fat);
     %% Sprigg’s representation
     E  = E0 * exp(-a * phi);
-    sv = 1e-05;
+    sv = 5e-05;
     E  = E + lhsnorm(0,sv,G.cells.num).*E;
     paramE = [paramE; exp(mean(log(E))) var(log(E))];
     fprintf('Mean E.......: %4.3fe9 N/m^2 \t | \t std E......: %4.3fe9 N/m^2\n',mean(E)/1e9,std(E)/1e9);

@@ -26,18 +26,26 @@ depth = 1e3;
 ini = 0;
 fim = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rho = 0.81;
-beta= 8.950e-14;      %% Factor to permeability
+rho = 0.597;
+beta= 9.1098e-14;      %% Factor to permeability
 nome= 'permREF';
 variav = '\kappa';
-% rho = 0.20;
-% beta= 0.12;
-% nome= 'phiREF';
-% variav = '\phi';
+%
+rho = 0.23;
+beta= 0.146;
+nome= 'phiREF';
+variav = '\phi';
+%
+% rho    = 0.457;
+% beta   = 1.0225e10;
+% nome   = 'EREF';
+% variav = '\mathsf{E}';
+
+homef = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/select_fields/*.dat'}, 'LOAD DATA');
-%[FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
-[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/*.dat'}, 'LOAD DATA');
+[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
+%[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/*.dat'}, 'LOAD DATA');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);
@@ -94,19 +102,19 @@ for n = ini:fim
     %plot_rock(Y,G,'Yn','$Y$',color,lim,vw,1);
     plot_rock_poro(rock.perm(:,1),G,'Y',beta,rho,['$Y_{' variav '}$'],...
         color,lim,vw,2);
-    base=['../../figuras/Y_' nome '_' snum];
+    base=[homef 'Y_' nome '_' snum];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     pause(1); close all
-% %     lim = [(mean(rock.perm(:,1)) - 0.0125*std(rock.perm(:,1)))...
-% %         (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
-% %     plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
-%     plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],...
-%         color,lim,vw,12);
-%     base=['../figuras/' nome '_' snum];
-%     set(gcf,'PaperPositionMode','auto');
-%     print('-depsc','-r600', base);
-%     pause(1); close all
+%     lim = [(mean(rock.perm(:,1)) - 0.0125*std(rock.perm(:,1)))...
+%         (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
+%     plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
+    plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],...
+        color,lim,vw,12);
+    base=[homef nome '_' snum];
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600', base);
+    pause(1); close all
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -14,9 +14,10 @@ Nfim = [1999];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains    = [Nch_ini:1:Nch_fim];
-base_name = 'presinj_TwoPhase3DMC_only_perm'
 base_name = 'presinj_TwoPhase3D_KC_MC'
+base_name = 'presinj_TwoPhase3D_onlyPerm_MC'
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'MonteCarlo/twophaseflow/exp/pres/pres_referencia_0.dat']);
 ref=dados;
@@ -38,7 +39,7 @@ dmedio = mean(data,3);
 erro   = std(data,0,3);
 %
 % Create figure
-figure1 = figure()
+figure1 = figure();
 %B=1e-2;
 %A=1e-5;
 C=min(dados(:,1));

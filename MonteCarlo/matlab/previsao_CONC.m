@@ -17,8 +17,9 @@ Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 base_name = 'prod_TwoPhase3D_KC_MC'
-% base_name = 'prod_TwoPhase3DMC_KC'
+base_name = 'prod_TwoPhase3D_onlyPerm_MC'
 hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
 homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 dados=load([hom 'MonteCarlo/twophaseflow/exp/prod/prod_referencia_0.dat']);
 %dados=load(['~/MCMC_parallelchains/twophaseflow/exp/prod/prod_referencia_0.dat']);
@@ -49,7 +50,7 @@ dmedio = mean(data,3);
 erro   = std(data,0,3);
 %
 % Create figure
-figure1 = figure()
+figure1 = figure();
 
 C=min(dados(:,1));
 D=max(dados(:,1))*1.01;
@@ -145,7 +146,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create figure
 clf; close all
-figure2 = figure(2)
+figure2 = figure(2);
 
 C=min(min(prodref(:,1,:)));
 D=max(max(prodref(:,1,:)))*1.01;
@@ -192,7 +193,7 @@ set(axes1,'FontName',...
 
 % Create legend
 legend1 = legend(axes1,'show');
-set(legend1,'Location','NorthWest','FontSize',10);
+set(legend1,'Location','NorthWest','FontSize',11,'Interpreter','latex');
 set(legend1,'Box','off');
 
 % Print

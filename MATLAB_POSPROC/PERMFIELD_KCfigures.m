@@ -30,17 +30,17 @@ permvar = '\kappa';
 phirho  = 0.23;
 phibeta = 0.146;
 phivar  = '\phi';
-Erho    = 0.201;
-Ebeta   = 9.9313e09;
-E0      = 2.5e10;
+Ebeta   = 1.0225e10;
+Erho    = 0.457;
+E0      = 1e11;
 Evar    = '\mathsf{E}';
 home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 homef= '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
-home = '~/MCMC_parallelchains/';
-homef= '~/MCMC_parallelchains/figuras/';
+%home = '~/MCMC_parallelchains/';
+%homef= '~/MCMC_parallelchains/figuras/';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PORO FIELD');
-[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/phi*.dat'}, 'LOAD DATA PORO FIELD');
+[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PORO FIELD');
+%[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/phi*.dat'}, 'LOAD DATA PORO FIELD');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);
@@ -51,8 +51,8 @@ end
 phifilen = filen(1:k);
 nini = int32(str2num(filem(k+1:end)));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
-[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/pe*.dat'}, 'LOAD DATA PERM FIELD');
+[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
+%[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/pe*.dat'}, 'LOAD DATA PERM FIELD');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);
@@ -63,8 +63,8 @@ end
 permfilen = filen(1:k);
 nini2 = int32(str2num(filem(k+1:end)));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
-[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/E*.dat'}, 'LOAD DATA PERM FIELD');
+[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
+%[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/E*.dat'}, 'LOAD DATA PERM FIELD');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);
@@ -123,6 +123,7 @@ sK   = std(rock.perm/(milli*darcy));
 fprintf('\n==============================================================\n')
 fprintf('Mean Yphi....: %4.3f    \t | \t std phi....: %4.3f   \n',mean(phi),std(phi));
 fprintf('Mean Yperm...: %4.3f mD \t | \t std K......: %4.3f mD\n',mK,sK);
+fprintf('Mean YE......: %4.3f GPa \t | \t std E......: %4.3f GPa\n',mean(E)/1e9,std(E)/1e9);
 fprintf('==============================================================\n')
 clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
