@@ -1,0 +1,195 @@
+# Created by Octave 4.2.2, Tue Sep 21 13:04:43 2021 -03 <mrborges@DELL-INSPIRON>
+# name: allowDL
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 5
+# name: description
+# type: sq_string
+# elements: 1
+# length: 199
+MRST may download data sets and other utilities from the internet. Disabling this means that no files will be downloaded by default. You can still manually activate downloads through optional inputs.
+
+
+# name: label
+# type: sq_string
+# elements: 1
+# length: 32
+Download files from the internet
+
+
+# name: value
+# type: bool
+1
+
+
+# name: default
+# type: bool
+1
+
+
+# name: defaulted
+# type: bool
+1
+
+
+
+
+# name: dataDirectory
+# type: sq_string
+# elements: 1
+# length: 66
+/home/mrborges/MCMC_parallelchains/twophaseflow/mrst/examples/data
+
+
+# name: outputDirectory
+# type: sq_string
+# elements: 1
+# length: 59
+/home/mrborges/MCMC_parallelchains/twophaseflow/mrst/output
+
+
+# name: promptDL
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 5
+# name: description
+# type: sq_string
+# elements: 1
+# length: 147
+MRST will ask for permission before downloading files. You can disable these prompts (recommended if you are on an unmetered high-speed connection)
+
+
+# name: label
+# type: sq_string
+# elements: 1
+# length: 31
+Prompt before downloading files
+
+
+# name: value
+# type: bool
+1
+
+
+# name: default
+# type: bool
+1
+
+
+# name: defaulted
+# type: bool
+1
+
+
+
+
+# name: promptMEX
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 5
+# name: description
+# type: sq_string
+# elements: 1
+# length: 125
+MRST normally asks before attempting to build MEX extensions. If disabled, building happens automatically without user input.
+
+
+# name: label
+# type: sq_string
+# elements: 1
+# length: 37
+Prompt before building MEX-extensions
+
+
+# name: value
+# type: bool
+0
+
+
+# name: default
+# type: bool
+0
+
+
+# name: defaulted
+# type: bool
+1
+
+
+
+
+# name: useMEX
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 5
+# name: description
+# type: sq_string
+# elements: 1
+# length: 303
+Parts of MRST can be accelerated with compiled extensions (MEX-acceleration). This requires a C/C++ compiler to be set up with Matlab (see 'mex -setup' for more details). Enabling this option will let MRST attempt to compile MEX files when needed. Building of such files can still be triggered manually.
+
+
+# name: label
+# type: sq_string
+# elements: 1
+# length: 20
+Use MEX-acceleration
+
+
+# name: value
+# type: bool
+0
+
+
+# name: default
+# type: bool
+0
+
+
+# name: defaulted
+# type: bool
+1
+
+
+
+
+# name: useOMP
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 5
+# name: description
+# type: sq_string
+# elements: 1
+# length: 105
+Many MEX extensions include OpenMP support for parallelization. Enable this if you have OpenMP installed.
+
+
+# name: label
+# type: sq_string
+# elements: 1
+# length: 38
+Use OpenMP when using MEX-acceleration
+
+
+# name: value
+# type: bool
+1
+
+
+# name: default
+# type: bool
+1
+
+
+# name: defaulted
+# type: bool
+1
+
+
+
+
