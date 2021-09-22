@@ -9,7 +9,7 @@ exper = ['exp' num2str(exper,'%0.3d')];
 tstart =  tic;
 
 addpath ../../twophaseflow/mrst_borges_tools/
-addpath ../../twophaseflow/mrst-2021a/
+addpath ../../twophaseflow/mrst/
 startup
 
 try

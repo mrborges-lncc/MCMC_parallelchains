@@ -9,7 +9,7 @@ exper = ['exp' num2str(exper,'%0.3d')];
 tstart =  tic;
 
 addpath ./mrst_borges_tools/
-addpath ./mrst-2021a/
+addpath ./mrst/
 startup
 
 try

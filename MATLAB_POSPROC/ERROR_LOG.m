@@ -8,14 +8,14 @@ N   = 0;
 M   = fim-ini+1;
 home= '/home/mrborges/MCMCrw/twoStage/';
 home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
-home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
+% home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
 % home= '../twoStage/';
 %
 homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 % homef='~/MCMC_parallelchains/';
 % homef='../';
 base_name = 'TwoPhase3D_RW_RK';
-base_name = 'TwoPhase3D_onlyPerm_RW_RK';
+% base_name = 'TwoPhase3D_onlyPerm_RW_RK';
 nome_extra = '';
 nchain= 1;
 razao = 3;

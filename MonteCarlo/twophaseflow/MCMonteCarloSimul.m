@@ -5,15 +5,16 @@ Nch_ini = 0;
 Nch_fim = 5;
 Nchains = (Nch_fim - Nch_ini) + 1;
 Nini = repmat(0, 1, Nchains);
+Nini = [1255 1422 1377 1366 1334 1272];
 Nfim = repmat(0, 1, Nchains);
-% Nfim = [1210 1250 1410 1101];
+Nfim = [1363 1547 1522 1498 1472 1417];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 
 nome= 'TwoPhase3D_RW_RK';
 %% Parallel
-Npar = 4;
+Npar = 2;
 cont = 0;
 while mod(Nchains,Npar) ~= 0 && cont < 100
     cont = cont + 1;
