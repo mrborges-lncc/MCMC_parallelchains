@@ -113,7 +113,7 @@ set(legend1,'Box','off');
 % Print
 base=[homf base_name];
 %print('-djpeg90',base)
-print('-depsc','-r600',base)
+print('-depsc','-r300',base)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Production
@@ -148,6 +148,11 @@ end
 clf; close all
 figure2 = figure(2);
 
+fat = 10^(-5);
+prod(:,2) = fat * prod(:,2);
+prodref(:,2) = fat * prodref(:,2);
+producao(:,2,:) = fat * producao(:,2,:);
+
 C=min(min(prodref(:,1,:)));
 D=max(max(prodref(:,1,:)))*1.01;
 A=min(min(prodref(:,2,:)));
@@ -157,6 +162,10 @@ dasp=[1 1.*(B-A)/(D-C) 200];
 % Create axes
 axes1 = axes('Parent',figure2,'FontSize',14,'FontName','Times New Roman',...
     'DataAspectRatio',dasp);
+% Set the remaining axes properties
+set(axes1,'FontName',...
+    'Times New Roman','FontSize',14,'TickDir','both','TickLabelInterpreter',...
+    'latex','XMinorTick','on','YMinorTick','on');
 box(axes1,'on');
 hold(axes1,'all');
 for k = 1:size(data,3)
@@ -185,11 +194,6 @@ xlabel('$t (day)$','FontSize',16,'FontName','Times New Roman',...
 % Create ylabel
 ylabel('Cumulated oil production ($m^3$)','FontSize',16,'FontName',...
     'Times New Roman','FontAngle','italic','Interpreter','latex');
-
-% Set the remaining axes properties
-set(axes1,'FontName',...
-    'Times New Roman','FontSize',14,'TickDir','both','TickLabelInterpreter',...
-    'latex','XMinorTick','on','YMinorTick','on');
 
 % Create legend
 legend1 = legend(axes1,'show');

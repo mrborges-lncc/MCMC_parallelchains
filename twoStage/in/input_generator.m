@@ -18,7 +18,7 @@ prompt = {...
 %
 dlg_title = 'EXPERIMENT INPUT';
 num_lines = [1 70];
-def    = {'TwoPhase3D_DE','amostra','1','2','100000','5000','2'};
+def    = {'TwoPhase3D_RW','amostra','1','2','7500','2500','2'};
 answer = inputdlg(prompt,dlg_title,num_lines,def,options);
 test   = int64(size(answer,1));
 if(test==0)
@@ -56,10 +56,10 @@ for i=1:ndata
         'Reference data file:',...
         'Sample data file:',...
         'Error at likelihood $\sigma_f$ (fine scale solution):'};
-    def    = {'1','2','20','60','yes',...
+    def    = {'1','2','1','150','yes',...
         '../twophaseflow/exp/pres/pres_ref_0.dat',...
         '../twophaseflow/exp/pres/pres_amostra_0.dat',...
-        '1.5e-05'};
+        '2e-04'};
     if ns == 2
         prompt = [prompt {'Error at likelihood $\sigma_c$ (coarse scale solution):'}];
         def    = [def {'2e-04'}];
@@ -85,7 +85,7 @@ for i=1:ndata
     if ns == 2, 
         ec = [ec; double(str2num(ans(9,:)))];
     else
-        ec = [ec; double(str2num(ans(8,:)))];
+        ec = [ec; ef];
     end
     if nor == 'yes'
         norma = [norma; 1];
@@ -125,7 +125,7 @@ for i=1:np
         'Jump frequency:',...
         'Jump size (mean or fixed):'};
     num_lines = [1 70];
-    def    = {'4','13005','0','10','0.25'};
+    def    = {'2','13005','0','10','2.08700e-02'};
     answer = inputdlg(prompt,dlg_title,num_lines,def,options);
     test   = int64(size(answer,1));
     if(test==0)
@@ -205,6 +205,8 @@ for i=1:np
 end
 for i=1:ndata
     fprintf(fileID,'%12.5e\n',ef(i));
+end
+for i=1:ndata
     fprintf(fileID,'%12.5e\n',ec(i));
 end
 for i=1:ndata

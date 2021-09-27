@@ -3,6 +3,7 @@ args = argv();
 num= str2num(args{1});
 exper = num;
 exper = ['exp' num2str(exper,'%0.3d')];
+fprintf('\n Running %s\n',exper);
 % Single phase flow Simulator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 25/03/2020
 % Based on MRST 2019
