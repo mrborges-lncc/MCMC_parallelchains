@@ -31,8 +31,8 @@ LD = $(FC)
 # define libs
 #BLAS      = -L/home/mrborges/LAPACK/blas_LINUX
 #LAPACK77  = -L/home/mrborges/LAPACK/lapack_LINUX
-BLAS      = -lblas
-LAPACK77  = -llapack
+#BLAS      = -lblas
+#LAPACK77  = -llapack
 LIBS      = $(LAPACK77) $(BLAS) $(SPECIAL_LIBG2C)
 
 ifeq ($(FC),ifort)

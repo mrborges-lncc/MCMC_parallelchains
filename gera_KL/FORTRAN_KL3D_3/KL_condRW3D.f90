@@ -67,9 +67,9 @@ PROGRAM MAIN
   ALLOCATE(X(0:NX))
   ALLOCATE(Y(0:NY))
   ALLOCATE(Z(0:NZ))
-  ALLOCATE(AVAL(1:MKL))
-  ALLOCATE(AVET(1:NUM_ELEM,1:MKL))
-  ALLOCATE(PCOND(1:MKL))
+  ALLOCATE(AVAL(MKL))
+  ALLOCATE(AVET(NUM_ELEM,MKL))
+  ALLOCATE(PCOND(MKL))
   ALLOCATE(THETA(MKL))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -111,7 +111,7 @@ PROGRAM MAIN
 ! RANDOM FIELDS GENERATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   WRITE(*,*)'LOADING EINGENPAIRS'
 !
-  CALL LOAD_AUTOV(AVAL,AVET,NUM_ELEM,MKL)
+  CALL LOAD_AUTOV()
 !
   CALL LOAD_THETA()
 !
@@ -236,6 +236,14 @@ END PROGRAM MAIN
 !
         READ(IN_FILE,3000)NCOND
         WRITE(*,3002)NCOND
+        IF(NCOND > 0)THEN
+           WRITE(*,*)'=========================='
+           WRITE(*,*)'=========================='
+           WRITE(*,*)'CONDITIONING OFF'
+           WRITE(*,*)'=========================='
+           WRITE(*,*)'=========================='
+           STOP 345
+        END IF
 !
         ALLOCATE(VET(0:3,0:NCOND-1))
         DO I=0,NCOND-1
@@ -547,82 +555,86 @@ END PROGRAM MAIN
       END FUNCTION VARIANCIA
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      SUBROUTINE LOAD_AUTOV(VAL,VE,NELEM,M)
+      SUBROUTINE LOAD_AUTOV()
 !
-      USE VARIAVEIS
-      IMPLICIT NONE
+        USE VARIAVEIS, ONLY: AVET,NX,NY,NZ,MKL,FILE_VET
+        IMPLICIT NONE
 !
-      REAL(4)          :: VAL(1:M)
-      REAL(4)          :: V(1:M*NELEM)
-      REAL(4)          :: VE(1:NELEM,1:M)
-      INTEGER          :: NELEM,M
-      INTEGER          :: ISTAT,IN_FILEA,IN_FILEV
-      INTEGER          :: I,J,K,NREC
-      REAL             :: TIME,T_START,T_FINAL
-      REAL,DIMENSION(2):: TARRAY
-      CHARACTER(LEN=3) :: TFILE
+        INTEGER          :: NELEM
+        INTEGER          :: ISTAT,IN_FILEA,IN_FILEV
+        INTEGER          :: I,J,K,NREC
+        REAL             :: TIME,T_START,T_FINAL
+        REAL,DIMENSION(2):: TARRAY
+        CHARACTER(LEN=3) :: TFILE
+        LOGICAL          :: EFILE
+        REAL(4),ALLOCATABLE,DIMENSION(:) :: V
 !
+        NELEM = NX*NY*NZ
+        ALLOCATE(V(NELEM * MKL))
 !!!!! FILE VERIFICATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      TFILE = 'ERR'
-      DO I=1,LEN(FILE_VET)
-         IF(FILE_VET(I:I+3).EQ.'.dat')THEN
-            J = I
-            TFILE = 'ASC'
-         END IF
-         IF(FILE_VET(I:I+3).EQ.'.bin')THEN
-            J = I
-            TFILE = 'BIN'
-         END IF
-      END DO
+        TFILE = 'ERR'
+        DO I=1,LEN(FILE_VET)
+           IF(FILE_VET(I:I+3).EQ.'.dat')THEN
+              J = I
+              TFILE = 'ASC'
+           END IF
+           IF(FILE_VET(I:I+3).EQ.'.bin')THEN
+              J = I
+              TFILE = 'BIN'
+           END IF
+        END DO
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      CALL ETIME(TARRAY,T_START)
-      T_START = TARRAY(1)
+        CALL ETIME(TARRAY,T_START)
+        T_START = TARRAY(1)
 !!!!! ABERTURA DOS ARQUIVOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      IF(TFILE.EQ.'ERR')THEN
-         WRITE(*,*)'ERROR ON READING INPUT FILE: ',FILE_VET
-         STOP 100
-      END IF
-      IF(TFILE.EQ.'ASC')THEN
-         IN_FILEV = 323
-         OPEN(UNIT=IN_FILEV,FILE=FILE_VET,STATUS='UNKNOWN', &
-              FORM='FORMATTED',IOSTAT=ISTAT)
-         IF(ISTAT.NE.0)THEN
-            WRITE(*,*)'ERROR ON OPENING INPUT FILE: ',FILE_VET
-            STOP
-         END IF
-         DO I=1,NELEM
-            READ(IN_FILEV,*)(VE(I,J),J=1,M)
-         ENDDO
-      END IF
-      IF(TFILE.EQ.'BIN')THEN
-         NREC = NELEM*M*4
-         IN_FILEV = 326
-         OPEN(UNIT=IN_FILEV,FILE=FILE_VET,STATUS='OLD', &
-              ACCESS='DIRECT',RECL=NREC,IOSTAT=ISTAT)
-         IF(ISTAT.NE.0)THEN
-            WRITE(*,*)'ERROR ON OPENING INPUT FILE: ',FILE_VET
-            STOP
-         END IF
-         READ(IN_FILEV,REC=1)V
-         K = 0
-         DO J=1,M
-            DO I=1,NELEM
-               K = K+1
-               VE(I,J) = V(K)
-            END DO
-         END DO
-      END IF
+        IF(TFILE.EQ.'ERR')THEN
+           WRITE(*,*)'ERROR ON READING INPUT FILE: ',FILE_VET
+           STOP 100
+        END IF
+        IF(TFILE.EQ.'ASC')THEN
+           IN_FILEV = 132
+           FILE_VET = TRIM(ADJUSTL(FILE_VET))
+           INQUIRE(FILE=FILE_VET,EXIST=EFILE)
+           OPEN(UNIT=IN_FILEV,FILE=FILE_VET,STATUS='UNKNOWN', ACTION='READ',IOSTAT=ISTAT)
+           IF(ISTAT.NE.0)THEN
+              WRITE(*,*)'ERROR ON OPENING INPUT FILE: ',FILE_VET
+              STOP
+           END IF
+           DO I=1,NELEM
+              READ(IN_FILEV,*)AVET(I,1:MKL)
+           ENDDO
+           CLOSE(IN_FILEV)
+        END IF
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        IF(TFILE.EQ.'BIN')THEN
+           NREC = NELEM*MKL*4
+           IN_FILEV = 326
+           OPEN(UNIT=IN_FILEV,FILE=FILE_VET,STATUS='OLD', &
+                ACCESS='DIRECT',RECL=NREC,IOSTAT=ISTAT)
+           IF(ISTAT.NE.0)THEN
+              WRITE(*,*)'ERROR ON OPENING INPUT FILE: ',FILE_VET
+              STOP
+           END IF
+           READ(IN_FILEV,REC=1)V
+           K = 0
+           DO J=1,MKL
+              DO I=1,NELEM
+                 K = k + 1
+                 AVET(I,J) = V(K)
+              END DO
+           END DO
+        END IF
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      CALL ETIME(TARRAY,T_FINAL)
-      T_FINAL = TARRAY(1)
-      TIME = T_FINAL-T_START
-      WRITE(*,334)TIME,TARRAY(1),TARRAY(2)
+        CALL ETIME(TARRAY,T_FINAL)
+        T_FINAL = TARRAY(1)
+        TIME = T_FINAL-T_START
+        WRITE(*,334)TIME,TARRAY(1),TARRAY(2)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-334   FORMAT('TIME TO LOAD AUT (s) =',F12.2,/,&
-           'USER TIME        (s) =',F12.2,/,&
-           'SYSTEM TIME      (s) =',F12.2,/)
-111   FORMAT(e25.8)
-112   FORMAT(40000e15.7)
+334     FORMAT('TIME TO LOAD AUT (s) =',F12.2,/,&
+             'USER TIME        (s) =',F12.2,/,&
+             'SYSTEM TIME      (s) =',F12.2,/)
+111     FORMAT(e25.8)
+112     FORMAT(40000e15.7)
 !
       END SUBROUTINE LOAD_AUTOV
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -642,7 +654,7 @@ END PROGRAM MAIN
         REAL(4) :: XI(1:NX*NY*NZ)
         INTEGER :: I,J,M,MX,MY,MZ
         REAL(4) :: POSIX,POSIY,POSIZ
-        REAL(4) :: AUX
+        REAL(4) :: AUX, SIG2
         INTEGER :: MAX,MIN,MIN2
         CHARACTER(LEN=256) :: NAME
         CHARACTER(LEN=4)   :: EXT
@@ -652,13 +664,14 @@ END PROGRAM MAIN
         REAL(4), EXTERNAL  :: MAIOR,MENOR
         REAL(4), EXTERNAL  :: VMEAN,VAR,VARIANCIA
         REAL(4), EXTERNAL  :: VMEAN3D,VAR3D
-        EXTERNAL           :: DGESV
+!        EXTERNAL           :: DGESV
         REAL(4)            :: WT
         INTEGER            :: ISTAT,IN_FILE
 !
 !        EXTERNAL :: ETIME
 ! SET VARIABLES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
+        SIG2 = SIG * SIG
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! IDENTIFICACAO DOS PONTOS NO VETOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -722,13 +735,13 @@ END PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            IF(NPROPOSAL.EQ.2)THEN
               DO I=1,MKL
-                 THETA(I)=SQRT(1.0-SIG*SIG)*THETA(I)+SIG*RANDOM_NORMAL()
-!                         +MEANTHETA*(1.D0-SQRT(1.0-SIG*SIG))
+                 THETA(I)=SQRT(1.0-SIG2)*THETA(I)+SIG*RANDOM_NORMAL()
+!                         +MEANTHETA*(1.D0-SQRT(1.0-SIG2))
               END DO
            END IF
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            IF(NPROPOSAL.EQ.4)THEN
-              WRITE(*,*)'DO NOT CHANGE THE LOAD THETA'
+              WRITE(*,*)'DO NOT CHANGE LOADED THETA'
            END IF
 ! NORMALIZACAO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !           AUX=SQRT(1.d0/VARIANCIA(THETA,MKL))
@@ -758,7 +771,7 @@ END PROGRAM MAIN
               ENDDO
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!! resolucao do sitema linear ! Aa=b !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              CALL DGESV(NCOND,NRHS,MAT,LDA,IPIV,B,LDB,INFO)
+!              CALL DGESV(NCOND,NRHS,MAT,LDA,IPIV,B,LDB,INFO)
 !              IF(INFO.EQ.0)WRITE(*,*)'successful exit'
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
               DO I=1,NCOND
@@ -776,8 +789,7 @@ END PROGRAM MAIN
               ENDDO
               XI(I)=AUX
            ENDDO
-!$OMP PARALLEL PRIVATE(I,J,KK)
-!$OMP DO
+!
            K=0
            DO KK=0,MZ
               DO J=0,MY
@@ -787,8 +799,6 @@ END PROGRAM MAIN
                  ENDDO
               ENDDO
            END DO
-!$OMP END DO
-!$OMP END PARALLEL
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! NAME OF OUTPUT FILE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            WRITE(C,113)M

@@ -41,12 +41,12 @@ nz  = 5;
 NX  = 51;
 NY  = 51;
 NZ  = 5;
-interpolacao = 1; % if == 1 the eigenvector are interpolated to this mesh%%
+interpolacao = 10; % if == 1 the eigenvector are interpolated to this mesh%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 eta1  = 50; % correlation length in the x direction
 eta2  = 50; % correlation length in the y direction
 eta3  = 10; % correlation length in the z direction
-Nrand = 2000;  % total number of realizations
+Nrand = 2;  % total number of realizations
 M     = 0;  % number of terms used in the KL expansion. OBS: if == 0 it 
             % uses the maximum number of terms (nx^2 x ny^2 x nz^2)
 TIPOINPUT = 10; % if == 1 reads the conditioned points from the file
@@ -63,7 +63,7 @@ tipo_prt  = 1;         % if == 1 print the fields in the LNCC format,
                        % otherwise print both formats
 paraview_print = 10;    % if == 1 print paraview visualization
 printa         = 1;    % if == 1 save the T matrix = sqrt(lambda)*phi
-printabin      = 1;    % if == 1 save the T in a binary file
+printabin      = 10;    % if == 1 save the T in a binary file
 estatistica    = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if(inputbox==1)
@@ -465,7 +465,6 @@ if(printa==1)
         save(name_autovet,'T','-ascii');
     end
     tEsave=toc(tSave);
-%    disp(['Autopares salvos em: ' num2str(tEsave) ' seg.']);
     disp(['Eigenpairs saved: ' num2str(tEsave) ' seg.']);
     disp('------------------------------');
 else
