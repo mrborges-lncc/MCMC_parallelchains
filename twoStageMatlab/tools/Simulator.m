@@ -1,4 +1,5 @@
-function Simulator(Y, physicaldim, meshg)
+
+kfunction [pres oilprod] = Simulator(Y, physicaldim, meshg)
 % Single phase flow Simulator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 25/03/2020
 % Based on MRST 2019
@@ -43,9 +44,9 @@ ny  = meshg(2);
 nz  = meshg(3);
 well_r= 0.125;          %% well radius
 TT    = 300.0;            %% days
-nstep = 30;            %% number of time steps for pressure-velocity system
+nstep = 300;            %% number of time steps for pressure-velocity system
 nprint= 25;             %% Number of impressions
-ndata = 15;             %% Number of impressions of data
+ndata = 150;             %% Number of impressions of data
 ndt   = 10;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
 [ndata njump] = ajusteImpress(ndata,nstep);
@@ -96,19 +97,19 @@ clear K
 %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if printa == 1 && heter == 1 
     plot_rock(reverseKlog(rock.perm(:,1),permbeta,permrho),G,'Yn','$\kappa_x$',color,lim,vw,1);
-    base=['../figuras/permKx_' nome];
+    base=['./figuras/permKx_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     plot_rock(reverseKlog(rock.perm(:,2),permbeta,permrho),G,'Yn','$\kappa_y$',color,lim,vw,2);
-    base=['../figuras/permKy_' nome];
+    base=['./figuras/permKy_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     plot_rock(reverseKlog(rock.perm(:,3),permbeta,permrho),G,'Yn','$\kappa_z$',color,lim,vw,3);
-    base=['../figuras/permKz_' nome];
+    base=['./figuras/permKz_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     plot_rock_poro(rock.poro,G,'Yn',1,1,'$\phi$',color,[0 0],vw,14);
-    base=['../figuras/phi_' nome];
+    base=['./figuras/phi_' nome];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
     pause(et); clf; close all
@@ -235,8 +236,8 @@ dt = TT/double(nstep)*ones(1,nstep);
 dt = [dt(1).*sort(repmat(2.^-[1:ndt ndt],1,1)) dt(2:end)];
 nstep    = numel(dt);
 wellSols = cell(nstep+1,1);  
-wellSols{1} = getWellSol(W, sol, fluid);
-solucao{1}  = sol; 
+%wellSols{1} = getWellSol(W, sol, fluid);
+%solucao{1}  = sol; 
 t = 0;
 % hwb = waitbar(t,'Simulation ..');
 for n=1:nstep
@@ -246,11 +247,12 @@ for n=1:nstep
     sol  = explicitTransport(sol, G, dt(n), rock, fluid,...
         'wells', W, 'verbose', verb, 'dt_factor', 0.75);
     npk  = PandSfigures(sol,G,W,printa,vw,nome,et,n,nprjump,(t/day),npk,ndt,lim);
-    wellSols{n+1} = getWellSol(W, sol, fluid);
-    solucao{n+1} = sol;
+    wellSols{n} = getWellSol(W, sol, fluid);
+    solucao{n} = sol;
 end
 p_monitores = monitors(G, 1, [255.0 255.0 depth])
-get_data(G,W,wellSols,solucao,nstep,dt,p_monitores)
+[pres oilprod] = get_data(G,W,wellSols,solucao,nstep,dt/day,...
+    p_monitores,ndt,ndata,njump);
 
 
 % close(hwb);

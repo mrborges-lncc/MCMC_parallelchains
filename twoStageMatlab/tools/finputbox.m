@@ -1,5 +1,5 @@
-function [expname, prop_method, jump, nStage, num_rockpar, num_datatype, num_trials, ...
-    num_select, NC] = finputbox()
+function [expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
+    num_trials, num_select, NC] = finputbox()
     options.Resize='on';
     options.WindowStyle='normal';
     options.Interpreter='tex';

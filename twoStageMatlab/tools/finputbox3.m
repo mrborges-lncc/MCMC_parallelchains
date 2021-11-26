@@ -38,7 +38,7 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     pk = pk + 1; dk = dk + 1;
     prompt{pk}   = 'Stochastic dimention of KL:';
-    definput{dk} = '13';
+    definput{dk} = '10';
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     answer   = inputdlg(prompt,dlgtitle,dims,definput);
     ans      = char(answer);

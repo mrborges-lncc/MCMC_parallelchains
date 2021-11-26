@@ -22,20 +22,37 @@ d     = KLM;
 numel = fine_mesh(1) * fine_mesh(2) * fine_mesh(3);
 thetan= zeros(d,NC,num_rockpar);
 theta = zeros(d,NC,num_rockpar);
+select_theta = zeros(d,NC,num_rockpar,num_trials);
 Y     = zeros(numel,NC,num_rockpar);
 K     = zeros(numel,NC,num_rockpar);
 mu    = 0.0;
-s2    = 2.0;
+s2    = (2.38/sqrt(d))^2;
+postn = zeros(NC,1);
+post  = zeros(NC,1);
+erro  = zeros(num_trials,NC);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for chain = 1 : NC
     for nk = 1 : num_rockpar
         %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        theta(:,chain,nk) = prop(mu,s2,d);
-        Y(:,chain,nk)     = KL(T{nk},theta(:,chain,nk),KLM,numel);
+        thetan(:,chain,nk) = prop(mu,s2,d);
+        Y(:,chain,nk)      = KL(T{nk},thetan(:,chain,nk),KLM,numel);
     end
-    %% Simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    Simulator(Y(:,chain,:),physical_dim,fine_mesh)
+    %% Simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    [pres prod] = Simulator(Y(:,chain,:),physical_dim,fine_mesh);
+    sample{1}   = pres;
+    sample{2}   = prod;
+    clear pres prod
+    %% Likelihood %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    likn          = likelihood(dataref,sample,precision,num_datatype);
+    postn(chain)  = posterior(likn,thetan(:,chain,:),KLM)
+    ACCEPT = 1;
+    if ACCEPT == 1
+        for nk = 1 : num_rockpar
+             select_theta(:,chain,nk,1) = thetan(:,chain,nk);
+        end 
+        erro(1,chain) = postn(chain);
+    end
 end
 %% MAIN LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for n = 2 : num_trials
@@ -47,6 +64,38 @@ for n = 2 : num_trials
         break
     end
     for chain = 1 : NC
-        x(:,chain) = prop(mu,s2,d)
+        ACCEPT = 0;
+        %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        for nk = 1 : num_rockpar
+            theta(:,chain,nk) = thetan(:,chain,nk) + prop(mu,s2,d);
+            Y(:,chain,nk)     = KL(T{nk},theta(:,chain,nk),KLM,numel);
+        end
+        %% Simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        [pres prod] = Simulator(Y(:,chain,:),physical_dim,fine_mesh);
+        sample{1}   = pres;
+        sample{2}   = prod;
+        clear pres prod
+        %% Likelihood %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        lik          = likelihood(dataref,sample,precision,num_datatype);
+        post(chain)  = posterior(lik,theta(:,chain,:),KLM);
+        %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        alpha = min(1, post(chain)/postn(chain));
+        coin  = rand(1,1);
+        if coin < alpha
+            ACCEPT = 1;
+        end
+        if ACCEPT == 1
+            for nk = 1 : num_rockpar
+                select_theta(:,chain,nk,n) = theta(:,chain,nk);
+                thetan(:,chain,nk) = theta(:,chain,nk);
+            end
+            erro(n,chain) = post(chain);
+            postn(chain)  = post(chain);
+        else
+            for nk = 1 : num_rockpar
+                select_theta(:,chain,nk,n) = thetan(:,chain,nk);
+            end
+            erro(n,chain) = postn(chain);
+        end
     end
 end
