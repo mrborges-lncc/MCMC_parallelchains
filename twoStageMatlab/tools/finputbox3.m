@@ -5,7 +5,7 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     options.Interpreter='tex';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     dlgtitle = 'Input information to prior generation';
-    dims     = [1 60];
+    dims     = [1 80];
     pk = 1;
     dk = 1;
     %% Grid information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -14,12 +14,12 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     %% fine mesh %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     pk = pk + 1; dk = dk + 1;
     prompt{pk} = 'Fine mesh (nx, ny, nz):';
-    definput{dk} = '51 51 5';
+    definput{dk} = '100 100 1';
     %% coarse mesh %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if nStage == 2
         pk = pk + 1; dk = dk + 1;
         prompt{pk} = 'Coarse mesh (cnx, cny, cnz):';
-        definput{dk} = '5 5 1';
+        definput{dk} = '20 20 1';
     end
     %% input data files names
     name = 'Name of KL matrix of prior ';
@@ -32,7 +32,7 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
         dk = dk + 1;
         aux = 'prod';
         if i == 1, aux = 'pres'; end
-        nome   = ['../gera_KL/MATLAB/out/avet1_510x510x20_51x51x5_l50x50x10_M13005.bin'];
+        nome   = ['../gera_KL/MATLAB/out/avet1_500x500x20_100x100x1_l50x50x10_M10000.bin'];
         definput{dk} = nome;
     end    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

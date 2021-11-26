@@ -29,13 +29,13 @@ graf=1;  % if == 1 print the eigenvalues picture
 fig =1;  % if == 1 print 3D field (last one)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% physical dimensions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Lx  = 510.00;
-Ly  = 510.00;
+Lx  = 500.00;
+Ly  = 500.00;
 Lz  = 20.00;
 %%%%% mesh for covariance matrix %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-nx  = 51;
-ny  = 51;
-nz  = 5;
+nx  = 100;
+ny  = 100;
+nz  = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Mesh for interpolation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 NX  = 51;
@@ -63,7 +63,7 @@ tipo_prt  = 1;         % if == 1 print the fields in the LNCC format,
                        % otherwise print both formats
 paraview_print = 10;    % if == 1 print paraview visualization
 printa         = 1;    % if == 1 save the T matrix = sqrt(lambda)*phi
-printabin      = 10;    % if == 1 save the T in a binary file
+printabin      = 1;    % if == 1 save the T in a binary file
 estatistica    = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if(inputbox==1)

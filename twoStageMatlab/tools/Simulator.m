@@ -1,5 +1,4 @@
-
-kfunction [pres oilprod] = Simulator(Y, physicaldim, meshg)
+function [pres oilprod] = Simulator(Y, physicaldim, meshg)
 % Single phase flow Simulator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 25/03/2020
 % Based on MRST 2019
@@ -23,10 +22,10 @@ vw  = [-35 20];
 grav= 1;
 lim = [0 0];
 %lim = 1.0e+02 * [0.85   2.0];
-heter = 1;   %% if 0 => homog.; 1 => heter.; 2 => read *.mat
+heter    = 1;   %% if 0 => homog.; 1 => heter.; 2 => read *.mat
 phiheter = 1;
-printa= 10;
-salva = 1;        %% if == 1 save well informations
+printa   = 10;
+salva    = 1;        %% if == 1 save well informations
 monitorpres = 1;  %% if == 1 pressure monitors at some points
 monitorsat  = 1;  %% if == 1 saturation monitors at some points
 nome  = 'amostra';
@@ -77,9 +76,9 @@ G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GEOLOGIC MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Read Gaussian fileds %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-K = permbeta * exp(permrho * Y(:,:,1));
+K = permbeta * exp(permrho * Y(:,1));
 K = [K K K];
-phi = phibeta * exp(phirho * Y(:,:,2));
+phi = phibeta * exp(phirho * Y(:,2));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Rock model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rock = makeRock(G, K, phi);
@@ -250,7 +249,7 @@ for n=1:nstep
     wellSols{n} = getWellSol(W, sol, fluid);
     solucao{n} = sol;
 end
-p_monitores = monitors(G, 1, [255.0 255.0 depth])
+p_monitores = monitors(G, 1, [Lx/2 Lx/2 (depth+dz*0.5)]);
 [pres oilprod] = get_data(G,W,wellSols,solucao,nstep,dt/day,...
     p_monitores,ndt,ndata,njump);
 
