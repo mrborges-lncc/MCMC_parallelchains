@@ -21,7 +21,7 @@ function [file_ref,file_sample,precision,precision_coarse] = ...
         dk = dk + 1;
         aux = 'prod';
         if i == 1, aux = 'pres'; end
-        nome   = ['../twophaseflow/exp/' aux '/' aux '_ref_0.dat'];
+        nome   = ['../twophaseflow/exp000/' aux '/' aux '_ref_0.dat'];
         definput{dk} = nome;
     end    
     %% input data files names
@@ -35,7 +35,7 @@ function [file_ref,file_sample,precision,precision_coarse] = ...
         dk = dk + 1;
         aux = 'prod';
         if i == 1, aux = 'pres'; end
-        nome   = ['../twophaseflow/exp/' aux '/' aux '_amostra_0.dat'];
+        nome   = ['../twophaseflow/exp000/' aux '/' aux '_amostra_0.dat'];
         definput{dk} = nome;
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,7 +62,7 @@ function [file_ref,file_sample,precision,precision_coarse] = ...
             pk = pk + 1;
             prompt{pk} = nome;
             dk = dk + 1;
-            definput{dk} = '8.e-4';
+            definput{dk} = '4.e-4';
         end
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

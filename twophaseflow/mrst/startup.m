@@ -21,7 +21,6 @@ along with MRST.  If not, see <http://www.gnu.org/licenses/>.
 %}
 
    build_mrst_path_tree();
-   build_mrst_path_tree();
 
    % Register known third-party modules
    mod_3rdparty = { 'matlab_bgl' };

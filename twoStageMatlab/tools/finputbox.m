@@ -12,7 +12,7 @@ function [expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
         'Number of different selected fields:','Number of chains:'};
     dlgtitle = 'Input data';
     dims     = [1 60];
-    definput = {'RW','DE', '0.21', '2', '2', '2', '3', '1000','2'};
+    definput = {'RW','DE', '0', '2', '2', '2', '150', '1000','2'};
     answer   = inputdlg(prompt,dlgtitle,dims,definput);
     ans      = char(answer);
     expname      = ans(1,:);

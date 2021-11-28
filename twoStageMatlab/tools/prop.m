@@ -1,3 +1,4 @@
-function [out] = prop(mu,s,d)
-%     out = mvnrnd(mu,s);
-    out = lhsnorm(mu,s,d);
+function [out] = prop(theta,mu,s,d)
+     out = mvnrnd(theta,s);
+%     out = theta + lhsnorm(mu,s,d);
+%    out = lhsnorm(mu,s,d);

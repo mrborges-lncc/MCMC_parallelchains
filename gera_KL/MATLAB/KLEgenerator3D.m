@@ -38,15 +38,15 @@ ny  = 100;
 nz  = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Mesh for interpolation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NX  = 51;
-NY  = 51;
-NZ  = 5;
+NX  = 100;
+NY  = 100;
+NZ  = 1;
 interpolacao = 10; % if == 1 the eigenvector are interpolated to this mesh%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 eta1  = 50; % correlation length in the x direction
 eta2  = 50; % correlation length in the y direction
 eta3  = 10; % correlation length in the z direction
-Nrand = 2;  % total number of realizations
+Nrand = 10; % total number of realizations
 M     = 0;  % number of terms used in the KL expansion. OBS: if == 0 it 
             % uses the maximum number of terms (nx^2 x ny^2 x nz^2)
 TIPOINPUT = 10; % if == 1 reads the conditioned points from the file
@@ -671,11 +671,11 @@ for nr=1:Nrand
             THETA=[THETA; theta];
         end
 %******* PRINTING THE FIELDS **********************************************
-        if(nz==1)
-            imprime(Lx,Ly,nx,ny,ntipo,beta,Xi,nr,home,name,tipo_prt);
-        else
+%         if(nz==1)
+%             imprime(Lx,Ly,nx,ny,ntipo,beta,Xi,nr,home,name,tipo_prt);
+%         else
             imprime3D(Lx,Ly,Lz,nx,ny,nz,ntipo,beta,Xi,nr,home,name,tipo_prt);
-        end
+%         end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% PARAVIEW PRINTING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if(paraview_print==1)

@@ -10,7 +10,7 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     dk = 1;
     %% Grid information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     prompt{pk}   = 'Domain dimensions (Lx, Ly, Lz):';
-    definput{dk} = '510.0 510.0 20.0';
+    definput{dk} = '500.0 500.0 20.0';
     %% fine mesh %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     pk = pk + 1; dk = dk + 1;
     prompt{pk} = 'Fine mesh (nx, ny, nz):';
@@ -19,7 +19,7 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     if nStage == 2
         pk = pk + 1; dk = dk + 1;
         prompt{pk} = 'Coarse mesh (cnx, cny, cnz):';
-        definput{dk} = '20 20 1';
+        definput{dk} = '25 25 1';
     end
     %% input data files names
     name = 'Name of KL matrix of prior ';
@@ -38,7 +38,7 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     pk = pk + 1; dk = dk + 1;
     prompt{pk}   = 'Stochastic dimention of KL:';
-    definput{dk} = '10';
+    definput{dk} = '10000';
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     answer   = inputdlg(prompt,dlgtitle,dims,definput);
     ans      = char(answer);

@@ -2,8 +2,8 @@ close all
 clear all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 addpath ./tools/
-%addpath ../twophaseflow/mrst_borges_tools/
-addpath ../twophaseflow/mrst/
+%addpath ../twophaseflow/mrst/
+addpath ~/Dropbox/mrst-2021b/
 startup
 %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
@@ -23,19 +23,30 @@ thetan= zeros(d,NC,num_rockpar);
 theta = zeros(d,NC,num_rockpar);
 select_theta = zeros(d,NC,num_rockpar,num_trials);
 Y     = zeros(numel,NC,num_rockpar);
-K     = zeros(numel,NC,num_rockpar);
 mu    = 0.0;
-s2    = (2.38/sqrt(d))^2;
-postn = zeros(NC,1);
-post  = zeros(NC,1);
 erro  = zeros(num_trials,NC);
+csample = [];
+TOL   = 1e-07;
+if abs(jump) <TOL 
+    s2 = (2.38/sqrt(d))^1;
+else
+    s2 = jump;
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+fprintf('\n==================================================\n')
+fprintf('==================================================\n')
+fprintf('\nIteration %d\n',1)
+fprintf('\n==================================================')
+fprintf('\n==================================================\n')
 for chain = 1 : NC
+    fprintf('\n==================================================')
+    fprintf('\n Iter. %d; chain: %d\n',1,chain);
+    fprintf('==================================================')
     for nk = 1 : num_rockpar
         %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        thetan(:,chain,nk) = prop(mu,s2,d);
-        Y(:,chain,nk)      = KL(T{nk},thetan(:,chain,nk),KLM,numel);
+        thetan(:,chain,nk) = lhsnorm(0.0,1.0,d);
+        Y(:,chain,nk)      = KL(T{nk},thetan(:,chain,nk),numel);
     end
     %% Two-Stage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if nStage == 2
@@ -44,52 +55,49 @@ for chain = 1 : NC
             fine_mesh,coarse_mesh,'perm');
         coarseporo = rockupscaling(Y(:,chain,2),physical_dim,...
             fine_mesh,coarse_mesh,'poro');
-        %% Simulation coarse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %% Simulation coarse scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         [cpres cprod] = Simulator([coarseperm coarseporo],...
             physical_dim,coarse_mesh);
         csamplen{1}   = cpres;
         csamplen{2}   = cprod;
         clear cpres cprod
-        %% Likelihood %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        clikn          = likelihood(dataref,csamplen,precision_coarse,...
-            num_datatype);
-        cpostn(chain)  = posterior(clikn,theta(:,chain,:),KLM);
-        ACCEPT = 1;
-    else
+        CACCEPT = 1;
         coarse_post_ratio = 1.0;
     end
-    %% Simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% Simulation fine scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [pres prod] = Simulator([Y(:,chain,1) Y(:,chain,1)],...
         physical_dim,fine_mesh);
     samplen{1}   = pres;
     samplen{2}   = prod;
     clear pres prod
-    %% Likelihood %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    likn          = likelihood(dataref,samplen,precision,num_datatype);
-    postn(chain)  = posterior(likn,thetan(:,chain,:),KLM);
-    ACCEPT = 1;
-    if ACCEPT == 1
-        for nk = 1 : num_rockpar
-             select_theta(:,chain,nk,1) = thetan(:,chain,nk);
-        end 
-        erro(1,chain) = postn(chain);
-    end
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    select_theta(:,chain,:,1) = thetan(:,chain,:);
+    erro(1,chain) = erromediorel(dataref,samplen,num_datatype);
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% MAIN LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for n = 2 : num_trials
+    fprintf('\n==================================================\n')
+    fprintf('==================================================\n')
     fprintf('\nIteration %d\n',n)
+    fprintf('\n==================================================')
+    fprintf('\n==================================================\n')
     if n > num_select
-        fprintf('\n======================================================\n')
+        fprintf('\n==================================================\n')
         fprintf('\nFinished\nNumber of different selected fields achivied\n')
-        fprintf('\n======================================================\n')
+        fprintf('\n==================================================\n')
         break
     end
     for chain = 1 : NC
-        ACCEPT = 0;
+        ACCEPT = 0; CACCEPT = 0;
+        fprintf('\n==================================================')
+        fprintf('\n Iter. %d; chain: %d\n',n,chain);
+        fprintf('==================================================')
         %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         for nk = 1 : num_rockpar
-            theta(:,chain,nk) = thetan(:,chain,nk) + prop(mu,s2,d);
-            Y(:,chain,nk)     = KL(T{nk},theta(:,chain,nk),KLM,numel);
+            theta(:,chain,nk) = prop(thetan(:,chain,nk),mu,s2,d);
+            Y(:,chain,nk)     = KL(T{nk},theta(:,chain,nk),numel);
         end
         %% Two-Stage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if nStage == 2
@@ -101,19 +109,19 @@ for n = 2 : num_trials
             %% Simulation coarse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             [cpres cprod] = Simulator([coarseperm coarseporo],...
                 physical_dim,coarse_mesh);
+            clear csample
             csample{1}   = cpres;
             csample{2}   = cprod;
             clear cpres cprod
-            %% Likelihood %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            clik          = likelihood(dataref,csample,precision_coarse,...
-                num_datatype);
-            cpost(chain)  = posterior(clik,theta(:,chain,:),KLM);
             %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             [calpha, coarse_post_ratio] = cprob_accept(dataref,csamplen,...
                 csample,precision_coarse,num_datatype)
             %% TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             if rand(1,1) < calpha
                 CACCEPT = 1;
+                fprintf('###################################\n')
+                fprintf('Accepted in coarse scale\nIter. %d; chain: %d\n',n,chain)
+                fprintf('###################################')
             else
                 CACCEPT = 0;
             end
@@ -123,35 +131,37 @@ for n = 2 : num_trials
         %% Fine scale avaliation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if CACCEPT == 1
             %% Simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            [pres prod] = Simulator(Y(:,chain,:),physical_dim,fine_mesh);
-            sample{1}   = pres;
-            sample{2}   = prod;
+            [pres prod] = Simulator([Y(:,chain,1) Y(:,chain,2)],...
+                physical_dim,fine_mesh);
+            sample{1} = pres;
+            sample{2} = prod;
             clear pres prod
-            %% Likelihood %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            lik          = likelihood(dataref,sample,precision,num_datatype);
-            post(chain)  = posterior(lik,theta(:,chain,:),KLM);
             %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            alpha = min(1, post(chain)/postn(chain))
             alpha = prob_accept(dataref,samplen,sample,precision,...
-                num_datatype,coarse_post_ratio)
+                num_datatype,coarse_post_ratio);
             %% TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             if rand(1,1) < alpha
                 ACCEPT = 1;
             end
             if ACCEPT == 1
-                for nk = 1 : num_rockpar
-                    select_theta(:,chain,nk,n) = theta(:,chain,nk);
-                    thetan(:,chain,nk) = theta(:,chain,nk);
-                end
-                erro(n,chain) = post(chain);
-                postn(chain)  = post(chain);
-                samplen       = sample;
+                samplen  = sample;
+                csamplen = csample;
+                clear sample csample
+                select_theta(:,chain,:,n) = theta(:,chain,:);
+                thetan(:,chain,:) = theta(:,chain,:);
             else
-                for nk = 1 : num_rockpar
-                    select_theta(:,chain,nk,n) = thetan(:,chain,nk);
-                end
-                erro(n,chain) = postn(chain);
+                select_theta(:,chain,:,n) = thetan(:,chain,:);
             end
+        else
+            select_theta(:,chain,:,n) = thetan(:,chain,:);
         end
+        erro(n,chain) = erromediorel(dataref,samplen,num_datatype);
+        color = 'r';
+        if chain == 1
+            color = 'bo';
+        end
+        plot(1:n, erro(1:n,chain),color,'LineWidth',3);
+        hold on
+        pause(0.01)
     end
 end

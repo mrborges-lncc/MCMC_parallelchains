@@ -10,7 +10,6 @@ function [out, out2] = cprob_accept(dataref,csamplen,csample,sigma,...
             (norm(ref(:,2:end))^2))/(2*sigma(k));
         auxn   = auxn - ((norm(ref(:,2:end) - samplen(:,2:end))^2)/...
             (norm(ref(:,2:end))^2))/(2*sigma(k));
-        
     end
     out = min(1,exp(aux - auxn));
     out2= 1/(exp(aux - auxn));

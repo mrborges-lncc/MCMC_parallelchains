@@ -60,6 +60,7 @@ phibeta = 0.146;
 phirho  = 0.23;
 permbeta= 9.1098e-14;
 permrho = 0.597;
+permrho = 1.0;
 Ebeta   = 1.0225e10;
 Erho    = 0.457;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,12 +86,12 @@ rock = makeRock(G, K, phi);
 pv   = poreVolume(G, rock);
 mK   = mean(rock.perm/(milli*darcy));
 sK   = std(rock.perm/(milli*darcy));
-fprintf('\n==============================================================\n\n')
-fprintf('Mean k_x....: %4.1f mD \t | \t std k_x....: %4.1f mD\n',mK(1),sK(1));
-fprintf('Mean k_y....: %4.1f mD \t | \t std k_y....: %4.1f mD\n',mK(2),sK(2));
-fprintf('Mean k_z....: %4.1f mD \t | \t std k_z....: %4.1f mD\n',mK(3),sK(3));
-fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2f   \n',mean(rock.poro),std(rock.poro));
-fprintf('\n==============================================================\n')
+% fprintf('\n==============================================================\n\n')
+% fprintf('Mean k_x....: %4.1f mD \t | \t std k_x....: %4.1f mD\n',mK(1),sK(1));
+% fprintf('Mean k_y....: %4.1f mD \t | \t std k_y....: %4.1f mD\n',mK(2),sK(2));
+% fprintf('Mean k_z....: %4.1f mD \t | \t std k_z....: %4.1f mD\n',mK(3),sK(3));
+% fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2f   \n',mean(rock.poro),std(rock.poro));
+% fprintf('\n==============================================================\n')
 clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -168,12 +169,12 @@ if PRbhp < TOL
 else
     BHPressure = PRbhp;
 end
-fprintf('\n==============================================================\n')
-fprintf('\n==============================================================\n\n')
-fprintf('Load at the top of the reservoir.........: %4.1f MPa\n',overburden/mega);
-fprintf('Fluid pressure at the top of reservoir...: %4.1f MPa\n',ptop/mega)
-fprintf('BHP (Bottom hole pressure)...............: %4.1f MPa\n',BHPressure/mega);
-fprintf('\n==============================================================\n')
+% fprintf('\n==============================================================\n')
+% fprintf('\n==============================================================\n\n')
+% fprintf('Load at the top of the reservoir.........: %4.1f MPa\n',overburden/mega);
+% fprintf('Fluid pressure at the top of reservoir...: %4.1f MPa\n',ptop/mega)
+% fprintf('BHP (Bottom hole pressure)...............: %4.1f MPa\n',BHPressure/mega);
+% fprintf('\n==============================================================\n')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% WELLS five-spot model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -241,7 +242,7 @@ t = 0;
 % hwb = waitbar(t,'Simulation ..');
 for n=1:nstep
     t = t + dt(n);
-    fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
+%    fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
     sol  = incompTPFA(sol, G, hT, fluid, 'wells', W, 'verbose', verb);
     sol  = explicitTransport(sol, G, dt(n), rock, fluid,...
         'wells', W, 'verbose', verb, 'dt_factor', 0.75);
