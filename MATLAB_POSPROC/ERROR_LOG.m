@@ -10,6 +10,7 @@ home= '/home/mrborges/MCMCrw/twoStage/';
 home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
 % home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
 % home= '../twoStage/';
+% home= '/media/mrborges/HD-E1/MCMC_RW/twoStage/';
 %
 homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 % homef='~/MCMC_parallelchains/';

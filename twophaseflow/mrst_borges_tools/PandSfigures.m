@@ -53,12 +53,12 @@ function np = PandSfigures(sol,G,W,printa,vw,nome,et,num,nprj,t,npk,ndt,lim)
         xlabel('$x (m)$','FontSize',14,'Interpreter','latex');
         base=['figuras/pressure_' nome '-' num2str(npk,'%d')];
         set(gcf,'PaperPositionMode','auto');
-        print('-dpng','-r600', base);
+        print('-dpng','-r100', base);
         pause(et);
         clf; close all;
         figure(5);
-        plotCellData(G, sol.s(:,1),find(sol.s(:,1)>=0.1),...
-            'FaceAlpha', 0.95, 'EdgeAlpha', 0.4, 'EdgeColor', 'k');
+        plotCellData(G, sol.s(:,1),find(sol.s(:,1)>=0.0),...
+            'FaceAlpha', 0.95, 'EdgeAlpha', 0.4, 'EdgeColor', 'none');
         plotWell(G, W, 'height', Z*0.2,'FontSize',10,'Interpreter','latex')
         colorbar('horiz'); colormap(colorm); axis equal tight; view(vw);
         set(gca,'ZDir', 'reverse'), title(['$S_w$, ' t],...
@@ -73,7 +73,7 @@ function np = PandSfigures(sol,G,W,printa,vw,nome,et,num,nprj,t,npk,ndt,lim)
         xlabel('$x (m)$','FontSize',14,'Interpreter','latex');
         base=['figuras/wsat_' nome '-' num2str(npk,'%d')];
         set(gcf,'PaperPositionMode','auto');
-        print('-dpng','-r600', base);
+        print('-dpng','-r100', base);
         pause(et);
         clf; close all;
         np = npk + 1;

@@ -46,7 +46,7 @@ interpolacao = 10; % if == 1 the eigenvector are interpolated to this mesh%%
 eta1  = 50; % correlation length in the x direction
 eta2  = 50; % correlation length in the y direction
 eta3  = 10; % correlation length in the z direction
-Nrand = 10; % total number of realizations
+Nrand = 100; % total number of realizations
 M     = 0;  % number of terms used in the KL expansion. OBS: if == 0 it 
             % uses the maximum number of terms (nx^2 x ny^2 x nz^2)
 TIPOINPUT = 10; % if == 1 reads the conditioned points from the file
