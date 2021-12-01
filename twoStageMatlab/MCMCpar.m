@@ -12,11 +12,17 @@ catch %#ok<CTCH>
    mrstModule add incomp mimetic coarsegrid upscaling
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-home = './';
-homef= './figuras/';
+homet = './thetas/theta';
+homed = './data/data';
+homef = './figuras/';
+homee = './error/error';
+homer = './data/restart';
+%% Seed control %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% seed = 1872;
+% rng(seed)
 %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
-    num_trials, num_select, NC, freqj] = finputbox();
+[newexp, expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
+    num_trials, num_select, NC, freqj, prt] = finputbox();
 [file_ref, file_sample, precision, precision_coarse] = ...
     finputbox2(nStage, num_datatype);
 [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
@@ -33,18 +39,13 @@ theta = zeros(d,NC,num_rockpar);
 select_theta = zeros(d,NC,num_rockpar,num_trials);
 Y     = zeros(numel,NC,num_rockpar);
 mu    = 0.0;
-erro  = zeros(num_trials,NC);
-cerro = zeros(num_trials,NC);
+erro  = zeros(num_trials,num_datatype,NC);
+cerro = zeros(num_trials,num_datatype,NC);
 csample  = cell(num_datatype,NC);
 csamplen = cell(num_datatype,NC);
 sample   = cell(num_datatype,NC);
 samplen  = cell(num_datatype,NC);
-TOL   = 1e-07;
-if abs(jump) <TOL 
-    s2 = (2.38/sqrt(d))^1;
-else
-    s2 = jump;
-end
+jump     = fjump(jump,prop_method,d,NC);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fprintf('\n==================================================\n')
@@ -83,8 +84,11 @@ for chain = 1 : NC
     samplen{2,chain} = prod;
     clear pres prod
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    savethetas(thetan,chain,num_rockpar,1,prt,homet,expname);
+    savedata(samplen,chain,num_datatype,1,prt,homed,expname);
     select_theta(:,chain,:,1) = thetan(:,chain,:);
-    erro(1,chain) = erromediorel(dataref, samplen(:,chain), num_datatype);
+    erro(1,:,chain) = erromediorel(dataref, samplen(:,chain), chain,...
+        num_datatype, homee, expname, prt);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% MAIN LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -108,7 +112,8 @@ for n = 2 : num_trials
         fprintf('==================================================')
         %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         for nk = 1 : num_rockpar
-            theta(:,chain,nk) = prop(prop_method,thetan(:,chain,nk),mu,s2,d);
+            theta(:,chain,nk) = prop(prop_method,thetan,chain,nk,jump,...
+                d,NC,freqj,n);
             Y(:,chain,nk)     = KL(T{nk},theta(:,chain,nk),numel);
         end
         %% Two-Stage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -157,7 +162,6 @@ for n = 2 : num_trials
                 csamplen(:,chain) = csample(:,chain);
                 select_theta(:,chain,:,n) = theta(:,chain,:);
                 thetan(:,chain,:) = theta(:,chain,:);
-%                save([home 'thetas/' ],'E','-ascii');
             else
                 select_theta(:,chain,:,n) = thetan(:,chain,:);
             end
@@ -166,8 +170,15 @@ for n = 2 : num_trials
             select_theta(:,chain,:,n) = thetan(:,chain,:);
         end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        erro(n,chain) = erromediorel(dataref,samplen(:,chain),num_datatype);
+        erro(n,:,chain) = erromediorel(dataref, samplen(:,chain), chain,...
+            num_datatype, homee, expname, prt);
+        savethetas(thetan,chain,num_rockpar,n,prt,homet,expname);
+        savedata(samplen,chain,num_datatype,n,prt,homed,expname);
     end
-    plot(1:n, erro(1:n,:),'LineWidth',3);
+    for i = 1 : num_rockpar
+        plot((1:n)', reshape(erro(1:n,i,:),[n NC]),'LineWidth',3);
+        hold on
+    end
     pause(0.001)
+    saverestart(n,homer,expname,NC,d,nStage)
 end

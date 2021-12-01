@@ -19,7 +19,7 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     if nStage == 2
         pk = pk + 1; dk = dk + 1;
         prompt{pk} = 'Coarse mesh (cnx, cny, cnz):';
-        definput{dk} = '25 25 1';
+        definput{dk} = '50 50 1';
     end
     %% input data files names
     name = 'Name of KL matrix of prior ';

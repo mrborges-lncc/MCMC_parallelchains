@@ -1,14 +1,16 @@
-function [out] = prop(method,theta,mu,s,d)
+function [out] = prop(method,theta,chain,nk,s,d,NC,freqj,iter)
+    if mod(iter,freqj) == 0, s = 2 * s; end
     switch method
         case 'RW'
-            out = mvnrnd(theta,s);
+            out = mvnrnd(theta(:,chain,nk),s);
         case 'CW'
-            beta= s;% * s;
-            out = sqrt(1-beta) * theta + sqrt(beta) * lhsnorm(0.0,1.0,d);
+            out = sqrt(1-s) * theta(:,chain,nk) + sqrt(s) * lhsnorm(0.0,1.0,d);
+        case 'DE'
+            [r] = chooser(chain,NC);
+            out = theta(:,chain,nk) + ...
+                s*(theta(:,r(1),nk) - theta(:,r(2),nk)) + lhsnorm(0.0,1.0e-03,d);
         otherwise
             out = lhsnorm(0.0,1.0,d);
     end
-%     out = theta + lhsnorm(mu,s,d);
-%    out = lhsnorm(mu,s,d);
     return
 end
