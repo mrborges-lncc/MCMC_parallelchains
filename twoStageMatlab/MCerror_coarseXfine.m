@@ -11,7 +11,14 @@ try
 catch %#ok<CTCH>
    mrstModule add incomp mimetic coarsegrid upscaling
 end
-read = 1;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+homet = './thetas/theta';
+homed = './data/data';
+homef = './figuras/';
+homee = './error/error';
+homer = './out/restart';
+read = 10;
+prt  = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if read == 1
     E = load('error/erroCoarseXfine.dat');
@@ -33,8 +40,8 @@ if read == 1
     print('-depsc','-r600',name);
 else
     %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    [expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
-        num_trials, num_select, NC] = finputbox();
+    [newexp, expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
+        num_trials, num_select, NC, freqj, prt] = finputbox();
     [file_ref, file_sample, precision, precision_coarse] = ...
         finputbox2(nStage, num_datatype);
     [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
@@ -58,6 +65,7 @@ else
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% MAIN LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    chain = 1;
     for n = 1 : num_trials
         fprintf('\n==================================================\n')
         fprintf('==================================================\n')
@@ -80,17 +88,17 @@ else
         csample{1}   = cpres;
         csample{2}   = cprod;
         clear cpres cprod
-        cerro(n) = erromediorel(dataref,csample,num_datatype);
+        cerro(n) = erromedio(dataref, csample, num_datatype);
         %% Fine scale avaliation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         [pres prod] = Simulator([Y(:,1) Y(:,2)],...
             physical_dim,fine_mesh);
         sample{1} = pres;
         sample{2} = prod;
         clear pres prod
-        erro(n) = erromediorel(dataref,sample,num_datatype);
+        erro(n) = erromedio(dataref, sample, num_datatype);
     end
     E = [erro cerro];
-    save('erroCoarseXfine.dat','E','-ascii');
+    save('erroCoarseXfine2.dat','E','-ascii');
     fitfigure(erro(1:n), cerro(1:n));
     name = 'figuras/ErrorFxErrorC';
     set(gcf,'PaperPositionMode','auto');

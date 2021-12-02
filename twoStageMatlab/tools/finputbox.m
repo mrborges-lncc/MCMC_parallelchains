@@ -13,7 +13,7 @@ function [newexp, expname, prop_method, jump, nStage, num_rockpar, num_datatype,
         'Save files? (1 == yes)'};
     dlgtitle = 'Input data';
     dims     = [1 60];
-    definput = {'true','DE','DE', '0', '10', '2', '2', '2', '150', '1000', '2', '1'};
+    definput = {'false','RW','RW', '0', '10', '2', '2', '2', '150', '1000', '2', '1'};
     answer   = inputdlg(prompt,dlgtitle,dims,definput);
     ans      = char(answer);
     k        = 1;

@@ -21,7 +21,7 @@ homet = './thetas/theta';
 homed = './data/data';
 homef = './figuras/';
 homee = './error/error';
-homer = './data/restart';
+homer = './out/restart';
 %% Seed control %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % seed = 1872;
 % rng(seed)
@@ -45,60 +45,71 @@ select_theta = zeros(d,NC,num_rockpar,num_trials);
 Y     = zeros(numel,NC,num_rockpar);
 mu    = 0.0;
 erro  = zeros(num_trials,num_datatype,NC);
-cerro = zeros(num_trials,num_datatype,NC);
 csample  = cell(num_datatype,NC);
 csamplen = cell(num_datatype,NC);
 sample   = cell(num_datatype,NC);
 samplen  = cell(num_datatype,NC);
 jump     = fjump(jump,prop_method,d,NC);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-fprintf('\n==================================================\n')
-fprintf('==================================================\n')
-fprintf('\nIteration %d\n',1)
-fprintf('\n==================================================')
-fprintf('\n==================================================\n')
-for chain = 1 : NC
+if newexp
+    %% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    fprintf('\n==================================================\n')
+    fprintf('==================================================\n')
+    fprintf('\nIteration %d\n',1)
     fprintf('\n==================================================')
-    fprintf('\n Iter. %d; chain: %d\n',1,chain);
-    fprintf('==================================================')
-    for nk = 1 : num_rockpar
-        %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        thetan(:,chain,nk) = lhsnorm(0.0,1.0,d);
-        Y(:,chain,nk)      = KL(T{nk},thetan(:,chain,nk),numel);
+    fprintf('\n==================================================\n')
+    for chain = 1 : NC
+        fprintf('\n==================================================')
+        fprintf('\n Iter. %d; chain: %d\n',1,chain);
+        fprintf('==================================================')
+        for nk = 1 : num_rockpar
+            %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            thetan(:,chain,nk) = lhsnorm(0.0,1.0,d);
+            Y(:,chain,nk)      = KL(T{nk},thetan(:,chain,nk),numel);
+        end
+        %% Two-Stage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        if nStage == 2
+            %% Upscaling of rock parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            coarseperm = rockupscaling(Y(:,chain,1),physical_dim, ...
+                fine_mesh,coarse_mesh,'perm');
+            coarseporo = rockupscaling(Y(:,chain,2),physical_dim,...
+                fine_mesh,coarse_mesh,'poro');
+            %% Simulation coarse scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            [cpres cprod] = Simulator([coarseperm coarseporo],...
+                physical_dim,coarse_mesh);
+            csamplen{1,chain} = cpres;
+            csamplen{2,chain} = cprod;
+            clear cpres cprod
+            coarse_post_ratio = 1.0;
+        end
+        %% Simulation fine scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        [pres prod] = Simulator([Y(:,chain,1) Y(:,chain,2)],...
+            physical_dim,fine_mesh);
+        samplen{1,chain} = pres;
+        samplen{2,chain} = prod;
+        clear pres prod
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        savethetas(thetan,chain,num_rockpar,1,prt,homet,expname);
+        savedata(samplen,chain,num_datatype,1,prt,homed,expname);
+        select_theta(:,chain,:,1) = thetan(:,chain,:);
+        erro(1,:,chain) = erromediorel(dataref, samplen(:,chain), chain,...
+            num_datatype, homee, expname, prt);
+        inicio = 2;
     end
-    %% Two-Stage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if nStage == 2
-        %% Upscaling of rock parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        coarseperm = rockupscaling(Y(:,chain,1),physical_dim, ...
-            fine_mesh,coarse_mesh,'perm');
-        coarseporo = rockupscaling(Y(:,chain,2),physical_dim,...
-            fine_mesh,coarse_mesh,'poro');
-        %% Simulation coarse scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        [cpres cprod] = Simulator([coarseperm coarseporo],...
-            physical_dim,coarse_mesh);
-        csamplen{1,chain} = cpres;
-        csamplen{2,chain} = cprod;
-        clear cpres cprod
-        coarse_post_ratio = 1.0;
-    end
-    %% Simulation fine scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    [pres prod] = Simulator([Y(:,chain,1) Y(:,chain,2)],...
-        physical_dim,fine_mesh);
-    samplen{1,chain} = pres;
-    samplen{2,chain} = prod;
-    clear pres prod
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    savethetas(thetan,chain,num_rockpar,1,prt,homet,expname);
-    savedata(samplen,chain,num_datatype,1,prt,homed,expname);
-    select_theta(:,chain,:,1) = thetan(:,chain,:);
-    erro(1,:,chain) = erromediorel(dataref, samplen(:,chain), chain,...
-        num_datatype, homee, expname, prt);
+else
+    [inicio, csamplen, samplen, precision_coarse, precision] = ...
+        restart(homer, expname, NC, d, nStage, csamplen, samplen);
+    thetan = loadthetas(thetan,NC,num_rockpar,(inicio-1),homet,expname);
+    fprintf('\n||||||||||||||||||||||||||||||||||||||||||||||||||\n')
+    fprintf('<><><><><><><><><><><><><><><><><><><><><><><><><>\n')
+    fprintf('\nRestart from iteration %d\n',inicio)
+    fprintf('\n<><>>>>><><<><><><>><><><><><><><><><><><><><><><><')
+    fprintf('\n|||||||||||||||||||||||||||||||||||||||||||||||||||\n')
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% MAIN LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for n = 2 : num_trials
+for n = inicio : num_trials
     fprintf('\n==================================================\n')
     fprintf('==================================================\n')
     fprintf('\nIteration %d\n',n)
@@ -185,5 +196,6 @@ for n = 2 : num_trials
         hold on
     end
     pause(0.001)
-    saverestart(n,homer,expname,NC,d,nStage,csamplen,samplen);
+    saverestart(n,homer,expname,NC,d,nStage,csamplen,samplen,...
+        precision_coarse,precision);
 end
