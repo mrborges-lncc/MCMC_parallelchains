@@ -11,19 +11,26 @@ try
 catch %#ok<CTCH>
    mrstModule add incomp mimetic coarsegrid upscaling
 end
-read = 10;
+read = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if read == 1
-    E = load('erroCoarseXfine.dat');
+    E = load('error/erroCoarseXfine.dat');
     fitfigure(E(:,1), E(:,2));
     name = 'figuras/ErrorFxErrorC';
     set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r300',name);
-%     syms f(t) t
-%     T = E(:,2);
-%     lambda = 1/mean(T);
-%     f(t) = lambda * exp(-lambda * t)
-%     exphist(T, f, lambda)
+    print('-depsc','-r600',name);
+%
+    T = log(E(:,1));
+    normhist(T,'$\log(\mathsf{E}_{1})$')
+    name = 'figuras/logError1';
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600',name);
+%
+    T = log(E(:,2));
+    normhist(T,'$\log(\mathsf{E}_{2})$')
+    name = 'figuras/logError2';
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600',name);
 else
     %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...

@@ -1,3 +1,8 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Hastings algorithm
+%% Author...: Marcio Borges
+%% Date.....: 01/12/2021
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
 clear all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -180,5 +185,5 @@ for n = 2 : num_trials
         hold on
     end
     pause(0.001)
-    saverestart(n,homer,expname,NC,d,nStage)
+    saverestart(n,homer,expname,NC,d,nStage,csamplen,samplen);
 end
