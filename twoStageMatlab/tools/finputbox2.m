@@ -87,6 +87,7 @@ function [file_ref,file_sample,precision,precision_coarse] = ...
             k = k + 1;
             precision = [precision; str2num(ans(k,:))];
         end
+        precision_coarse = 0 * precision;
     end
     if nStage == 2
         for i = 1 : num_datatype

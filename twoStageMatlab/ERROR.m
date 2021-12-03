@@ -24,12 +24,12 @@ for chain = NC
     er2  = [er2 erro(1:sz,2)];
 end
 
-errorfigure(1:sz,er1,'1')
+errorfigure(1:sz,er1,'$||\mathsf{F}_{\!\mathsf{ref}_{\ \! 1}} - \mathsf{F}_{\!\mathsf{s}_{\ \! 1}}||^{2}$')
 name = 'figuras/ErrorF1';
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600',name);
 
-errorfigure(1:sz,er2,'2')
+errorfigure(1:sz,er2,'$||\mathsf{F}_{\!\mathsf{ref}_{\ \! 2}} - \mathsf{F}_{\!\mathsf{s}_{\ \! 2}}||^{2}$')
 name = 'figuras/ErrorF2';
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600',name);

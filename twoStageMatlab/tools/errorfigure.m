@@ -22,7 +22,7 @@ hold(axes1,'on');
 semilogy(X1,YMatrix1,'LineWidth',2);
 
 % Create ylabel
-ylabel(['Mean Squared Error ($\mathsf{F}^{obs}_{' v '}$)'],'FontSize',14,'Interpreter','latex');
+ylabel(v,'FontSize',14,'Interpreter','latex');
 
 % Create xlabel
 xlabel('Iteration','FontSize',14,'Interpreter','latex');

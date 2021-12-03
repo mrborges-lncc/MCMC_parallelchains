@@ -17,7 +17,7 @@ homed = './data/data';
 homef = './figuras/';
 homee = './error/error';
 homer = './out/restart';
-read = 1;
+read = 10;
 prt  = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if read == 1
@@ -27,21 +27,37 @@ if read == 1
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
     %
-    E = load('error/erroCoarseXfine.dat');
     fitfigure(E(:,2), E(:,4), 2);
     name = 'figuras/ErrorFxErrorC2';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
     %
+    fitfigure(E(:,1) + E(:,2), E(:,3) + E(:,4), 3);
+    name = 'figuras/ErrorFxErrorC';
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600',name);
+    %
     T = log(E(:,1));
     normhist(T,'$\log(\mathsf{E}_{1})$');
-    name = 'figuras/logError1';
+    name = 'figuras/logErrorF1';
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600',name);
+    %
+    T = log(E(:,2));
+    normhist(T,'$\log(\mathsf{E}_{1})$');
+    name = 'figuras/logErrorF2';
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600',name);
+    %
+    T = log(E(:,3));
+    normhist(T,'$\log(\mathsf{E}_{1})$');
+    name = 'figuras/logErrorC1';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
 %
-    T = log(E(:,2));
+    T = log(E(:,4));
     normhist(T,'$\log(\mathsf{E}_{2})$');
-    name = 'figuras/logError2';
+    name = 'figuras/logErrorC2';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
 else
@@ -105,12 +121,11 @@ else
     end
     E = [erro cerro];
     save('./error/erroCoarseXfine.dat','E','-ascii');
-    fitfigure(erro(1:n,1), cerro(1:n,1));
+    fitfigure(erro(1:n,1), cerro(1:n,1),1);
     name = 'figuras/ErrorFxErrorC1';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r300',name);
-    save('./error/erroCoarseXfine.dat','E','-ascii');
-    fitfigure(erro(1:n,2), cerro(1:n,2));
+    fitfigure(erro(1:n,2), cerro(1:n,2),2);
     name = 'figuras/ErrorFxErrorC2';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r300',name);

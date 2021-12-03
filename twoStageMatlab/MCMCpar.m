@@ -37,14 +37,14 @@ dataref = load_data(file_ref,num_datatype);
 %% READ T matrices from KL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 T = load_KL(file_KL,num_rockpar,fine_mesh,KLM);
 %% Variables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-d     = KLM;
-numel = fine_mesh(1) * fine_mesh(2) * fine_mesh(3);
-thetan= zeros(d,NC,num_rockpar);
-theta = zeros(d,NC,num_rockpar);
-select_theta = zeros(d,NC,num_rockpar,num_trials);
-Y     = zeros(numel,NC,num_rockpar);
-mu    = 0.0;
-erro  = zeros(num_trials,num_datatype,NC);
+d        = KLM;
+numel    = fine_mesh(1) * fine_mesh(2) * fine_mesh(3);
+thetan   = zeros(d,NC,num_rockpar);
+theta    = zeros(d,NC,num_rockpar);
+% select_theta = zeros(d,NC,num_rockpar,num_trials);
+Y        = zeros(numel,NC,num_rockpar);
+mu       = 0.0;
+erro     = zeros(num_trials,num_datatype,NC);
 csample  = cell(num_datatype,NC);
 csamplen = cell(num_datatype,NC);
 sample   = cell(num_datatype,NC);
@@ -54,7 +54,7 @@ counter  = ones(NC,1);
 ccounter = ones(NC,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if newexp
-    %% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     fprintf('\n==================================================\n')
     fprintf('==================================================\n')
     fprintf('\nIteration %d\n',1)
@@ -65,7 +65,7 @@ if newexp
         fprintf('\n Iter. %d; chain: %d\n',1,chain);
         fprintf('==================================================')
         for nk = 1 : num_rockpar
-            %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             thetan(:,chain,nk) = lhsnorm(0.0,1.0,d);
             Y(:,chain,nk)      = KL(T{nk},thetan(:,chain,nk),numel);
         end
@@ -76,7 +76,7 @@ if newexp
                 fine_mesh,coarse_mesh,'perm');
             coarseporo = rockupscaling(Y(:,chain,2),physical_dim,...
                 fine_mesh,coarse_mesh,'poro');
-            %% Simulation coarse scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %% Simulation coarse scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             [cpres cprod] = Simulator([coarseperm coarseporo],...
                 physical_dim,coarse_mesh);
             csamplen{1,chain} = cpres;
@@ -84,7 +84,7 @@ if newexp
             clear cpres cprod
             coarse_post_ratio = 1.0;
         end
-        %% Simulation fine scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %% Simulation fine scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         [pres prod] = Simulator([Y(:,chain,1) Y(:,chain,2)],...
             physical_dim,fine_mesh);
         samplen{1,chain} = pres;
@@ -93,20 +93,21 @@ if newexp
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         savethetas(thetan,chain,num_rockpar,1,prt,homet,expname);
         savedata(samplen,chain,num_datatype,1,prt,homed,expname);
-        select_theta(:,chain,:,1) = thetan(:,chain,:);
+%         select_theta(:,chain,:,1) = thetan(:,chain,:);
         erro(1,:,chain) = erromediorel(dataref, samplen(:,chain), chain,...
             num_datatype, homee, expname, prt);
         inicio = 2;
     end
 else
-    [inicio, csamplen, samplen, precision_coarse, precision] = ...
-        restart(homer, expname, NC, d, nStage, csamplen, samplen);
+    [inicio, csamplen, samplen, precision_coarse, precision, ...
+        ccounter, counter] = restart(homer, expname, NC, d, ...
+        nStage);
     thetan = loadthetas(thetan,NC,num_rockpar,(inicio-1),homet,expname);
     fprintf('\n||||||||||||||||||||||||||||||||||||||||||||||||||\n')
     fprintf('<><><><><><><><><><><><><><><><><><><><><><><><><>\n')
     fprintf('\nRestart from iteration %d\n',inicio)
-    fprintf('\n<><>>>>><><<><><><>><><><><><><><><><><><><><><><><')
-    fprintf('\n|||||||||||||||||||||||||||||||||||||||||||||||||||\n')
+    fprintf('\n<><><><><><<><><><>><><><><><><><><><><><><><><><>')
+    fprintf('\n||||||||||||||||||||||||||||||||||||||||||||||||||\n')
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% MAIN LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,6 +164,7 @@ for n = inicio : num_trials
             end
         else
             CACCEPT = 1;
+            coarse_post_ratio = 1;
         end
         %% Fine scale avaliation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if CACCEPT == 1
@@ -179,15 +181,15 @@ for n = inicio : num_trials
             if rand(1,1) < alpha
                 samplen(:,chain)  = sample(:,chain);
                 csamplen(:,chain) = csample(:,chain);
-                select_theta(:,chain,:,n) = theta(:,chain,:);
+%                 select_theta(:,chain,:,n) = theta(:,chain,:);
                 thetan(:,chain,:) = theta(:,chain,:);
                 counter(chain,1)  = counter(chain,1) + 1;
             else
-                select_theta(:,chain,:,n) = thetan(:,chain,:);
+%                 select_theta(:,chain,:,n) = thetan(:,chain,:);
             end
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         else
-            select_theta(:,chain,:,n) = thetan(:,chain,:);
+%             select_theta(:,chain,:,n) = thetan(:,chain,:);
         end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         erro(n,:,chain) = erromediorel(dataref, samplen(:,chain), chain,...
@@ -201,9 +203,11 @@ for n = inicio : num_trials
     end
     pause(0.001)
     saverestart(n,homer,expname,NC,d,nStage,csamplen,samplen,...
-        precision_coarse,precision);
+        precision_coarse,precision,ccounter,counter);
+    fprintf('\n***********************************************************************\n')
     for i = 1 : NC
-        fprintf('\nAcceptance rate of chain %d (fine scale)....: %4.2f\n',i,100*(counter(i,1)/n));
-        fprintf('\nAcceptance rate of chain %d (coarse scale)..: %4.2f\n',i,100*(ccounter(i,1)/n));
+        fprintf('Acceptance rate of chain %d <=> coarse scale: %4.2f | fine scale: %4.2f\n',...
+            i,100*(counter(i,1)/n),100*(ccounter(i,1)/n));
     end
+    fprintf('***********************************************************************\n')
 end
