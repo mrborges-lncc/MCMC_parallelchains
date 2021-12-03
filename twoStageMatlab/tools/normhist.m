@@ -25,7 +25,7 @@ hold(axes1,'on');
 
 % Create histogram
 histogram(data1,'Parent',axes1,'LineWidth',1,'FaceColor',[0.8 0.8 0.8],...
-    'Normalization','pdf', 'BinWidth',0.1,'DisplayName',lab);
+    'Normalization','pdf', 'BinWidth',0.2,'DisplayName',lab);
 
 % Create fplot
 % if lambda < 1
@@ -37,7 +37,7 @@ histogram(data1,'Parent',axes1,'LineWidth',1,'FaceColor',[0.8 0.8 0.8],...
 name = 'pdf';
 plot(x,y,'Parent',axes1,'MarkerSize',6,...
     'Color',[0 0.447058823529412 0.741176470588235],...
-    'LineWidth',2,'DisplayName', name);
+    'LineWidth',3,'DisplayName', name);
 
 % Create ylabel
 ylabel('$f(t)$','FontSize',16,'Interpreter','latex');

@@ -17,7 +17,7 @@ homed = './data/data';
 homef = './figuras/';
 homee = './error/error';
 homer = './out/restart';
-read = 10;
+read = 1;
 prt  = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if read == 1
@@ -37,26 +37,26 @@ if read == 1
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
     %
-    T = log(E(:,1));
-    normhist(T,'$\log(\mathsf{E}_{1})$');
+    T = (E(:,1));
+    quisquaredhist(T,'$\mathsf{E_{f}}_{1}$');
     name = 'figuras/logErrorF1';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
     %
-    T = log(E(:,2));
-    normhist(T,'$\log(\mathsf{E}_{1})$');
+    T = (E(:,2));
+    quisquaredhist(T,'$\mathsf{E_{f}}_{1}$');
     name = 'figuras/logErrorF2';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
     %
-    T = log(E(:,3));
-    normhist(T,'$\log(\mathsf{E}_{1})$');
+    T = (E(:,3));
+    quisquaredhist(T,'$\mathsf{E_{c}}_{1}$');
     name = 'figuras/logErrorC1';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
 %
-    T = log(E(:,4));
-    normhist(T,'$\log(\mathsf{E}_{2})$');
+    T = (E(:,4));
+    quisquaredhist(T,'$\mathsf{E_{c}}_{2}$');
     name = 'figuras/logErrorC2';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);

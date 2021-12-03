@@ -127,7 +127,7 @@ for n = inicio : num_trials
     for chain = 1 : NC
         CACCEPT = 0;
         fprintf('\n==================================================')
-        fprintf('\n Iter. %d; chain: %d\n',n,chain);
+        fprintf('\n Iter. %d ________ chain: %d\n',n,chain);
         fprintf('==================================================')
         %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         for nk = 1 : num_rockpar
@@ -166,6 +166,7 @@ for n = inicio : num_trials
             CACCEPT = 1;
             coarse_post_ratio = 1;
         end
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Fine scale avaliation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if CACCEPT == 1
             %% Simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -177,6 +178,7 @@ for n = inicio : num_trials
             %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             alpha = prob_accept(dataref,samplen(:,chain),sample(:,chain),...
                 precision,num_datatype,coarse_post_ratio);
+            fprintf('\nAlpha: %4.2f <===> coarse_post_ratio: %4.2f\n',alpha,coarse_post_ratio);
             %% TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             if rand(1,1) < alpha
                 samplen(:,chain)  = sample(:,chain);
@@ -204,10 +206,10 @@ for n = inicio : num_trials
     pause(0.001)
     saverestart(n,homer,expname,NC,d,nStage,csamplen,samplen,...
         precision_coarse,precision,ccounter,counter);
-    fprintf('\n***********************************************************************\n')
+    fprintf('\n**************************************************\n')
     for i = 1 : NC
-        fprintf('Acceptance rate of chain %d <=> coarse scale: %4.2f | fine scale: %4.2f\n',...
+        fprintf('Acceptance rate of chain %d:\n\t <=> coarse scale: %4.2f | fine scale: %4.2f\n',...
             i,100*(counter(i,1)/n),100*(ccounter(i,1)/n));
     end
-    fprintf('***********************************************************************\n')
+    fprintf('***************************************************\n')
 end

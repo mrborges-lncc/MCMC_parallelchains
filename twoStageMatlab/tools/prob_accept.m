@@ -1,5 +1,5 @@
 function [out] = prob_accept(dataref,samplen,sample,sigma,...
-    num_datatype,coarse_post_ratio)
+    num_datatype,cpostratio)
     aux = 0.0;
     auxn= 0.0;
     for k = 1 : num_datatype
@@ -12,7 +12,7 @@ function [out] = prob_accept(dataref,samplen,sample,sigma,...
             (norm(ref(:,2:end))^2))/(2*sigma(k));
         
     end
-    out = min(1,exp(aux - auxn));
+    out = min(1,exp(aux - auxn) * cpostratio);
     return    
 end
 
