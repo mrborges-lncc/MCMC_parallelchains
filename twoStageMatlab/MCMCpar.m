@@ -50,6 +50,8 @@ csamplen = cell(num_datatype,NC);
 sample   = cell(num_datatype,NC);
 samplen  = cell(num_datatype,NC);
 jump     = fjump(jump,prop_method,d,NC);
+counter  = ones(NC,1);
+ccounter = ones(NC,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if newexp
     %% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -151,6 +153,7 @@ for n = inicio : num_trials
                 csamplen(:,chain),csample(:,chain),precision_coarse,num_datatype);
             %% TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             if rand(1,1) < calpha
+                ccounter(chain,1) = ccounter(chain,1) + 1;
                 CACCEPT = 1;
                 fprintf('#################################################\n')
                 fprintf('Accepted in coarse scale (calpha = %f)\nIter. %d; chain: %d\n',calpha,n,chain)
@@ -178,6 +181,7 @@ for n = inicio : num_trials
                 csamplen(:,chain) = csample(:,chain);
                 select_theta(:,chain,:,n) = theta(:,chain,:);
                 thetan(:,chain,:) = theta(:,chain,:);
+                counter(chain,1)  = counter(chain,1) + 1;
             else
                 select_theta(:,chain,:,n) = thetan(:,chain,:);
             end
@@ -198,4 +202,8 @@ for n = inicio : num_trials
     pause(0.001)
     saverestart(n,homer,expname,NC,d,nStage,csamplen,samplen,...
         precision_coarse,precision);
+    for i = 1 : NC
+        fprintf('\nAcceptance rate of chain %d (fine scale)....: %4.2f\n',i,100*(counter(i,1)/n));
+        fprintf('\nAcceptance rate of chain %d (coarse scale)..: %4.2f\n',i,100*(ccounter(i,1)/n));
+    end
 end

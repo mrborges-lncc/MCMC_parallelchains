@@ -17,24 +17,30 @@ homed = './data/data';
 homef = './figuras/';
 homee = './error/error';
 homer = './out/restart';
-read = 10;
+read = 1;
 prt  = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if read == 1
     E = load('error/erroCoarseXfine.dat');
-    fitfigure(E(:,1), E(:,2));
-    name = 'figuras/ErrorFxErrorC';
+    fitfigure(E(:,1), E(:,3), 1);
+    name = 'figuras/ErrorFxErrorC1';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
-%
+    %
+    E = load('error/erroCoarseXfine.dat');
+    fitfigure(E(:,2), E(:,4), 2);
+    name = 'figuras/ErrorFxErrorC2';
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r600',name);
+    %
     T = log(E(:,1));
-    normhist(T,'$\log(\mathsf{E}_{1})$')
+    normhist(T,'$\log(\mathsf{E}_{1})$');
     name = 'figuras/logError1';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
 %
     T = log(E(:,2));
-    normhist(T,'$\log(\mathsf{E}_{2})$')
+    normhist(T,'$\log(\mathsf{E}_{2})$');
     name = 'figuras/logError2';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
@@ -57,8 +63,8 @@ else
     theta = zeros(d,num_rockpar);
     Y     = zeros(numel,num_rockpar);
     mu    = 0.0;
-    erro  = zeros(num_trials,1);
-    cerro = zeros(num_trials,1);
+    erro  = zeros(num_trials,num_rockpar);
+    cerro = zeros(num_trials,num_rockpar);
     csample = [];
     TOL   = 1e-07;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -88,19 +94,24 @@ else
         csample{1}   = cpres;
         csample{2}   = cprod;
         clear cpres cprod
-        cerro(n) = erromedio(dataref, csample, num_datatype);
+        cerro(n,:) = erromedio(dataref, csample, num_datatype);
         %% Fine scale avaliation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         [pres prod] = Simulator([Y(:,1) Y(:,2)],...
             physical_dim,fine_mesh);
         sample{1} = pres;
         sample{2} = prod;
         clear pres prod
-        erro(n) = erromedio(dataref, sample, num_datatype);
+        erro(n,:) = erromedio(dataref, sample, num_datatype);
     end
     E = [erro cerro];
-    save('erroCoarseXfine2.dat','E','-ascii');
-    fitfigure(erro(1:n), cerro(1:n));
-    name = 'figuras/ErrorFxErrorC';
+    save('./error/erroCoarseXfine.dat','E','-ascii');
+    fitfigure(erro(1:n,1), cerro(1:n,1));
+    name = 'figuras/ErrorFxErrorC1';
+    set(gcf,'PaperPositionMode','auto');
+    print('-depsc','-r300',name);
+    save('./error/erroCoarseXfine.dat','E','-ascii');
+    fitfigure(erro(1:n,2), cerro(1:n,2));
+    name = 'figuras/ErrorFxErrorC2';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r300',name);
 end
