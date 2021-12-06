@@ -5,7 +5,7 @@ addpath ./tools/
 ini = 1;
 fim = 10;
 nt  = fim - ini + 1;
-NC  = [1:3];
+NC  = [1:2];
 expname = 'RW';
 homee   = './error/error';
 er1     = [];
@@ -13,12 +13,12 @@ er2     = [];
 %% load files %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sz  = 1e32;
 for chain = NC
-    name = [homee expname '_chain' num2str(chain,'%d') '.dat']
+    name = [homee expname '_chain' num2str(chain,'%d') '.dat'];
     erro = load(name);
     sz   = min(sz,size(erro,1));
 end
 for chain = NC
-    name = [homee expname '_chain' num2str(chain,'%d') '.dat']
+    name = [homee expname '_chain' num2str(chain,'%d') '.dat'];
     erro = load(name);
     er1  = [er1 erro(1:sz,1)];
     er2  = [er2 erro(1:sz,2)];

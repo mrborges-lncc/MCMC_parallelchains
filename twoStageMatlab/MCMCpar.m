@@ -209,7 +209,7 @@ for n = inicio : num_trials
     fprintf('\n**************************************************\n')
     for i = 1 : NC
         fprintf('Acceptance rate of chain %d:\n\t <=> coarse scale: %4.2f | fine scale: %4.2f\n',...
-            i,100*(counter(i,1)/n),100*(ccounter(i,1)/n));
+            i,100*(ccounter(i,1)/n),100*(counter(i,1)/n));
     end
     fprintf('***************************************************\n')
 end
