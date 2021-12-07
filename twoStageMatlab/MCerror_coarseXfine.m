@@ -38,24 +38,29 @@ if read == 1
     print('-depsc','-r600',name);
     %
     T = (E(:,1));
+    T = 1+(T - mean(T))/(sqrt(var(T)/2));
+    
     quisquaredhist(T,'$\mathsf{E_{f}}_{1}$');
     name = 'figuras/logErrorF1';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
     %
     T = (E(:,2));
+    T = 1+(T - mean(T))/(sqrt(var(T)/2));
     quisquaredhist(T,'$\mathsf{E_{f}}_{1}$');
     name = 'figuras/logErrorF2';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
     %
     T = (E(:,3));
+    T = 1+(T - mean(T))/(sqrt(var(T)/2));
     quisquaredhist(T,'$\mathsf{E_{c}}_{1}$');
     name = 'figuras/logErrorC1';
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
 %
     T = (E(:,4));
+    T = 1+(T - mean(T))/(sqrt(var(T)/2));
     quisquaredhist(T,'$\mathsf{E_{c}}_{2}$');
     name = 'figuras/logErrorC2';
     set(gcf,'PaperPositionMode','auto');

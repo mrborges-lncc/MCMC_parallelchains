@@ -69,6 +69,7 @@ if newexp
             thetan(:,chain,nk) = lhsnorm(0.0,1.0,d);
             Y(:,chain,nk)      = KL(T{nk},thetan(:,chain,nk),numel);
         end
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Two-Stage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if nStage == 2
             %% Upscaling of rock parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,7 +91,7 @@ if newexp
         samplen{1,chain} = pres;
         samplen{2,chain} = prod;
         clear pres prod
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         savethetas(thetan,chain,num_rockpar,1,prt,homet,expname);
         savedata(samplen,chain,num_datatype,1,prt,homed,expname);
 %         select_theta(:,chain,:,1) = thetan(:,chain,:);
@@ -164,7 +165,7 @@ for n = inicio : num_trials
             end
         else
             CACCEPT = 1;
-            coarse_post_ratio = 1;
+            coarse_post_ratio = 1.0;
         end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Fine scale avaliation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

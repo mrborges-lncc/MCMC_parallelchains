@@ -3,10 +3,9 @@ function [out] = erromediorel(cref,csample,chain,numdatatype,home,name,prt)
     for k = 1 : numdatatype
         ref    = cref{k};
         sample = csample{k};
-        out(k) = ((norm(ref(:,2:end) - sample(:,2:end)))/...
-            (norm(ref(:,2:end))));
+        out(k) = ((norm(ref(:,2:end) - sample(:,2:end))^2)/...
+            (norm(ref(:,2:end))^2));
     end
-    out = out.^2;
     if prt == 1
         nome = [home name '_chain' num2str(chain,'%d') '.dat'];
         if exist(nome, 'file') == 0
