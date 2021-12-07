@@ -1,5 +1,6 @@
 function [out] = prop(method,theta,chain,nk,s,d,NC,freqj,iter)
     if mod(iter,freqj) == 0, s = 2 * s; end
+    if iter < 100, s = 10 * s; end
     switch method
         case 'RW'
             out = mvnrnd(theta(:,chain,nk),s);

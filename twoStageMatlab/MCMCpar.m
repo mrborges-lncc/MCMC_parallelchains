@@ -62,7 +62,7 @@ if newexp
     fprintf('\n==================================================\n')
     for chain = 1 : NC
         fprintf('\n==================================================')
-        fprintf('\n Iter. %d; chain: %d\n',1,chain);
+        fprintf('\n Iter. %d \t chain: %d\n',1,chain);
         fprintf('==================================================')
         for nk = 1 : num_rockpar
             %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -128,7 +128,7 @@ for n = inicio : num_trials
     for chain = 1 : NC
         CACCEPT = 0;
         fprintf('\n==================================================')
-        fprintf('\n Iter. %d ________ chain: %d\n',n,chain);
+        fprintf('\n Iter. %d \t chain: %d\n',n,chain);
         fprintf('==================================================')
         %% Random fields generation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         for nk = 1 : num_rockpar
@@ -157,9 +157,9 @@ for n = inicio : num_trials
             if rand(1,1) < calpha
                 ccounter(chain,1) = ccounter(chain,1) + 1;
                 CACCEPT = 1;
-                fprintf('#################################################\n')
+                fprintf('##################################################\n')
                 fprintf('Accepted in coarse scale (calpha = %f)\nIter. %d; chain: %d\n',calpha,n,chain)
-                fprintf('#################################################')
+                fprintf('##################################################')
             else
                 CACCEPT = 0;
             end
@@ -207,10 +207,14 @@ for n = inicio : num_trials
     pause(0.001)
     saverestart(n,homer,expname,NC,d,nStage,csamplen,samplen,...
         precision_coarse,precision,ccounter,counter);
-    fprintf('\n**************************************************\n')
+    fprintf('\n*************************************************\n')
     for i = 1 : NC
-        fprintf('Acceptance rate of chain %d:\n\t <=> coarse scale: %4.2f | fine scale: %4.2f\n',...
-            i,100*(ccounter(i,1)/n),100*(counter(i,1)/n));
+        fprintf('Acceptance rate of chain %d:\n => ',i);
+        if nStage == 2
+            fprintf('coarse scale: %4.2f | ',100*(ccounter(i,1)/n));
+        end
+        fprintf('fine scale: %4.2f\n', 100*(counter(i,1)/n));
     end
-    fprintf('***************************************************\n')
+    fprintf('**************************************************\n')
 end
+clear
