@@ -2,14 +2,15 @@ clear all; close all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 addpath ./tools/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NC = 2;
+NC = 3;
 d  = 1;
 Ni = [1];
-Nf = [1000];
-M  = 100;
+Nf = [600];
+M  = 20;
 Nt = Nf - Ni + 1;
 expname = 'RW';
-home    = '~/twoStageMatlab/'
+home    = '~/twoStageMatlab/';
+home    = './';
 homet   = [home 'thetas/theta'];
 vari    = '1';
 X = zeros(Nt,d,NC);

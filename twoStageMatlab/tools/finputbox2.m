@@ -1,4 +1,4 @@
-function [file_ref,file_sample,precision,precision_coarse] = ...
+function [file_ref,precision,precision_coarse] = ...
     finputbox2(nStage, num_datatype)
     options.Resize='on';
     options.WindowStyle='normal';
@@ -21,23 +21,23 @@ function [file_ref,file_sample,precision,precision_coarse] = ...
         dk = dk + 1;
         aux = 'prod';
         if i == 1, aux = 'pres'; end
-        nome   = ['../twophaseflow/exp000/' aux '/' aux '_ref_0.dat'];
+        nome   = ['~/MCMC_parallelchains/twophaseflow/exp000/' aux '/' aux '_ref_0.dat'];
         definput{dk} = nome;
     end    
     %% input data files names
-    name = 'Name of input data file (Samples) ';
-    for i = 1 : num_datatype
-        pk = pk + 1;
-        nome   = [name num2str(i,'%d') ':'];
-        prompt{pk} = nome;
-    end
-    for i = 1 : num_datatype
-        dk = dk + 1;
-        aux = 'prod';
-        if i == 1, aux = 'pres'; end
-        nome   = ['../twophaseflow/exp000/' aux '/' aux '_amostra_0.dat'];
-        definput{dk} = nome;
-    end
+%     name = 'Name of input data file (Samples) ';
+%     for i = 1 : num_datatype
+%         pk = pk + 1;
+%         nome   = [name num2str(i,'%d') ':'];
+%         prompt{pk} = nome;
+%     end
+%     for i = 1 : num_datatype
+%         dk = dk + 1;
+%         aux = 'prod';
+%         if i == 1, aux = 'pres'; end
+%         nome   = ['~/MCMC_parallelchains/twophaseflow/exp000/' aux '/' aux '_amostra_0.dat'];
+%         definput{dk} = nome;
+%     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     name = 'Precision for likelihood (\sigma^2) data set n. (';
     if nStage == 1
@@ -51,7 +51,6 @@ function [file_ref,file_sample,precision,precision_coarse] = ...
     end
     if nStage == 2
         name = 'Precision for likelihood (\sigma^2) data set n. (';
-        name = 'Precision for likelihood (\sigma^2) data set n. (';
         for j = 1 : num_datatype
             nome = [name num2str(j,'%d') ') finescale:'];
             pk = pk + 1;
@@ -62,7 +61,7 @@ function [file_ref,file_sample,precision,precision_coarse] = ...
             pk = pk + 1;
             prompt{pk} = nome;
             dk = dk + 1;
-            definput{dk} = '4.e-4';
+            definput{dk} = '2.5e-4';
         end
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -76,10 +75,10 @@ function [file_ref,file_sample,precision,precision_coarse] = ...
         file_ref = [file_ref; ans(k,:)];
     end
     file_sample = []; % Files with reference data
-    for i = 1 : num_datatype
-        k = k + 1;
-        file_sample = [file_sample; ans(k,:)];
-    end
+%     for i = 1 : num_datatype
+%         k = k + 1;
+%         file_sample = [file_sample; ans(k,:)];
+%     end
     precision = [];
     precision_coarse = [];
     if nStage == 1
