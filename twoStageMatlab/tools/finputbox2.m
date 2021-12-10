@@ -21,7 +21,7 @@ function [file_ref,precision,precision_coarse] = ...
         dk = dk + 1;
         aux = 'prod';
         if i == 1, aux = 'pres'; end
-        nome   = ['~/MCMC_parallelchains/twophaseflow/exp000/' aux '/' aux '_ref_0.dat'];
+        nome   = ['~/MCMC_parallelchains/twophaseflow/exp/' aux '/' aux '_ref_0.dat'];
         definput{dk} = nome;
     end    
     %% input data files names

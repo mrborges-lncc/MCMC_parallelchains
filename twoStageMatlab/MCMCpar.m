@@ -212,6 +212,8 @@ for n = inicio : num_trials
         fprintf('Acceptance rate of chain %d:\n => ',i);
         if nStage == 2
             fprintf('coarse scale: %4.2f | ',100*(ccounter(i,1)/n));
+%             fprintf('\nfine scale relative to coarse: %4.2f\n',...
+%                 100*(counter(i,1)/ccounter(:,1)));
         end
         fprintf('fine scale: %4.2f\n', 100*(counter(i,1)/n));
     end

@@ -10,11 +10,11 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     dk = 1;
     %% Grid information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     prompt{pk}   = 'Domain dimensions (Lx, Ly, Lz):';
-    definput{dk} = '500.0 500.0 20.0';
+    definput{dk} = '510.0 510.0 20.0';
     %% fine mesh %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     pk = pk + 1; dk = dk + 1;
     prompt{pk} = 'Fine mesh (nx, ny, nz):';
-    definput{dk} = '100 100 1';
+    definput{dk} = '51 51 5';
     %% coarse mesh %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if nStage == 2
         pk = pk + 1; dk = dk + 1;
@@ -33,12 +33,13 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
         aux = 'prod';
         if i == 1, aux = 'pres'; end
         nome   = ['../gera_KL/MATLAB/out/avet1_500x500x20_100x100x1_l50x50x10_M10000.bin'];
+        nome   = ['../gera_KL/MATLAB/out/avet1_510x510x20_51x51x5_l50x50x10_M13005.bin'];
         definput{dk} = nome;
     end    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     pk = pk + 1; dk = dk + 1;
     prompt{pk}   = 'Stochastic dimention of KL:';
-    definput{dk} = '10000';
+    definput{dk} = '13005';
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     answer   = inputdlg(prompt,dlgtitle,dims,definput);
     ans      = char(answer);

@@ -1,6 +1,5 @@
 function [out, out2] = cprob_accept(dataref,csamplen,csample,sigma,...
     num_datatype)
-    TOL = 1.0e-05;
     aux = 0.0;
     auxn= 0.0;
     for k = 1 : num_datatype
@@ -12,8 +11,8 @@ function [out, out2] = cprob_accept(dataref,csamplen,csample,sigma,...
         auxn   = auxn - ((norm(ref(:,2:end) - samplen(:,2:end))^2)/...
             (norm(ref(:,2:end))^2))/(2*sigma(k));
     end
-    out = min(1,exp(aux - auxn));
-    out2= 1/(exp(aux - auxn)+TOL);
+    out  = min(1,exp(aux - auxn));
+    out2 = exp(auxn - aux);
     return    
 end
 

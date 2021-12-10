@@ -5,12 +5,12 @@ addpath ./tools/
 ini = 1;
 fim = 10;
 nt  = fim - ini + 1;
-NC  = [1:3];
-expname = 'RW';
-stage   = 2;
+NC  = [1:2];
+expname = 'CW';
+stage   = 1;
 d       = 10000;
 home    = '~/twoStageMatlab/';
-% home    = './';
+home    = './';
 homee   = [home 'error/error'];
 homer   = [home 'out/restart'];
 er1     = [];
@@ -66,10 +66,12 @@ if stage == 2
         fprintf('Acceptance rate in coarse scale problem chain %d.....: %4.2f\n',NC(k),100*ccounter.ccounter(k)/size(erro,1));
     end
 end    
-nome = [homer expname '_stage' num2str(stage,'%d') '_NC' ...
-    num2str(chain,'%d') '_d' num2str(d,'%d') '_counter.mat'];
-counter = load(nome,'-mat');
-for k = 1 : length(counter.counter)
-    fprintf('Acceptance rate in fine scale problem chain %d.....: %4.2f\n',NC(k),100*counter.counter(k)/size(erro,1));
+if stage == 2
+    nome = [homer expname '_stage' num2str(stage,'%d') '_NC' ...
+        num2str(chain,'%d') '_d' num2str(d,'%d') '_counter.mat'];
+    counter = load(nome,'-mat');
+    for k = 1 : length(counter.counter)
+        fprintf('Acceptance rate in fine scale problem chain %d.....: %4.2f\n',NC(k),100*counter.counter(k)/size(erro,1));
+    end
 end
 clear
