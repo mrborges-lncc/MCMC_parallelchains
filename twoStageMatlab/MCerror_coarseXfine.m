@@ -24,7 +24,7 @@ if read == 1
     E = load('error/erroCoarseXfine.dat');
     fitfigure(E(:,1), E(:,3), 1);
     name = 'figuras/ErrorFxErrorC1';
-    set(gcf,'PaperPositionMode','auto');
+%     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600',name);
     %
     fitfigure(E(:,2), E(:,4), 2);

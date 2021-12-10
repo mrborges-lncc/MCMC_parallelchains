@@ -19,13 +19,13 @@ hold(axes1,'on');
 % Create plot
 plot1 = plot(X1,Y1,'DisplayName','data','Marker','o','LineWidth',1,...
     'LineStyle','none',...
-    'Color',[0 0.447058823529412 0.741176470588235]);
+    'Color',[0 0.45 0.74]);
 
 % Create ylabel
-ylabel('$y$ (Coarse scale error)','FontSize',16,'Interpreter','latex');
+ylabel('$\mathsf{E}_{\mathsf{c}}$','FontSize',18,'Interpreter','latex');
 
 % Create xlabel
-xlabel('$x$ (Fine scale error)','FontSize',16,'Interpreter','latex');
+xlabel('$\mathsf{E}_{\mathsf{f}}$','FontSize',18,'Interpreter','latex');
 
 xlim([A B]);
 ylim([C D]);
@@ -170,7 +170,8 @@ else
     xl = get(axesh1, 'xlim');
     fit =  fittype1 - 1;
 %     s1 = sprintf('%s \hat{y} =',a1);
-    s1 = ['$ \hat{y} = '];
+%    s1 = ['$ \hat{y} = '];
+    s1 = ['$\hat{\mathsf{E}}_{\mathsf{c}} = '];
     th = text(xl*[.95;.05],1,s1,'parent',axesh1, 'vis','off');
     if abs(coeffs1(1) < 0)
         s1 = [s1 ' -'];
@@ -206,6 +207,7 @@ else
     if length(s1) == 3
         s1 = sprintf(format2,s1,0);
     end
-    s1 = [s1 ' $'];
+    n = find(s1 == 'x') - 1;
+    s1 = [s1(1:n) '\mathsf{E}_{\mathsf{f}}' s1(n+2:end) ' $'];
 end
 

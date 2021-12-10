@@ -5,7 +5,7 @@ addpath ./tools/
 ini = 1;
 fim = 10;
 nt  = fim - ini + 1;
-NC  = [1:2];
+NC  = [1:3];
 expname = 'CW';
 stage   = 1;
 d       = 10000;
@@ -30,12 +30,12 @@ for chain = NC
 end
 
 errorfigure(1:sz,er1,'$||\mathsf{F}_{\!\mathsf{ref}_{\ \! 1}} - \mathsf{F}_{\!\mathsf{s}_{\ \! 1}}||^{2}$')
-name = 'figuras/ErrorF1';
+name = ['figuras/ErrorF1_' expname];
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600',name);
 
 errorfigure(1:sz,er2,'$||\mathsf{F}_{\!\mathsf{ref}_{\ \! 2}} - \mathsf{F}_{\!\mathsf{s}_{\ \! 2}}||^{2}$')
-name = 'figuras/ErrorF2';
+name = ['figuras/ErrorF2_' expname];
 set(gcf,'PaperPositionMode','auto');
 print('-depsc','-r600',name);
 

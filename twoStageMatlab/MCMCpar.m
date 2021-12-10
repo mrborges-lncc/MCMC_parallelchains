@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Hastings algorithm
+%% Metropolis algorithm
 %% Author...: Marcio Borges
 %% Date.....: 01/12/2021
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,8 +23,8 @@ homef = './figuras/';
 homee = './error/error';
 homer = './out/restart';
 %% Seed control %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% seed = 1872;
-% rng(seed)
+seed = 1872;
+rng(seed)
 %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [newexp, expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
     num_trials, num_select, NC, freqj, prt] = finputbox();

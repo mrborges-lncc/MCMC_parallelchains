@@ -7,8 +7,8 @@ function errorfigure(X1, YMatrix1, v)
 
 A = min(X1);
 B = max(X1);
-C = min(min(YMatrix1));
-D = max(max(YMatrix1))*1.2;
+C = 1e-3;%min(min(YMatrix1));
+D = 1.0;%max(max(YMatrix1))*1.2;
 ratio = (B-A)/(D-C);
 
 % Create figure
