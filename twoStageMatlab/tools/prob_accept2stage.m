@@ -1,18 +1,24 @@
-function [out] = prob_accept(dataref,samplen,sample,sigma,...
-    num_datatype,cpostratio)
+function [out] = prob_accept2stage(dataref,samplen,sample,sigma,...
+    csamplen,csample,sigmac,num_datatype,cpostratio)
     aux = 0.0;
     auxn= 0.0;
     for k = 1 : num_datatype
-        ref    = dataref{k};
-        csample = sample{k};
-        csamplen= samplen{k};
-        aux    = aux - ((norm(ref(:,2:end) - csample(:,2:end))^2)/...
+        ref   = dataref{k};
+        samp  = sample{k};
+        sampn = samplen{k};
+        csamp = csample{k};
+        csampn= csamplen{k};
+        aux    = aux - ((norm(ref(:,2:end) - samp(:,2:end))^2)/...
             (norm(ref(:,2:end))^2))/(2*sigma(k));
-        auxn   = auxn - ((norm(ref(:,2:end) - csamplen(:,2:end))^2)/...
+        auxn   = auxn - ((norm(ref(:,2:end) - sampn(:,2:end))^2)/...
+            (norm(ref(:,2:end))^2))/(2*sigma(k));
+        caux   = caux - ((norm(ref(:,2:end) - csamp(:,2:end))^2)/...
+            (norm(ref(:,2:end))^2))/(2*sigma(k));
+        cauxn  = cauxn - ((norm(ref(:,2:end) - csampn(:,2:end))^2)/...
             (norm(ref(:,2:end))^2))/(2*sigma(k));
         
     end
-    out = min(1,exp(aux - auxn) * cpostratio);
+    out = min(1,exp(aux - auxn + cauxn - caux));
     return    
 end
 
