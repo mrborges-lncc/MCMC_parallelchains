@@ -28,14 +28,14 @@ homer = './out/restart';
 %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [newexp, expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
     num_trials, NC, freqj, prt] = finputbox();
-[file_ref, precision, precision_coarse, normaliz] = ...
+[file_ref, precision, precision_coarse, data_normal] = ...
     finputbox2(nStage, num_datatype);
 [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     finputbox3(nStage, num_rockpar);
 %% READ REFERENCE DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cut = [0 0];
+cut = [1 0];
 dataref = load_data(file_ref,num_datatype,cut);
-[drefvar, dataref] = normalizaREF(dataref,normaliz);
+[scalar, dataref] = normalizaREF(dataref,data_normal);
 %% READ T matrices from KL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 T = load_KL(file_KL,num_rockpar,fine_mesh,KLM);
 %% Variables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,7 +84,7 @@ if newexp
                 physical_dim,coarse_mesh);
             csamplen{1,chain} = cpres(1+cut(1):end-cut(2),:);
             csamplen{2,chain} = cprod(1+cut(1):end-cut(2),:);
-            csamplen(:,chain) = normaliza(samplen(:,chain),drefvar);
+            csamplen(:,chain) = normaliza(csamplen(:,chain),scalar);
             clear cpres cprod
             coarse_post_ratio = 1.0;
         end
@@ -93,11 +93,11 @@ if newexp
             physical_dim,fine_mesh);
         samplen{1,chain} = pres(1+cut(1):end-cut(2),:);
         samplen{2,chain} = prod(1+cut(1):end-cut(2),:);
-        samplen(:,chain) = normaliza(samplen(:,chain),drefvar);
+        samplen(:,chain) = normaliza(samplen(:,chain),scalar);
         clear pres prod
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         savethetas(thetan,chain,num_rockpar,1,prt,homet,expname);
-        savedata(samplen,chain,num_datatype,1,prt,homed,expname);
+        savedata(samplen,chain,num_datatype,1,prt,homed,expname,scalar);
 %         select_theta(:,chain,:,1) = thetan(:,chain,:);
         erro(1,:,chain) = erromediorel(dataref, samplen(:,chain), chain,...
             num_datatype, homee, expname, prt);
@@ -153,7 +153,7 @@ for n = inicio : num_trials
             clear csample
             csample{1,chain} = cpres(1+cut(1):end-cut(2),:);
             csample{2,chain} = cprod(1+cut(1):end-cut(2),:);
-            csample(:,chain) = normaliza(csample(:,chain),drefvar);
+            csample(:,chain) = normaliza(csample(:,chain),scalar);
             clear cpres cprod
             %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             [calpha, coarse_post_ratio] = cprob_accept(dataref,...
@@ -180,7 +180,7 @@ for n = inicio : num_trials
                 physical_dim,fine_mesh);
             sample{1,chain} = pres(1+cut(1):end-cut(2),:);
             sample{2,chain} = prod(1+cut(1):end-cut(2),:);
-            sample(:,chain) = normaliza(sample(:,chain),drefvar);
+            sample(:,chain) = normaliza(sample(:,chain),scalar);
             clear pres prod
             %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             alpha = prob_accept(dataref,samplen(:,chain),sample(:,chain),...
@@ -204,13 +204,15 @@ for n = inicio : num_trials
         erro(n,:,chain) = erromediorel(dataref, samplen(:,chain), chain,...
             num_datatype, homee, expname, prt);
         savethetas(thetan,chain,num_rockpar,n,prt,homet,expname);
-        savedata(samplen,chain,num_datatype,n,prt,homed,expname);
+        savedata(samplen,chain,num_datatype,n,prt,homed,expname,scalar);
     end
-    for i = 1 : num_rockpar
-        plot((1:n)', reshape(erro(1:n,i,:),[n NC]),'LineWidth',3);
-        hold on
+    if mod(n,5) == 0
+        for i = 1 : num_rockpar
+            plot((1:n)', reshape(erro(1:n,i,:),[n NC]),'LineWidth',3);
+            hold on
+            pause(0.001)
+        end
     end
-    pause(0.001)
     saverestart(n,homer,expname,NC,d,nStage,csamplen,samplen,...
         precision_coarse,precision,ccounter,counter);
     fprintf('\n*************************************************\n')
