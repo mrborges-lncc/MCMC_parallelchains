@@ -23,17 +23,19 @@ homef = './figuras/';
 homee = './error/error';
 homer = './out/restart';
 %% Seed control %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-seed = 1872;
-rng(seed)
+% seed = 1872;
+% rng(seed)
 %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [newexp, expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
     num_trials, NC, freqj, prt] = finputbox();
-[file_ref, precision, precision_coarse] = ...
+[file_ref, precision, precision_coarse, normaliz] = ...
     finputbox2(nStage, num_datatype);
 [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
     finputbox3(nStage, num_rockpar);
 %% READ REFERENCE DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dataref = load_data(file_ref,num_datatype);
+cut = [0 0];
+dataref = load_data(file_ref,num_datatype,cut);
+[drefvar, dataref] = normalizaREF(dataref,normaliz);
 %% READ T matrices from KL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 T = load_KL(file_KL,num_rockpar,fine_mesh,KLM);
 %% Variables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -80,16 +82,18 @@ if newexp
             %% Simulation coarse scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             [cpres cprod] = Simulator([coarseperm coarseporo],...
                 physical_dim,coarse_mesh);
-            csamplen{1,chain} = cpres;
-            csamplen{2,chain} = cprod;
+            csamplen{1,chain} = cpres(1+cut(1):end-cut(2),:);
+            csamplen{2,chain} = cprod(1+cut(1):end-cut(2),:);
+            csamplen(:,chain) = normaliza(samplen(:,chain),drefvar);
             clear cpres cprod
             coarse_post_ratio = 1.0;
         end
         %% Simulation fine scale %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         [pres prod] = Simulator([Y(:,chain,1) Y(:,chain,2)],...
             physical_dim,fine_mesh);
-        samplen{1,chain} = pres;
-        samplen{2,chain} = prod;
+        samplen{1,chain} = pres(1+cut(1):end-cut(2),:);
+        samplen{2,chain} = prod(1+cut(1):end-cut(2),:);
+        samplen(:,chain) = normaliza(samplen(:,chain),drefvar);
         clear pres prod
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         savethetas(thetan,chain,num_rockpar,1,prt,homet,expname);
@@ -119,12 +123,12 @@ for n = inicio : num_trials
     fprintf('\nIteration %d\n',n)
     fprintf('\n==================================================')
     fprintf('\n==================================================\n')
-    if n > num_select
-        fprintf('\n==================================================\n')
-        fprintf('\nFinished\nNumber of different selected fields achivied\n')
-        fprintf('\n==================================================\n')
-        break
-    end
+%     if n > num_select
+%         fprintf('\n==================================================\n')
+%         fprintf('\nFinished\nNumber of different selected fields achivied\n')
+%         fprintf('\n==================================================\n')
+%         break
+%     end
     for chain = 1 : NC
         CACCEPT = 0;
         fprintf('\n==================================================')
@@ -147,8 +151,9 @@ for n = inicio : num_trials
             [cpres cprod] = Simulator([coarseperm coarseporo],...
                 physical_dim,coarse_mesh);
             clear csample
-            csample{1,chain} = cpres;
-            csample{2,chain} = cprod;
+            csample{1,chain} = cpres(1+cut(1):end-cut(2),:);
+            csample{2,chain} = cprod(1+cut(1):end-cut(2),:);
+            csample(:,chain) = normaliza(csample(:,chain),drefvar);
             clear cpres cprod
             %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             [calpha, coarse_post_ratio] = cprob_accept(dataref,...
@@ -173,8 +178,9 @@ for n = inicio : num_trials
             %% Simulation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             [pres prod] = Simulator([Y(:,chain,1) Y(:,chain,2)],...
                 physical_dim,fine_mesh);
-            sample{1,chain} = pres;
-            sample{2,chain} = prod;
+            sample{1,chain} = pres(1+cut(1):end-cut(2),:);
+            sample{2,chain} = prod(1+cut(1):end-cut(2),:);
+            sample(:,chain) = normaliza(sample(:,chain),drefvar);
             clear pres prod
             %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             alpha = prob_accept(dataref,samplen(:,chain),sample(:,chain),...

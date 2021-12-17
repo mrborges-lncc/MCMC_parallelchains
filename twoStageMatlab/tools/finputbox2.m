@@ -1,4 +1,4 @@
-function [file_ref,precision,precision_coarse] = ...
+function [file_ref,precision,precision_coarse,normaliza] = ...
     finputbox2(nStage, num_datatype)
     options.Resize='on';
     options.WindowStyle='normal';
@@ -39,6 +39,10 @@ function [file_ref,precision,precision_coarse] = ...
 %         definput{dk} = nome;
 %     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    pk = pk + 1;
+    prompt{pk} = 'Data normalization: 1 == yes | 0 == no:';
+    dk = dk + 1;
+    definput{dk} = '1';
     name = 'Precision for likelihood (\sigma^2) data set n. (';
     if nStage == 1
         for j = 1 : num_datatype
@@ -79,6 +83,8 @@ function [file_ref,precision,precision_coarse] = ...
 %         k = k + 1;
 %         file_sample = [file_sample; ans(k,:)];
 %     end
+    k = k + 1;
+    normaliza = str2num(ans(k,:));
     precision = [];
     precision_coarse = [];
     if nStage == 1
