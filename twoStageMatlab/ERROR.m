@@ -5,10 +5,10 @@ addpath ./tools/
 ini = 1;
 fim = 10;
 nt  = fim - ini + 1;
-NC  = [1:2];
-expname = 'CW';
+NC  = [1:3];
+expname = 'blackboxRW';
 stage   = 1;
-d       = 10000;
+d       = 4;
 home    = '~/twoStageMatlab/';
 home    = './';
 homee   = [home 'error/error'];
