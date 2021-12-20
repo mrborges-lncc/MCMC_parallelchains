@@ -5,8 +5,8 @@ addpath ./tools/
 ini = 1;
 fim = 10;
 nt  = fim - ini + 1;
-NC  = [1:2];
-expname = 'nCW';
+NC  = [1:3];
+expname = 'CW';
 stage   = 1;
 d       = 4;
 home    = '~/twoStageMatlab/';

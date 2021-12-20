@@ -5,10 +5,10 @@ addpath ./tools/
 NC = 3;
 d  = 1;
 Ni = [1];
-Nf = [5000];
-M  = 250;
+Nf = [4900];
+M  = 50;
 Nt = Nf - Ni + 1;
-expname = 'blackboxRW';
+expname = 'RW';
 home    = '~/twoStageMatlab/';
 home    = './';
 homet   = [home 'thetas/theta'];
@@ -19,7 +19,7 @@ for chain = 1 : NC
     k = 0;
     for n = Ni : Nf
         name = [homet expname '_chain' num2str(chain,'%d') '_t' vari...
-            '_' num2str(n,'%d') '.dat']
+            '_' num2str(n,'%d') '.dat'];
         aux = load(name,'-mat');
         k = k + 1;
         X(k,:,chain) = aux.t(1:d);
@@ -45,5 +45,6 @@ plot(x,R)
 
 if d == 1
     y = reshape(X,[Nt NC]);
+    y = y(Nt/2:end,:);
     p = anova1(y);
 end
