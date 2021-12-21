@@ -17,7 +17,7 @@ homed = './data/data';
 homef = './figuras/';
 homee = './error/error';
 homer = './out/restart';
-read = 1;
+read = 0;
 prt  = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if read == 1
@@ -67,14 +67,15 @@ if read == 1
     print('-depsc','-r600',name);
 else
     %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    [newexp, expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
-        num_trials, num_select, NC, freqj, prt] = finputbox();
-    [file_ref, file_sample, precision, precision_coarse] = ...
-        finputbox2(nStage, num_datatype);
-    [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
-        finputbox3(nStage, num_rockpar);
+    newinput = false;
+    [newexp, expname, prop_method, jump, nStage, num_rockpar, ...
+        num_datatype, num_trials, NC, freqj, prt, ...
+        file_ref, precision, precision_coarse, data_normal,...
+        physical_dim, fine_mesh, coarse_mesh, file_KL, ...
+        KLM] = inputdata(newinput)
+    cut = [0 0];
     %% READ REFERENCE DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    dataref = load_data(file_ref,num_datatype);
+    dataref = load_data(file_ref,num_datatype,cut);
     %% READ T matrices from KL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     T = load_KL(file_KL,num_rockpar,fine_mesh,KLM);
     %% Variables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -12,7 +12,7 @@ function [out, out2] = cprob_accept(dataref,csamplen,csample,sigma,...
             (norm(ref(:,2:end))^2))/(2*sigma(k));
     end
     out  = min(1,exp(aux - auxn));
-    out2 = exp(auxn - aux);
+    out2 = 1.0;%exp(auxn - aux);
     return    
 end
 

@@ -26,14 +26,13 @@ homer = './out/restart';
 % seed = 1872;
 % rng(seed)
 %% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[newexp, expname, prop_method, jump, nStage, num_rockpar, num_datatype, ...
-    num_trials, NC, freqj, prt] = finputbox();
-[file_ref, precision, precision_coarse, data_normal] = ...
-    finputbox2(nStage, num_datatype);
-[physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
-    finputbox3(nStage, num_rockpar);
+newinput = false;
+[newexp, expname, prop_method, jump, nStage, num_rockpar, ...
+    num_datatype, num_trials, NC, freqj, prt, ...
+    file_ref, precision, precision_coarse, data_normal,...
+    physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = inputdata(newinput);
 %% READ REFERENCE DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cut = [1 0];
+cut = [0 0];
 dataref = load_data(file_ref,num_datatype,cut);
 [scalar, dataref] = normalizaREF(dataref,data_normal);
 %% READ T matrices from KL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,7 +58,7 @@ if newexp
     %% Start (First step) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     fprintf('\n==================================================\n')
     fprintf('==================================================\n')
-    fprintf('\nIteration %d\n',1)
+    fprintf('Iteration %d',1)
     fprintf('\n==================================================')
     fprintf('\n==================================================\n')
     for chain = 1 : NC
@@ -120,7 +119,7 @@ end
 for n = inicio : num_trials
     fprintf('\n==================================================\n')
     fprintf('==================================================\n')
-    fprintf('\nIteration %d\n',n)
+    fprintf('Iteration %d',n)
     fprintf('\n==================================================')
     fprintf('\n==================================================\n')
 %     if n > num_select
@@ -185,7 +184,7 @@ for n = inicio : num_trials
             %% ACCEPTANCE TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             alpha = prob_accept(dataref,samplen(:,chain),sample(:,chain),...
                 precision,num_datatype,coarse_post_ratio);
-            fprintf('\nAlpha: %4.2f <===> coarse_post_ratio: %4.2f\n',alpha,coarse_post_ratio);
+            fprintf('Alpha: %4.2f <===> coarse_post_ratio: %4.2f',alpha,coarse_post_ratio);
             %% TEST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             if rand(1,1) < alpha
                 samplen(:,chain)  = sample(:,chain);

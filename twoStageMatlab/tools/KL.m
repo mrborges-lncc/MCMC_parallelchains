@@ -1,7 +1,9 @@
 function [out] = KL(T,theta,numel)
-%    out = zeros(numel,1);
+%     tstart =  tic;
+    out = zeros(numel,1);
     for el = 1:numel
-        out(el) = T(el,:)*theta;
+        out(el) = T(el,:) * theta;
     end
+%     telapsed = toc(tstart);
 end
 

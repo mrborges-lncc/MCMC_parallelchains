@@ -32,7 +32,7 @@ function [physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = ...
         dk = dk + 1;
         aux = 'prod';
         if i == 1, aux = 'pres'; end
-        nome   = ['../gera_KL/MATLAB/out/avet1_500x500x20_100x100x1_l50x50x10_M10000.bin'];
+%         nome   = ['../gera_KL/MATLAB/out/avet1_500x500x20_100x100x1_l50x50x10_M10000.bin'];
         nome   = ['../gera_KL/MATLAB/out/avet1_510x510x20_51x51x5_l50x50x10_M13005.bin'];
         definput{dk} = nome;
     end    

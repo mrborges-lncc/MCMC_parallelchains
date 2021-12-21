@@ -4,12 +4,12 @@ addpath ./tools/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 jump = 5;
 NC = [1:3];
-Ni = [100];
-Nf = [200];
+Ni = [1];
+Nf = [2000];
 Nt = Nf - Ni + 1;
 num_datatype = 2;
 data_normal  = 0;
-expname = 'nCW';
+expname = 'CW';
 home    = './';
 homet   = [home 'data/data'];
 homef   = './figuras/';
