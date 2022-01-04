@@ -17,8 +17,8 @@ homed = './data/data';
 homef = './figuras/';
 homee = './error/error';
 homer = './out/restart';
-read = 0;
-prt  = 0;
+read  = 1;
+prt   = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if read == 1
     E = load('error/erroCoarseXfine.dat');

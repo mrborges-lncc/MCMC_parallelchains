@@ -32,7 +32,7 @@ newinput = false;
     file_ref, precision, precision_coarse, data_normal,...
     physical_dim, fine_mesh, coarse_mesh, file_KL, KLM] = inputdata(newinput);
 %% READ REFERENCE DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cut = [0 0];
+cut = [1 0];
 dataref = load_data(file_ref,num_datatype,cut);
 [scalar, dataref] = normalizaREF(dataref,data_normal);
 %% READ T matrices from KL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -205,7 +205,7 @@ for n = inicio : num_trials
         savethetas(thetan,chain,num_rockpar,n,prt,homet,expname);
         savedata(samplen,chain,num_datatype,n,prt,homed,expname,scalar);
     end
-    if mod(n,5) == 0
+    if mod(n,500) == 0
         for i = 1 : num_rockpar
             plot((1:n)', reshape(erro(1:n,i,:),[n NC]),'LineWidth',3);
             hold on

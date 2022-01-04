@@ -12,20 +12,20 @@ function [newexp, expname, prop_method, jump, nStage, num_rockpar, ...
             finputbox3(nStage, num_rockpar);
     else
         newexp      = true;
-        expname     = 'CW';
-        prop_method = 'CW';
+        expname     = 'RW';
+        prop_method = 'RW';
         jump        = 0;
         nStage      = 2;
         num_rockpar = 2;
         num_datatype= 2;
         num_trials  = 500;
-        NC          = 2;
+        NC          = 3;
         freqj       = 10;
         prt         = 1;
         file_ref = ["~/MCMC_parallelchains/twophaseflow/exp/pres/pres_ref_0.dat",
             "~/MCMC_parallelchains/twophaseflow/exp/prod/prod_ref_0.dat"];
         precision    = [2e-4 2e-5];
-        precision_coarse = [2.5e-4 2.5e-5];
+        precision_coarse = [2.1e-4 2.1e-5];
         data_normal  = 0;
         physical_dim = [510 510 20];
         fine_mesh    = [51 51 5];
