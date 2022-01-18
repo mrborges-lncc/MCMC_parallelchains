@@ -15,11 +15,11 @@ function [newexp, expname, prop_method, jump, nStage, num_rockpar, ...
         expname     = 'RW';
         prop_method = 'RW';
         jump        = 0;
-        nStage      = 2;
+        nStage      = 1;
         num_rockpar = 2;
         num_datatype= 2;
-        num_trials  = 500;
-        NC          = 3;
+        num_trials  = 10000;
+        NC          = 20;
         freqj       = 10;
         prt         = 1;
         file_ref = ["~/MCMC_parallelchains/twophaseflow/exp/pres/pres_ref_0.dat",

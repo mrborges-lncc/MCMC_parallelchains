@@ -205,7 +205,7 @@ for n = inicio : num_trials
         savethetas(thetan,chain,num_rockpar,n,prt,homet,expname);
         savedata(samplen,chain,num_datatype,n,prt,homed,expname,scalar);
     end
-    if mod(n,500) == 0
+    if mod(n,5) == 0
         for i = 1 : num_rockpar
             plot((1:n)', reshape(erro(1:n,i,:),[n NC]),'LineWidth',3);
             hold on
