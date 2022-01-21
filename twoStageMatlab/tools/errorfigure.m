@@ -12,7 +12,7 @@ D = 1.0;%max(max(YMatrix1))*1.2;
 ratio = (B-A)/(D-C);
 
 % Create figure
-figure1 = figure;
+figure1 = figure('OuterPosition',[480 150 520 260]);
 
 % Create axes
 axes1 = axes('Parent',figure1);
@@ -34,6 +34,6 @@ ylim([C D]);
 box(axes1,'on');
 hold(axes1,'off');
 % Set the remaining axes properties
-set(axes1,'DataAspectRatio',[ratio 2 1],'FontName','Times','FontSize',12,...
+set(axes1,'DataAspectRatio',[ratio 5 1],'FontName','Times','FontSize',12,...
     'TickDir','both','TickLabelInterpreter','latex','XMinorTick','on',...
-    'YMinorTick','on','YScale','log');
+    'YMinorTick','on','YScale','log','YTick',[1e-06 1e-04 1e-02 1]);

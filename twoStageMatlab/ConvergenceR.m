@@ -5,7 +5,7 @@ addpath ./tools/
 NC = 3;
 d  = 1;
 Ni = [1];
-Nf = [4900];
+Nf = [490];
 M  = 50;
 Nt = Nf - Ni + 1;
 expname = 'RW';

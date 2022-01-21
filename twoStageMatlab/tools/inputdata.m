@@ -12,14 +12,14 @@ function [newexp, expname, prop_method, jump, nStage, num_rockpar, ...
             finputbox3(nStage, num_rockpar);
     else
         newexp      = true;
-        expname     = 'RW';
+        expname     = 'RW2';
         prop_method = 'RW';
         jump        = 0;
-        nStage      = 1;
+        nStage      = 2;
         num_rockpar = 2;
         num_datatype= 2;
         num_trials  = 10000;
-        NC          = 20;
+        NC          = 10;
         freqj       = 10;
         prt         = 1;
         file_ref = ["~/MCMC_parallelchains/twophaseflow/exp/pres/pres_ref_0.dat",
