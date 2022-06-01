@@ -5,7 +5,7 @@ addpath ./tools/
 NC = 3;
 d  = 1;
 Ni = [1];
-Nf = [490];
+Nf = [550];
 M  = 50;
 Nt = Nf - Ni + 1;
 expname = 'RW';
@@ -33,14 +33,21 @@ end
 
 x = [];
 R = [];
+W = [];
+V = [];
 for i = M : M : Nt
     j = i/2;
 %     j = i - M +1;
     [r,v,w] = convergeRMatrix(X(j:i,:,:));
     x = [x; i];
     R = [R; r];
+    W = [W; w];
+    V = [V; v];
 end
-% Rfigure(x,R,R,R)
+Rfigure(x,R,R,R)
+W = sqrt(W);
+V = sqrt(V);
+VWfigure(x,W,W,W,V,V,V)
 plot(x,R)
 
 if d == 1

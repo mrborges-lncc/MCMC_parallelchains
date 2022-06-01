@@ -6,13 +6,13 @@ addpath ./tools/
 %% Input %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nc= 5;     % number of chains
 d = 1;      % dimension
-N = 4000;   % size of sample
+N = 100000;   % size of sample
 X = zeros(N,d,Nc);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Bilding variables
 for j = 1 : Nc
     for i = 1 : d
-        X(:,i,j) = lhsnorm(10.0,1.0,N);
+        X(:,i,j) = lhsnorm(0.0,3.0,N);
 %         X(:,i,j) = rand(N,1);
     end
 end
@@ -25,16 +25,19 @@ x = [];
 R = [];
 W = [];
 V = [];
-M = 50;
-for i = M : M : N
+b = N/100;
+for i = b : b : N
     j = i/2;
-    [r,v,w] = convergeR1D(X(j:i,:,:));
+%     [r,v,w] = convergeR1D(X(j:i,:,:));
+    [r,v,w] = convergeRMatrix(X(j:i,:,:));
     x = [x; i];
     R = [R; r];
     W = [W; w];
     V = [V; v];
 end
 Rfigure(x,R,R,R)
+W = sqrt(W);
+V = sqrt(V);
 VWfigure(x,W,W,W,V,V,V)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
