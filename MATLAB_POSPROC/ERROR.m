@@ -5,7 +5,7 @@ ini = 0;
 fim = 5;
 N   = 0;
 %
-M   = fim-ini&+1;
+M   = fim-ini+1;
 home= '/home/mrborges/MCMCrw/twoStage/';
 home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
 % home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
@@ -79,13 +79,13 @@ for nf = 1:nvar + 1
     % Set the remaining axes properties
     set(axes1,'LineWidth',1,'TickDir','both',...
         'TickLabelInterpreter','latex','XMinorTick','on',...
-        'YMinorTick','on');
+        'YMinorTick','on','YScale','log');
     box(axes1,'on');
     hold(axes1,'all');
     final = 0;
     for i=1:M
         cor    = [(M-i)/(M) 0 (i-1)/(M)];
-        %cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
+        cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
         inicio = final+1;
         final  = inicio+tm(i+1)-1;
         dx     = data(inicio:final,1);

@@ -31,8 +31,8 @@ nome= 'permKC';
 permrho = 0.42;
 permbeta= 5.7e-14;      %% Factor to permeability
 permvar = '\kappa';
-phirho  = 0.2;
-phibeta = 0.12;
+phirho  = 0.275;
+phibeta = 0.125;
 phivar  = '\phi';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -78,6 +78,8 @@ param  = [];
 medias = [];
 desvios= [];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+MPHI =[];
+MPER =[];
 for n = ini:fim
     snum    = num2str(n,'%d');
     Y   = load_perm(G,phifilen,phifilen,phifilen,depth,n,nD);
@@ -97,11 +99,13 @@ for n = ini:fim
     medias= [medias; mean(phi) mean(perm)];
     desvios= [desvios; std(phi) std(perm)];
     fprintf('\n==============================================================\n')
-    fprintf('Mean Yphi....: %4.3f    \t | \t std phi....: %4.2e   \n',mean(phi),std(phi));
-    fprintf('Mean Yperm...: %4.3f mD \t | \t std K......: %4.3f mD\n',mk/permbeta,sqrt(vk)/permbeta);
+    fprintf('Mean phi.....: %4.3f    \t | \t std phi....: %4.2e   \n',mean(phi),std(phi));
+    fprintf('Mean perm....: %4.3f mD \t | \t std K......: %4.3f mD\n',mk/(milli * darcy()),sqrt(vk)/(milli * darcy()));
     fprintf('==============================================================\n')
     savefields(Lx,Ly,Lz,nx,ny,nz,1,reverseKlog(perm,beta,rho),...
-        reverseKlog(phi,phibeta,phirho),n,home,permname,phiname,prt)
+        reverseKlog(phi,phibeta,phirho),n,home,permname,phiname,prt);
+    MPHI = [MPHI; phi];
+    MPER = [MPER; mk];
 end
 pbeta = 1.0; % pbeta = permbeta;
 plotKC(phi,perm/pbeta,0)
@@ -116,9 +120,12 @@ fprintf('PHI =====> Mean = %5.4f\t Std = %5.4f\n',mean(medias(:,1)),mean(desvios
 fprintf('PERM ====> Mean = %5.4e\t Std = %5.4e\n',mean(medias(:,2)),mean(desvios(:,2)))
 fprintf('==============================================================\n')
 fprintf('==============================================================\n')
-fprintf('PHI =====> beta = %5.4e\t rho = %f\n',phibeta,phirho)
+fprintf('PHI =====> beta = %5.4f\t rho = %f\n',phibeta,phirho)
 fprintf('PERM ====> beta = %5.4e\t rho = %f\n',beta,rho)
 fprintf('==============================================================\n')
+fprintf('==============================================================\n')
+fprintf('<PHI>  = %5.4f   \t sigPHI = %5.4f\n',mean(MPHI),std(MPHI))
+fprintf('<PERM> = %5.4f mD\t sigK   = %5.4f mD\n',mean(MPER)/(milli * darcy()),std(MPER)/(milli * darcy()))
 fprintf('==============================================================\n')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(22)

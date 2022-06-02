@@ -47,13 +47,13 @@ nx  = 51;
 ny  = 51;
 nz  = 5;
 well_r= 0.125;          %% well radius
-TT    = 300.0;            %% days
-nstep = 300;            %% number of time steps for pressure-velocity system
+TT    = 200.0;            %% days
+nstep = 400;            %% number of time steps for pressure-velocity system
 nprint= 25;             %% Number of impressions
-ndata = 150;             %% Number of impressions of data
+ndata = 200;             %% Number of impressions of data
 ndt   = 10;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
-[ndata njump] = ajusteImpress(ndata,nstep);
+[ndata njump]    = ajusteImpress(ndata,nstep);
 PRbhp = 0.0;            %% production well pressure
 vinj  = 0.5e3/day;      %% Injection rate
 patm  = 1.0*atm;        %% Pressure at 0m cote
@@ -61,10 +61,10 @@ depth = 1.0e03*meter;   %% depth until the top of reservoir
 rhoR  = 2.70e03*kilogram/meter^3;  %% mean density of overload rocks
 overburden= 00.0*atm;   %% Load (overburden)
 fatk  = milli() * darcy();      %% Factor to permeability
-phibeta = 0.146;
-phirho  = 0.23;
-permbeta= 9.1098e-14;
-permrho = 0.597;
+phibeta = 0.125;
+phirho  = 0.275;
+permbeta= 6.5767e-14;
+permrho = 0.791827;
 Ebeta   = 1.0225e10;
 Erho    = 0.457;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -209,6 +209,9 @@ fprintf('\n==============================================================\n')
 %% WELLS five-spot model %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [inj_cells,prod1_cells,prod2_cells,prod3_cells,prod4_cells] = ...
     fivespot_wells(G,Lx,Ly,nx,ny);
+% [inj_cells,prod1_cells,prod2_cells,prod3_cells,prod4_cells] = ...
+%     mrb_wells(G,Lx,Ly,nx,ny,[Lx/2 Ly/2],[50 90], [100 450],...
+%     [410 50],[380 410]);
 refdepth = min(G.cells.centroids(:, 3)); % for example...
 W = addWell([], G, rock, inj_cells, 'Type', 'rate', 'Comp_i', [1 0],...
      'Val', vinj, 'Radius', well_r*meter, 'Dir', 'z', 'sign',1,...
@@ -272,7 +275,7 @@ t = 0;
 % hwb = waitbar(t,'Simulation ..');
 for n=1:nstep
     t = t + dt(n);
-    fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
+%     fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
     sol  = incompTPFA(sol, G, hT, fluid, 'wells', W, 'verbose', verb);
     sol  = explicitTransport(sol, G, dt(n), rock, fluid,...
         'wells', W, 'verbose', verb, 'dt_factor', 0.75);

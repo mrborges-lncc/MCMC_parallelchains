@@ -3,8 +3,8 @@ close all
 
 delete(gcp('nocreate'))
 
-ini = 1700;
-fim = 1999;
+ini = 0;
+fim = 1;
 N   = fim - ini + 1;
 nome = 'TwoPhase3D_KC_MC';
 

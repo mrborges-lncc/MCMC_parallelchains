@@ -57,7 +57,7 @@ function np = PandSfigures(sol,G,W,printa,vw,nome,et,num,nprj,t,npk,ndt,lim)
         pause(et);
         clf; close all;
         figure(5);
-        plotCellData(G, sol.s(:,1),find(sol.s(:,1)>=0.0),...
+        plotCellData(G, sol.s(:,1),find(sol.s(:,1)>=0.01),...
             'FaceAlpha', 0.95, 'EdgeAlpha', 0.4, 'EdgeColor', 'none');
         plotWell(G, W, 'height', Z*0.2,'FontSize',10,'Interpreter','latex')
         colorbar('horiz'); colormap(colorm); axis equal tight; view(vw);

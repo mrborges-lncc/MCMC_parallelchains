@@ -63,7 +63,7 @@ end
 permfilen = filen(1:k);
 nini2 = int32(str2num(filem(k+1:end)));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA PERM FIELD');
+[FILENAME, PATHNAME] =uigetfile({[home 'twophaseflow/exp/fields/*.dat']}, 'LOAD DATA YOUNG FIELD');
 %[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/E*.dat'}, 'LOAD DATA PERM FIELD');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);

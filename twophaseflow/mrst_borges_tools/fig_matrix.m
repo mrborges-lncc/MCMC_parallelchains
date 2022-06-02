@@ -26,7 +26,7 @@ for i=1:ys(2)
     name = ['$' str '{' num2str(i,'%d') '}$'];
     plot(X1,Y1(:,i),'LineWidth',2,'Parent',axes1,...
     'DisplayName',name,'LineStyle',lin,'Marker',sib,...
-    'Color',color(i,:));
+    'Color',[color(i,:)]);
 end
 % Set the remaining axes properties
 A = min(min(X1));
