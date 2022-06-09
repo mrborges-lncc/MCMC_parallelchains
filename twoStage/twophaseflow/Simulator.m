@@ -8,8 +8,8 @@ exper = ['exp' num2str(exper,'%0.3d')];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tstart =  tic;
 
-addpath ./mrst_borges_tools/
-addpath ./mrst/
+addpath ../../twophaseflow/mrst_borges_tools/
+addpath ../../twophaseflow/mrst/
 startup
 
 try
@@ -34,6 +34,10 @@ monitorpres = 1;  %% if == 1 pressure monitors at some points
 monitorsat  = 1;  %% if == 1 saturation monitors at some points
 nome  = 'amostra';
 % nome  = 'ref';
+nomex = [nome '_x'];
+nomey = [nome '_y'];
+nomez = [nome '_x'];
+nomep = [nome '_x'];
 et    = 0;
 verb  = false;
 %%
@@ -42,8 +46,8 @@ verb  = false;
 Lx  = 512.0;
 Ly  = 512.0;
 Lz  = 20.0;
-nx  = 128;
-ny  = 128;
+nx  = 64;
+ny  = 64;
 nz  = 1;
 well_r= 0.125;          %% well radius
 TT    = 120.0;          %% days
@@ -82,10 +86,10 @@ s_monitores = monitors(G, monitorsat , [exper '/in/input_sat.in']);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GEOLOGIC MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Read Gaussian fileds %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-filenx = [exper '/fields/perm_' nome '_'];
-fileny = [exper '/fields/perm_' nome '_'];
-filenz = [exper '/fields/perm_' nome '_'];
-filephi= [exper '/fields/poro_' nome '_'];
+filenx = [exper '/fields/perm_' nomex '_'];
+fileny = [exper '/fields/perm_' nomey '_'];
+filenz = [exper '/fields/perm_' nomez '_'];
+filephi= [exper '/fields/poro_' nomep '_'];
 fieldnz = 0;
 nini = 0;
 TOL  = 1.0e-7;
@@ -118,7 +122,7 @@ fprintf('\n==============================================================\n\n')
 fprintf('Mean k_x....: %4.1f mD \t | \t std k_x....: %4.1f mD\n',mK(1),sK(1));
 fprintf('Mean k_y....: %4.1f mD \t | \t std k_y....: %4.1f mD\n',mK(2),sK(2));
 fprintf('Mean k_z....: %4.1f mD \t | \t std k_z....: %4.1f mD\n',mK(3),sK(3));
-fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2f   \n',mean(rock.poro),std(rock.poro));
+fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2g   \n',mean(rock.poro),std(rock.poro));
 fprintf('\n==============================================================\n')
 clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

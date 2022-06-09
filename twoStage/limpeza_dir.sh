@@ -50,5 +50,7 @@ rm -rf ../blackbox/exp9*;
 rm -rf ../blackbox/output*.out;
 rm -rf ./upscaling/output*.out;
 rm -rf ./upscaling/in0*;
+rm -rf ./upscaling1/output*.out;
+rm -rf ./upscaling1/in0*;
 
 

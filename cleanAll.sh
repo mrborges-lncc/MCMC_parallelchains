@@ -39,8 +39,14 @@ echo $PWD;
 make clean;
 cd ../;
 cd twoStage;
-echo $PWD;
 make clean;
+cd upscaling;
+make clean;
+cd ../;
+cd upscaling1;
+make clean;
+cd ../../;
+echo $PWD;
 
 
 

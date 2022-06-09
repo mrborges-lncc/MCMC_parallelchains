@@ -1,0 +1,38 @@
+ ###################################
+ ## READ INPUT DATA FROM: ##########
+ ./entrada.in                                                                                                                    
+ ###################################
+
+TIPO DE UPSCALING         1
+ MEDIA
+
+NUMERO DA PRIMEIRA AMOSTRA:         0
+NUMERO FINAL DA AMOSTRA   :         0
+NUMERO TOTAL DE AMOSTRAS  :         1
+
+NOME DO ARQUIVO DE PERMEABILIDADES (MALHA FINA)  : ../../../twophaseflow/exp/fields/poro_amostra_                                                                                  
+VALOR DE KG = 0.12500E+00
+VALOR DE RHO= 0.27500E+00
+
+NOME DO ARQUIVO DE PERMEABILIDADES (MALHA GROSSA): ../../twophaseflow/exp/fields/poro_amostra_                                                                                     
+
+NUMERO DE ELEMENTOS EM (X):        64
+NUMERO DE ELEMENTOS EM (Y):        64
+######################################
+######################################
+NAME OF INPUT FILE (RANDOM FIELD)    0: ../../../twophaseflow/exp/fields/poro_amostra_0.dat
+Y ######################### 
+MEDIA     =   0.21336
+VARIANCIA =   0.96862
+MAXIMO    =   3.33225
+MINIMO    =  -3.59201
+##############################
+######################################
+######################################
+NAME OF OUTPUT FILE (RANDOM FIELD)    0: ../../twophaseflow/exp/fields/poro_amostra_x_0.dat
+K ######################### 
+MEDIA     =   0.22702
+VARIANCIA =   0.86925
+MAXIMO    =   2.91443
+MINIMO    =  -3.08863
+##############################
