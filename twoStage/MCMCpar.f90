@@ -3042,94 +3042,94 @@ SUBROUTINE UPSCALING(K,NK)
      FILEAMC = ('./upscaling2/in')//TRIM(ADJUSTL(NUMB))//('/entrada.in')
   END IF
 !
-     WRITE(*,*)'#### RANK: ',NK
-     WRITE(*,*)'#### LEITURA DO ARQUIVO DE ENTRADA UPSCALING ####'
-     WRITE(*,*)FILEAMC
-     OPEN(UNIT=IN_FILE,FILE=FILEAMC,STATUS='UNKNOWN',&
-          FORM='FORMATTED',IOSTAT=ISTAT)
-     IF(ISTAT.NE.0)THEN
-        WRITE(*,*)'ERROR ON OPENING INPUT FILE: ',FILEAMC
-        STOP
-     END IF
+  WRITE(*,*)'#### RANK: ',NK
+  WRITE(*,*)'#### LEITURA DO ARQUIVO DE ENTRADA UPSCALING ####'
+  WRITE(*,*)FILEAMC
+  OPEN(UNIT=IN_FILE,FILE=FILEAMC,STATUS='UNKNOWN',&
+       FORM='FORMATTED',IOSTAT=ISTAT)
+  IF(ISTAT.NE.0)THEN
+     WRITE(*,*)'ERROR ON OPENING INPUT FILE: ',FILEAMC
+     STOP
+  END IF
 !
-     READ(IN_FILE,100)NA
-     READ(IN_FILE,101)NB,NC
-     READ(IN_FILE,102)FIN
-     READ(IN_FILE,*)XA,XB
-     READ(IN_FILE,102)FOUT
-     READ(IN_FILE,101)ND,NE
+  READ(IN_FILE,100)NA
+  READ(IN_FILE,101)NB,NC
+  READ(IN_FILE,102)FIN
+  READ(IN_FILE,*)XA,XB
+  READ(IN_FILE,102)FOUT
+  READ(IN_FILE,101)ND,NE
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     LNGT = LEN(FIN)
-     FAUX = TRIM(FIN)
-     DO I=1,LNGT-2
-        FEXP = FAUX(I:I+2)
-        IF(FEXP.EQ.'exp')THEN
-           GOTO 111
-        END IF
-     END DO
-111  CONTINUE
-     DO J=I,LNGT-2
-        FEXP = FAUX(J:J)
-        IF(FEXP.EQ.'/')THEN
-           GOTO 115
-        END IF
-     END DO
-115  CONTINUE
-     FIN = TRIM(ADJUSTL(FIN(1:I-1)))//('exp')//TRIM(ADJUSTL(NUMB))//&
-          TRIM(ADJUSTL(FIN(J:LNGT)))
+  LNGT = LEN(FIN)
+  FAUX = TRIM(FIN)
+  DO I=1,LNGT-2
+     FEXP = FAUX(I:I+2)
+     IF(FEXP.EQ.'exp')THEN
+        GOTO 111
+     END IF
+  END DO
+111 CONTINUE
+  DO J=I,LNGT-2
+     FEXP = FAUX(J:J)
+     IF(FEXP.EQ.'/')THEN
+        GOTO 115
+     END IF
+  END DO
+115 CONTINUE
+  FIN = TRIM(ADJUSTL(FIN(1:I-1)))//('exp')//TRIM(ADJUSTL(NUMB))//&
+       TRIM(ADJUSTL(FIN(J:LNGT)))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     LNGT = LEN(FOUT)
-     FAUX = TRIM(FOUT)
-     DO I=1,LNGT-2
-        FEXP = FAUX(I:I+2)
-        IF(FEXP.EQ.'exp')THEN
-           GOTO 112
-        END IF
-     END DO
-112  CONTINUE
-     DO J=I,LNGT-2
-        FEXP = FAUX(J:J)
-        IF(FEXP.EQ.'/')THEN
-           GOTO 116
-        END IF
-     END DO
-116  CONTINUE
-     FOUT = TRIM(ADJUSTL(FOUT(1:I-1)))//('exp')//TRIM(ADJUSTL(NUMB))//&
-          TRIM(ADJUSTL(FOUT(J:LNGT)))
-!
-     CLOSE(UNIT=IN_FILE)
+  LNGT = LEN(FOUT)
+  FAUX = TRIM(FOUT)
+  DO I=1,LNGT-2
+     FEXP = FAUX(I:I+2)
+     IF(FEXP.EQ.'exp')THEN
+        GOTO 112
+     END IF
+  END DO
+112 CONTINUE
+  DO J=I,LNGT-2
+     FEXP = FAUX(J:J)
+     IF(FEXP.EQ.'/')THEN
+        GOTO 116
+     END IF
+  END DO
+116 CONTINUE
+  FOUT = TRIM(ADJUSTL(FOUT(1:I-1)))//('exp')//TRIM(ADJUSTL(NUMB))//&
+       TRIM(ADJUSTL(FOUT(J:LNGT)))
+  !
+  CLOSE(UNIT=IN_FILE)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     WRITE(*,*)'#### LEITURA DO ARQUIVO DE ENTRADA UPSCALING ####'
-     WRITE(*,*)FILEAMC
-     OPEN(UNIT=IN_FILE,FILE=FILEAMC,STATUS='UNKNOWN',&
-          FORM='FORMATTED',IOSTAT=ISTAT)
-     IF(ISTAT.NE.0)THEN
-        WRITE(*,*)'ERROR ON OPENING INPUT FILE: ',FILEAMC
-        STOP
-     END IF
+  WRITE(*,*)'#### LEITURA DO ARQUIVO DE ENTRADA UPSCALING ####'
+  WRITE(*,*)FILEAMC
+  OPEN(UNIT=IN_FILE,FILE=FILEAMC,STATUS='UNKNOWN',&
+       FORM='FORMATTED',IOSTAT=ISTAT)
+  IF(ISTAT.NE.0)THEN
+     WRITE(*,*)'ERROR ON OPENING INPUT FILE: ',FILEAMC
+     STOP
+  END IF
 !
-     WRITE(IN_FILE,100)NA
-     WRITE(IN_FILE,101)NB,NC
-     WRITE(IN_FILE,102)FIN
-     WRITE(IN_FILE,*)XA,XB
-     WRITE(IN_FILE,102)FOUT
-     WRITE(IN_FILE,101)ND,NE
+  WRITE(IN_FILE,100)NA
+  WRITE(IN_FILE,101)NB,NC
+  WRITE(IN_FILE,102)FIN
+  WRITE(IN_FILE,*)XA,XB
+  WRITE(IN_FILE,102)FOUT
+  WRITE(IN_FILE,101)ND,NE
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     CLOSE(UNIT=IN_FILE)
+  CLOSE(UNIT=IN_FILE)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
-     IF(NUPSC(K).EQ.0)THEN
-        COMMAND = ('cd ./upscaling/; sh rodarUP.sh in')//TRIM(ADJUSTL(NUMB))
-     END IF
-     IF(NUPSC(K).EQ.1)THEN
-        COMMAND = ('cd ./upscaling1/; sh rodarUP.sh in')//TRIM(ADJUSTL(NUMB))
-     END IF
-     IF(NUPSC(K).EQ.2)THEN
-        COMMAND = ('cd ./upscaling2/; sh rodarUP.sh in')//TRIM(ADJUSTL(NUMB))
-     END IF
-     WRITE(*,*)'RANK:',NK,TRIM(COMMAND)
-     CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
+  IF(NUPSC(K).EQ.0)THEN
+     COMMAND = ('cd ./upscaling/; sh rodarUP.sh in')//TRIM(ADJUSTL(NUMB))
+  END IF
+  IF(NUPSC(K).EQ.1)THEN
+     COMMAND = ('cd ./upscaling1/; sh rodarUP.sh in')//TRIM(ADJUSTL(NUMB))
+  END IF
+  IF(NUPSC(K).EQ.2)THEN
+     COMMAND = ('cd ./upscaling2/; sh rodarUP.sh in')//TRIM(ADJUSTL(NUMB))
+  END IF
+  WRITE(*,*)'RANK:',NK,TRIM(COMMAND)
+  CALL EXECUTE_COMMAND_LINE(COMMAND,WAIT=.TRUE.)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 100 FORMAT(I10)
 101 FORMAT(2I10)
@@ -3175,7 +3175,6 @@ SUBROUTINE READ_UPSC(K)
   WRITE(*,*)XA,XB
   WRITE(*,102)FOUT
   WRITE(*,101)ND,NE
-  
 !
   CLOSE(UNIT=IN_FILE)
   !
@@ -5265,6 +5264,7 @@ SUBROUTINE COPY_DIRUP(NPR,NS)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
   IF(NS.EQ.2)THEN
+     write(*,*)'NUPSC',NUPSC
      DO K=1,NPRIORR
         IF(NUPSC(K).EQ.0)THEN
            COMMAND = ('cp -r ./upscaling/in ')
