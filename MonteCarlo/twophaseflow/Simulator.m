@@ -17,14 +17,13 @@ try
 catch %#ok<CTCH>
    mrstModule add incomp ad-mechanics
 end
-verbose = true;
 
 nD = '3D';
 color = 'none';
 %color = 'k';
 vw  = [-35 20];
-%vw  = [0 90];
-grav= 1;
+vw  = [0 90];
+grav= 10;
 lim = [0 0];
 %lim = 1.0e+02 * [0.85   2.0];
 heter = 1;   %% if 0 => homog.; 1 => heter.; 2 => read *.mat
@@ -40,31 +39,31 @@ verb  = false;
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Lx  = 510.0;
-Ly  = 510.0;
+Lx  = 512.0;
+Ly  = 512.0;
 Lz  = 20.0;
-nx  = 51;
-ny  = 51;
-nz  = 5;
+nx  = 128;
+ny  = 128;
+nz  = 1;
 well_r= 0.125;          %% well radius
-TT    = 600;            %% days
-nstep = 600;            %% number of time steps for pressure-velocity system
-nprint= 25;             %% Number of impressions
-ndata = 300;             %% Number of impressions of data
-ndt   = 15;
+TT    = 240.0;          %% days
+nstep = 480;            %% number of time steps for pressure-velocity system
+nprint= 50;             %% Number of impressions
+ndata = 480;            %% Number of impressions of data
+ndt   = 10;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
-[ndata njump] = ajusteImpress(ndata,nstep);
+[ndata njump]    = ajusteImpress(ndata,nstep);
 PRbhp = 0.0;            %% production well pressure
-vinj  = 0.5e3/day;      %% Injection rate
+vinj  = 1.0e3/day;      %% Injection rate
 patm  = 1.0*atm;        %% Pressure at 0m cote
 depth = 1.0e03*meter;   %% depth until the top of reservoir
 rhoR  = 2.70e03*kilogram/meter^3;  %% mean density of overload rocks
 overburden= 00.0*atm;   %% Load (overburden)
-fatk  = milli() * darcy();      %% Factor to permeability
-phibeta = 0.146;
-phirho  = 0.23;
-permbeta= 9.1098e-14;
-permrho = 0.597;
+fatk    = milli() * darcy();      %% Factor to permeability
+phibeta = 0.125;
+phirho  = 0.275;
+permbeta= 6.5465e-14;
+permrho = 0.812408;
 Ebeta   = 1.0225e10;
 Erho    = 0.457;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,21 +125,21 @@ clear K
 %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if printa == 1 && heter == 1 
     plot_rock(reverseKlog(rock.perm(:,1),permbeta,permrho),G,'Yn','$\kappa_x$',color,lim,vw,1);
-    base=['../figuras/permKx_' nome];
+    base=['../../figuras/permKx_' nome];
     set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r600', base);
+    print('-depsc','-r100', base);
     plot_rock(reverseKlog(rock.perm(:,2),permbeta,permrho),G,'Yn','$\kappa_y$',color,lim,vw,2);
-    base=['../figuras/permKy_' nome];
+    base=['../../figuras/permKy_' nome];
     set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r600', base);
+    print('-depsc','-r100', base);
     plot_rock(reverseKlog(rock.perm(:,3),permbeta,permrho),G,'Yn','$\kappa_z$',color,lim,vw,3);
-    base=['../figuras/permKz_' nome];
+    base=['../../figuras/permKz_' nome];
     set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r600', base);
+    print('-depsc','-r100', base);
     plot_rock_poro(rock.poro,G,'Yn',1,1,'$\phi$',color,[0 0],vw,14);
-    base=['../figuras/phi_' nome];
+    base=['../../figuras/phi_' nome];
     set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r600', base);
+    print('-depsc','-r100', base);
     pause(et); clf; close all
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -272,7 +271,7 @@ t = 0;
 % hwb = waitbar(t,'Simulation ..');
 for n=1:nstep
     t = t + dt(n);
-    fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
+%     fprintf(1,'Time step %d/%d <=> %5.4f days\n',n,nstep,(t/day));
     sol  = incompTPFA(sol, G, hT, fluid, 'wells', W, 'verbose', verb);
     sol  = explicitTransport(sol, G, dt(n), rock, fluid,...
         'wells', W, 'verbose', verb, 'dt_factor', 0.75);
@@ -334,15 +333,15 @@ if printa == 1
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Computing WI %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-qprod= vinj;
-Ky = mean(rock.perm(:,2));
-Kx = mean(rock.perm(:,1));
-Delta_x = sqrt(dx*dy);
-Ke = sqrt(Kx*Ky);
-re = 0.28*(sqrt(sqrt(Ky/Kx)*dx^2 + sqrt(Kx/Ky)*dy^2)/((Ky/Kx)^(1/4) + (Kx/Ky)^(1/4)));
-%re = Delta_x*exp(-pi/2);
-WI = ((2*pi*Ke*dz)/(log(re/well_r)));
-W(1).WI(1);
+% qprod= vinj;
+% Ky = mean(rock.perm(:,2));
+% Kx = mean(rock.perm(:,1));
+% Delta_x = sqrt(dx*dy);
+% Ke = sqrt(Kx*Ky);
+% re = 0.28*(sqrt(sqrt(Ky/Kx)*dx^2 + sqrt(Kx/Ky)*dy^2)/((Ky/Kx)^(1/4) + (Kx/Ky)^(1/4)));
+% %re = Delta_x*exp(-pi/2);
+% WI = ((2*pi*Ke*dz)/(log(re/well_r)));
+% W(1).WI(1);
 %clear all
 %% Plot production curves
 % First we plot the saturation in the perforated cell and the corresponding

@@ -1,27 +1,29 @@
 clear;
 close all
-loc=300;
-jump=8;
+loc=100;
+jump=15;
 N=00;
-B=250.;
+B=450.;
 A=0;
 % 1 m3 = 6.2898105697751 bbl
 fat = 6.2898105697751;
+fat = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
 Nch_fim = 0;
 Nchains = Nch_fim - Nch_ini + 1;
-Nini = repmat(0, 1, Nchains);
-Nfim = [1999];
+Nini = 0; %repmat(0, 1, Nchains);
+Nfim = [179];
 Nfim = Nfim(Nch_ini+1:Nch_fim+1);
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
-base_name = 'prod_TwoPhase3D_KC_MC'
-base_name = 'prod_TwoPhase3D_onlyPerm_MC'
-hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
-hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
-homf = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
-dados=load([hom 'MonteCarlo/twophaseflow/exp/prod/prod_referencia_0.dat']);
+base_name = 'prod_TwoPhase2D_KC_MC'
+% base_name = 'prod_TwoPhase3D_onlyPerm_MC'
+% hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+% hom  = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
+hom  = '~/MCMC_parallelchains/';
+homf = '~/MCMC_parallelchains/figuras/';
+dados=load([hom 'twophaseflow/exp/prod/prod_referencia_0.dat']);
 %dados=load(['~/MCMC_parallelchains/twophaseflow/exp/prod/prod_referencia_0.dat']);
 ref=dados;
 home = [hom 'MonteCarlo/twophaseflow/exp/prod/'];
@@ -65,16 +67,16 @@ hold(axes1,'all');
 dados = dmedio;
 errorbar(dados(1:jump:end,1),dados(1:jump:end,2),erro(1:jump:end,2),...
     'Parent',axes1,'Color',[0.85 0.33 0.10],'MarkerSize',6,'Marker','o',...
-    'LineStyle','none','DisplayName','mean 1','LineWidth',0.5)
+    'LineStyle','none','DisplayName','data 1','LineWidth',0.5)
 errorbar(dados(1:jump:end,1),dados(1:jump:end,3),erro(1:jump:end,3),...
     'Parent',axes1,'Color',[0.07 0.62 1],'MarkerSize',6,'Marker','^',...
-    'LineStyle','none','DisplayName','mean 2','LineWidth',0.5)
+    'LineStyle','none','DisplayName','data 2','LineWidth',0.5)
 errorbar(dados(1:jump:end,1),dados(1:jump:end,4),erro(1:jump:end,4),...
     'Parent',axes1,'Color',[0.93 0.69 0.13],'MarkerSize',6,'Marker','s',...
-    'LineStyle','none','DisplayName','mean 3','LineWidth',0.5)
+    'LineStyle','none','DisplayName','data 3','LineWidth',0.5)
 errorbar(dados(1:jump:end,1),dados(1:jump:end,5),erro(1:jump:end,4),...
     'Parent',axes1,'Color',[0 0 0],'MarkerSize',6,'Marker','v',...
-    'LineStyle','none','DisplayName','mean 4','LineWidth',0.5)
+    'LineStyle','none','DisplayName','data 4','LineWidth',0.5)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dados=ref;
 plot(dados(2:end,1),dados(2:end,2),'Parent',axes1,'Color',[0.85 0.33 0.10],...
@@ -148,7 +150,7 @@ end
 clf; close all
 figure2 = figure(2);
 
-fat = 10^(-5);
+%fat = 10^(-5);
 prod(:,2) = fat * prod(:,2);
 prodref(:,2) = fat * prodref(:,2);
 producao(:,2,:) = fat * producao(:,2,:);

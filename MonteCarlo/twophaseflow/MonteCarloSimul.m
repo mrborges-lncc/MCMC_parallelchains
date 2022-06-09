@@ -3,12 +3,12 @@ close all
 
 delete(gcp('nocreate'))
 
-ini = 0;
-fim = 1;
+ini = 120;
+fim = 999;
 N   = fim - ini + 1;
-nome = 'TwoPhase3D_KC_MC';
+nome = 'TwoPhase2D_KC_MC';
 
-home = '~/fields/campos/';
+home = './fields/';
 
 currentDir = home;
 finpe   = [currentDir 'perm_'];

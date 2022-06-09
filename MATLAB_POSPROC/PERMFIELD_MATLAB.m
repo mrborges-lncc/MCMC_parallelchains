@@ -15,24 +15,24 @@ startup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Lx  = 500.0;
-Ly  = 500.0;
+Lx  = 512.0;
+Ly  = 512.0;
 Lz  = 20.0;
-nx  = 100;
-ny  = 100;
+nx  = 128;
+ny  = 128;
 nz  = 1;
 depth = 1e3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-ini = 42;
-fim = 44;
+ini = 20;
+fim = 39;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rho = 0.597;
-beta= 9.1098e-14;      %% Factor to permeability
+rho = 0.817651;
+beta= 6.6707e-14;      %% Factor to permeability
 nome= 'permREF';
 variav = '\kappa';
 %
-rho = 0.23;
-beta= 0.146;
+rho = 0.125;
+beta= 0.275;
 nome= 'phiREF';
 variav = '\phi';
 %
@@ -41,11 +41,11 @@ variav = '\phi';
 % nome   = 'EREF';
 % variav = '\mathsf{E}';
 
-homef = '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
+homef = '../figuras/';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/select_fields/*.dat'}, 'LOAD DATA');
-[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
-%[FILENAME, PATHNAME] =uigetfile({'~/fields/campos/*.dat'}, 'LOAD DATA');
+%[FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
+[FILENAME, PATHNAME] =uigetfile({'../MonteCarlo/twophaseflow/fields/*.dat'}, 'LOAD DATA');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);

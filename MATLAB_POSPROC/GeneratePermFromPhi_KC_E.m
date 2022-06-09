@@ -15,17 +15,17 @@ startup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Lx  = 510.0;
-Ly  = 510.0;
+Lx  = 512.0;
+Ly  = 512.0;
 Lz  = 20.0;
-nx  = 51;
-ny  = 51;
-nz  = 5;
+nx  = 128;
+ny  = 128;
+nz  = 1;
 depth = 1e3;
 ini = 0;
-fim = 0;
+fim = 999;
 prt = 1; % print for simulation
-ckc = 2.11e-11;
+ckc = 2.5e-11;
 a   = 7.12;
 E0  = 5e10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,8 +33,8 @@ nome= 'permKC';
 permrho = 0.597;
 permbeta= 9.1098e-14;      %% Factor to permeability
 permvar = '\kappa';
-phirho  = 0.23;
-phibeta = 0.146;
+phirho  = 0.275;
+phibeta = 0.125;
 phivar  = '\phi';
 Erho    = 0.457;
 Ebeta   = 1.0225e10;
@@ -53,6 +53,7 @@ G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/MonteCarlo/twophaseflow/fields';
 home = '/media/mrborges/HD-E1/fields/campos/';
+home = '~/MCMC_parallelchains/MonteCarlo/twophaseflow/fields/';
 permname = 'perm';
 phiname  = 'phi';
 Ename    = 'E';
@@ -76,7 +77,7 @@ catch %#ok<CTCH>
 end
 verbose = true;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-nD = '3D';
+nD = '2D';
 color = 'none';
 %color = 'k';
 vw  = [-35 20];

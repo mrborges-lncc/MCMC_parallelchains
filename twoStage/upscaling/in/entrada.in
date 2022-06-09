@@ -1,6 +1,6 @@
          0
          0         0
-../../../simuladorRigido/exp/fields/perm_amostra_                                                                
+../../twophaseflow/exp/fields/perm_amostra_                                                                
    1.00000000       1.00000000    
-../../simuladorRigido/exp/fields/perm_amostra_                                                           
-        50        50
+../twophaseflows/exp/fields/perm_amostra_                                                           
+        64        64

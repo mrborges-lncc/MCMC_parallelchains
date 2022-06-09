@@ -15,12 +15,12 @@ startup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Lx  = 510.0;
-Ly  = 510.0;
-Lz  = 20.0;
-nx  = 51;
-ny  = 51;
-nz  = 5;
+Lx  = 512.0;
+Ly  = 512.0;
+Lz  = 32.0;
+nx  = 64;
+ny  = 64;
+nz  = 8;
 depth = 1e3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nome= 'permKC';
@@ -34,7 +34,7 @@ Ebeta   = 1.0225e10;
 Erho    = 0.457;
 E0      = 1e11;
 Evar    = '\mathsf{E}';
-home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
+home = '~/MCMC_parallelchains/';
 homef= '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 %home = '~/MCMC_parallelchains/';
 %homef= '~/MCMC_parallelchains/figuras/';

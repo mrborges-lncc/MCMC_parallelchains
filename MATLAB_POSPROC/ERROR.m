@@ -2,19 +2,19 @@ clear;
 close all;
 repet = 10;
 ini = 0;
-fim = 5;
+fim = 1;
 N   = 0;
 %
 M   = fim-ini+1;
-home= '/home/mrborges/MCMCrw/twoStage/';
-home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
+% home= '/home/mrborges/MCMCrw/twoStage/';
+% home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/';
 % home= '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/twoStage/';
-% home= '../twoStage/';
+home= '../twoStage/';
 %
-homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
+% homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 % homef='~/MCMC_parallelchains/';
-% homef='../';
-base_name = 'TwoPhase3D_RW_RK';
+homef='../';
+base_name = 'TwoPhase2D_RW_RK';
 % base_name = 'TwoPhase3D_onlyPerm_RW_RK';
 nome_extra = '';
 nchain= 1;

@@ -10,21 +10,21 @@ close all;
 tstart =  tic;
 
 addpath ~/Dropbox/mrst_borges_tools/
-addpath ~/Dropbox/mrst-2021a/
+addpath ~/Dropbox/mrst-2022a/
 addpath ../../MATLAB_POSPROC/
 startup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Lx  = 510.0;
-Ly  = 510.0;
-Lz  = 20.0;
-nx  = 51;
-ny  = 51;
-nz  = 5;
+Lx  = 512.0;
+Ly  = 512.0;
+Lz  = 32.0;
+nx  = 64;
+ny  = 64;
+nz  = 8;
 depth = 1e3;
 ini = 0;
-fim = 1999;
+fim = 0;
 prt = 1; % print for simulation
 printa = 10;
 Ss  = 68798.072;

@@ -2,6 +2,7 @@
 %% Metropolis algorithm
 %% Author...: Marcio Borges
 %% Date.....: 01/12/2021
+%% Revision.: 06/06/2022
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
 clear all

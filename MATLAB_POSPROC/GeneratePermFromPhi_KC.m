@@ -10,20 +10,20 @@ close all;
 tstart =  tic;
 
 addpath ~/Dropbox/mrst_borges_tools/
-addpath ~/Dropbox/mrst-2021a/
+addpath ~/Dropbox/mrst-2022a/
 startup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Lx  = 510.0;
-Ly  = 510.0;
+Lx  = 512.0;
+Ly  = 512.0;
 Lz  = 20.0;
-nx  = 51;
-ny  = 51;
-nz  = 5;
+nx  = 128;
+ny  = 128;
+nz  = 1;
 depth = 1e3;
 ini = 0;
-fim = 0;
+fim = 999;
 prt = 1; % print for simulation
 ckc = 2.5e-11;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,7 +46,7 @@ G.nodes.coords(:, 1) = G.nodes.coords(:, 1)*meter;
 G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-home = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/MonteCarlo/twophaseflow/fields';
+home = '~/MCMC_parallelchains/MonteCarlo/twophaseflow/fields';
 permname = 'perm';
 phiname  = 'phi';
 [FILENAME, PATHNAME] =uigetfile({'~/fields/*.dat'}, 'LOAD DATA PORO FIELD');
@@ -69,7 +69,7 @@ catch %#ok<CTCH>
 end
 verbose = true;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-nD = '3D';
+nD = '2D';
 color = 'none';
 %color = 'k';
 vw  = [-35 20];
@@ -105,7 +105,7 @@ for n = ini:fim
     savefields(Lx,Ly,Lz,nx,ny,nz,1,reverseKlog(perm,beta,rho),...
         reverseKlog(phi,phibeta,phirho),n,home,permname,phiname,prt);
     MPHI = [MPHI; phi];
-    MPER = [MPER; mk];
+    MPER = [MPER; perm];
 end
 pbeta = 1.0; % pbeta = permbeta;
 plotKC(phi,perm/pbeta,0)

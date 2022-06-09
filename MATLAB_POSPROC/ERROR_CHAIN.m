@@ -1,9 +1,11 @@
 clear;
 close all
-base_name = 'TwoPhase3D_RW_RK1';
+base_name = 'TwoPhase2D_RW_RK0';
 %file_name = ['../MCMC/error/erros_' base_name '.dat']
 file_name = ['~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/error/erros_' base_name '.dat']
 file_name2= ['~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/out/nchain_' base_name '.dat']
+file_name = ['~/MCMC_parallelchains/twoStage/error/erros_' base_name '.dat']
+file_name2= ['~/MCMC_parallelchains/twoStage/out/nchain_' base_name '.dat']
 dados =load(file_name);
 dados2=load(file_name2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
