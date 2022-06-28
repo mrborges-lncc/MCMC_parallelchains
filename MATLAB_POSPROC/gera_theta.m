@@ -1,8 +1,8 @@
 clear;
-N=16384;
+N=8000;
 %A=randn(N,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-line_file = '../gera_KL/FORTRAN_KL3D/out/theta.dat';
+line_file = '/prj/prjmurad/mrborges/Dropbox/KLE/out/theta.dat';
 
 for j=1:1
 %    line_file = '../forecast/3Dfields/thetasMC/thetaMC_';

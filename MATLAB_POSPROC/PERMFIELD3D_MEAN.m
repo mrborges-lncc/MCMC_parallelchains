@@ -19,7 +19,7 @@ imprK=10; % se igual a 1 gera o grafico de K
 stat=10;  % se igual a 1 gera os histogramas das vas.
 tipo=1 % 1 se perm e 2 se phi
 permfigs=1; % se igual a 1 gera os graficos 2D
-TIPOINPUT = 1; % ==1 entrada por arquivo
+TIPOINPUT = 10; % ==1 entrada por arquivo
 TIPOINPUT2 = 10; % ==1 entrada por arquivo
 filme=10;
 mi=-3;
@@ -49,7 +49,6 @@ end
 %**************************************************************************
 %** ENTRADA DE DADOS DO CONDICIONAMENTO ***********************************
 % vet(n,i) coordenada i da posicao do dado condicionado n
-inp = load('../gera_KL/MATLAB/input_cond.dat');
 %
 if(TIPOINPUT2 == 1)
     name = '../simul_comp/exp/input_cond.in'
@@ -68,6 +67,7 @@ if(TIPOINPUT2 == 1)
     vet2 = data(:,1:2)
 end
 if(TIPOINPUT == 1)
+    inp = load('../gera_KL/MATLAB/input_cond.dat');
     vet = inp(:,1:2)
     dados=inp(:,3);
     clear inp
@@ -85,10 +85,10 @@ disp(' LOADING FIELD ');
 % [FILENAME, PATHNAME] =uigetfile('../simul_comp/exp/fields/*.dat', 'LOAD DATA');
 % [FILENAME, PATHNAME] =uigetfile('../simuladorBTMM/exp/fields/*.dat', 'LOAD DATA');
 % [FILENAME, PATHNAME] =uigetfile('../twoStage/select_fields/*.dat', 'LOAD DATA');
-% [FILENAME, PATHNAME] =uigetfile('../gera_KL/MATLAB/campos/*.dat', 'LOAD DATA');
-% line_file=sprintf('%s%s', PATHNAME,FILENAME);
-line_file='../forecast/3Dfields/fields/MC_0_0.dat'
-line_file='../forecast/FORTRAN_LBD3D/campos/MCMC_0_0.dat'
+[FILENAME, PATHNAME] =uigetfile('~/Dropbox/KLE/fields/*.dat', 'LOAD DATA');
+line_file=sprintf('%s%s', PATHNAME,FILENAME);
+% line_file='../forecast/3Dfields/fields/MC_0_0.dat'
+% line_file='../forecast/FORTRAN_LBD3D/campos/MCMC_0_0.dat'
 n=0;
 %
 % for i=size(line_file,2):-1:1

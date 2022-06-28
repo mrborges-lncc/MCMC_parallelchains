@@ -8,9 +8,9 @@ clear all;
 close all;
 
 tstart =  tic;
+addpath ../twophaseflow/mrst_borges_tools/
+addpath ../twophaseflow/mrst/
 
-addpath ~/Dropbox/mrst_borges_tools/
-addpath ~/Dropbox/mrst-2022a/
 startup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,7 +21,8 @@ Lz  = 40.0;
 nx  = 20;
 ny  = 20;
 nz  = 20;
-depth = 1e3;
+depth = 0e3;
+condit = true;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ini = 0;
 fim = 0;
@@ -55,14 +56,8 @@ while filem(k) ~= '_'
     k = k-1;
 end
 filen = filen(1:k);
-nini = int32(str2num(filem(k+1:end)))
-try
-   require incomp ad-mechanics
-catch %#ok<CTCH>
-   mrstModule add incomp ad-mechanics
-end
+nini = int32(str2num(filem(k+1:end)));
 verbose = true;
-
 nD = '3D';
 color = 'none';
 %color = 'k';
@@ -70,6 +65,11 @@ vw  = [-35 20];
 %vw  = [0 90];
 et = 3;
 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if condit
+    dados = load('~/Dropbox/KLE/in/input_cond.dat');
+    dados(:,3) = Lz - dados(:,3);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dx  = Lx/double(nx);
@@ -81,6 +81,30 @@ G.nodes.coords(:, 2) = G.nodes.coords(:, 2)*meter;
 G.nodes.coords(:, 1) = G.nodes.coords(:, 1)*meter;
 G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+dx2 = dx/2; dy2 = dy/2; dz2 = dz/2;
+cells = [];
+for j = 1 : size(dados,1)
+    v = dados(j,1:3);
+    for i = 1 : G.cells.num
+        c = G.cells.centroids(i,:);
+        if c(1)-dx2 <= v(1) && v(1) <= c(1)+dx2
+            if c(2)-dy2 <= v(2) && v(2) <= c(2)+dy2
+                if c(3)-dz2 <= v(3) && v(3) <= c(3)+dz2
+                    cells = [cells; i];
+                end
+            end
+        end
+    end
+end
+Ge = cell(size(dados,1),1);
+for j = 1 : size(dados,1)
+    c  = G.cells.centroids(cells(j),:);
+    Gb = cartGrid([1 1 1],[dx dy dz]);
+    Gb.nodes.coords(:, 3) = c(3) + Gb.nodes.coords(:, 3)-dx2;
+    Gb.nodes.coords(:, 2) = c(2) + Gb.nodes.coords(:, 2)-dy2;
+    Gb.nodes.coords(:, 1) = c(1) + Gb.nodes.coords(:, 1)-dz2;
+    Ge{j} = computeGeometry(Gb);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GEOLOGIC MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for n = ini:fim
@@ -104,19 +128,28 @@ for n = ini:fim
     %plot_rock(Y,G,'Yn','$Y$',color,lim,vw,1);
     plot_rock_poro(rock.perm(:,1),G,'Y',beta,rho,['$Y_{' variav '}$'],...
         color,lim,vw,2);
+    if condit
+        hold on
+        for j = 1 : size(dados,1)
+            plotGrid(Ge{j},'FaceColor','none','EdgeColor','k',...
+                'LineWidth',2);
+            fprintf('\nPoint (%3.2f, %3.2f, %3.2f) = %3.2f',...
+                dados(j,1:3),rock.perm(cells(j),1))
+        end
+    end
     base=[homef 'Y_' nome '_' snum];
     set(gcf,'PaperPositionMode','auto');
     print('-depsc','-r600', base);
-    pause(1); close all
-%     lim = [(mean(rock.perm(:,1)) - 0.0125*std(rock.perm(:,1)))...
-%         (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
-%     plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
-    plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],...
-        color,lim,vw,12);
-    base=[homef nome '_' snum];
-    set(gcf,'PaperPositionMode','auto');
-    print('-depsc','-r600', base);
-    pause(1); close all
+%     pause(1); close all
+% %     lim = [(mean(rock.perm(:,1)) - 0.0125*std(rock.perm(:,1)))...
+% %         (mean(rock.perm(:,1)) + 0.25*std(rock.perm(:,1)))];
+% %     plot_rock(rock.perm(:,1),G,'Yn',variav,color,lim,vw,2);
+%     plot_rock_poro(rock.perm(:,1),G,'Yn',beta,rho,['$' variav '$'],...
+%         color,lim,vw,12);
+%     base=[homef nome '_' snum];
+%     set(gcf,'PaperPositionMode','auto');
+%     print('-depsc','-r600', base);
+%     pause(1); close all
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
