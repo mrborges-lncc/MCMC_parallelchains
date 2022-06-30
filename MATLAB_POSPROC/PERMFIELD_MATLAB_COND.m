@@ -15,14 +15,14 @@ startup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GRID %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Lx  = 40.0;
-Ly  = 40.0;
-Lz  = 40.0;
+Lx  = 1.0;
+Ly  = 0.75;
+Lz  = 0.50;
 nx  = 20;
-ny  = 20;
-nz  = 20;
+ny  = 15;
+nz  = 10;
 depth = 0e3;
-condit = true;
+condit = false;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ini = 0;
 fim = 0;
@@ -47,7 +47,7 @@ homef = '../figuras/';
 %[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/twoStage/select_fields/*.dat'}, 'LOAD DATA');
 %[FILENAME, PATHNAME] =uigetfile({'~/MCMC_parallelchains/twophaseflow/exp/fields/*.dat'}, 'LOAD DATA');
 %[FILENAME, PATHNAME] =uigetfile({'../MonteCarlo/twophaseflow/fields/*.dat'}, 'LOAD DATA');
-[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/KLE/fields/*.dat'}, 'LOAD DATA');
+[FILENAME, PATHNAME] =uigetfile({'~/Dropbox/KLE/fields/sexp_*.dat'}, 'LOAD DATA');
 filen=sprintf('%s%s', PATHNAME,FILENAME);
 lf = length(filen);
 filem = filen(1:end-4);
@@ -76,34 +76,36 @@ dx  = Lx/double(nx);
 dy  = Ly/double(ny);
 dz  = Lz/double(nz);
 G   = cartGrid([nx ny nz],[Lx Ly Lz]*meter^3);
-G.nodes.coords(:, 3) = depth + G.nodes.coords(:, 3)*meter;
-G.nodes.coords(:, 2) = G.nodes.coords(:, 2)*meter;
-G.nodes.coords(:, 1) = G.nodes.coords(:, 1)*meter;
+G.nodes.coords(:, 3) = -G.nodes.coords(:, 3) + Lz;
+G.nodes.coords(:, 2) = G.nodes.coords(:, 2);
+G.nodes.coords(:, 1) = G.nodes.coords(:, 1);
 G   = computeGeometry(G);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dx2 = dx/2; dy2 = dy/2; dz2 = dz/2;
-cells = [];
-for j = 1 : size(dados,1)
-    v = dados(j,1:3);
-    for i = 1 : G.cells.num
-        c = G.cells.centroids(i,:);
-        if c(1)-dx2 <= v(1) && v(1) <= c(1)+dx2
-            if c(2)-dy2 <= v(2) && v(2) <= c(2)+dy2
-                if c(3)-dz2 <= v(3) && v(3) <= c(3)+dz2
-                    cells = [cells; i];
+if condit
+    cells = [];
+    for j = 1 : size(dados,1)
+        v = dados(j,1:3);
+        for i = 1 : G.cells.num
+            c = G.cells.centroids(i,:);
+            if c(1)-dx2 <= v(1) && v(1) <= c(1)+dx2
+                if c(2)-dy2 <= v(2) && v(2) <= c(2)+dy2
+                    if c(3)-dz2 <= v(3) && v(3) <= c(3)+dz2
+                        cells = [cells; i];
+                    end
                 end
             end
         end
     end
-end
-Ge = cell(size(dados,1),1);
-for j = 1 : size(dados,1)
-    c  = G.cells.centroids(cells(j),:);
-    Gb = cartGrid([1 1 1],[dx dy dz]);
-    Gb.nodes.coords(:, 3) = c(3) + Gb.nodes.coords(:, 3)-dx2;
-    Gb.nodes.coords(:, 2) = c(2) + Gb.nodes.coords(:, 2)-dy2;
-    Gb.nodes.coords(:, 1) = c(1) + Gb.nodes.coords(:, 1)-dz2;
-    Ge{j} = computeGeometry(Gb);
+    Ge = cell(size(dados,1),1);
+    for j = 1 : size(dados,1)
+        c  = G.cells.centroids(cells(j),:);
+        Gb = cartGrid([1 1 1],[dx dy dz]);
+        Gb.nodes.coords(:, 3) = c(3) + Gb.nodes.coords(:, 3)-dx2;
+        Gb.nodes.coords(:, 2) = c(2) + Gb.nodes.coords(:, 2)-dy2;
+        Gb.nodes.coords(:, 1) = c(1) + Gb.nodes.coords(:, 1)-dz2;
+        Ge{j} = computeGeometry(Gb);
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GEOLOGIC MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,7 +128,7 @@ for n = ini:fim
     %% figures %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     lim = [0 0];
     %plot_rock(Y,G,'Yn','$Y$',color,lim,vw,1);
-    plot_rock_poro(rock.perm(:,1),G,'Y',beta,rho,['$Y_{' variav '}$'],...
+    plot_rock_poroZinv(rock.perm(:,1),G,'Y',beta,rho,['$Y_{' variav '}$'],...
         color,lim,vw,2);
     if condit
         hold on
