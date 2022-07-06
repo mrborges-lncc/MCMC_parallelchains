@@ -562,7 +562,8 @@ END PROGRAM MAIN
 !
         INTEGER          :: NELEM
         INTEGER          :: ISTAT,IN_FILEA,IN_FILEV
-        INTEGER          :: I,J,K,NREC
+        INTEGER          :: I,J,K
+        INTEGER          :: NREC
         REAL             :: TIME,T_START,T_FINAL
         REAL,DIMENSION(2):: TARRAY
         CHARACTER(LEN=3) :: TFILE
@@ -571,6 +572,7 @@ END PROGRAM MAIN
 !
         NELEM = NX*NY*NZ
         ALLOCATE(V(NELEM * MKL))
+        INQUIRE(IOLENGTH=NREC)V
 !!!!! FILE VERIFICATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         TFILE = 'ERR'
         DO I=1,LEN(FILE_VET)
@@ -607,7 +609,6 @@ END PROGRAM MAIN
         END IF
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         IF(TFILE.EQ.'BIN')THEN
-           NREC = NELEM*MKL*4
            IN_FILEV = 326
            OPEN(UNIT=IN_FILEV,FILE=FILE_VET,STATUS='OLD', &
                 ACCESS='DIRECT',RECL=NREC,IOSTAT=ISTAT)
