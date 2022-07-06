@@ -868,7 +868,7 @@ END PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! PRINT FIELD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            CALL PRINT_OLD3D(XI,NAME)
-           CALL PRINT_UT(XI,NELEM,NAME)
+!           CALL PRINT_UT(XI,NELEM,NAME)
            CALL ETIME(TARRAY,T_FINAL)
            T_FINAL = TARRAY(1)
            TIME = T_FINAL-T_START

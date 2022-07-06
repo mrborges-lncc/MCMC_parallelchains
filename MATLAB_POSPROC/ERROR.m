@@ -1,6 +1,6 @@
 clear;
 close all;
-repet = 10;
+repet = 1;
 ini = 0;
 fim = 1;
 N   = 0;
@@ -85,7 +85,7 @@ for nf = 1:nvar + 1
     final = 0;
     for i=1:M
         cor    = [(M-i)/(M) 0 (i-1)/(M)];
-        cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
+%         cor    = [(i-1)/(M-1) (i-1)/(M-1) (i-1)/(M-1)];
         inicio = final+1;
         final  = inicio+tm(i+1)-1;
         dx     = data(inicio:final,1);

@@ -19,7 +19,7 @@ inputbox = 10; % if == 1 display a dialog box to input data
 %%% INPUT DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tStart = tic;
 home     = './fields/';
-homeT    = './out/';
+homeT    = '../MATLAB/out/';
 home_fig = './figuras/';
 homep    = './paraview/';
 %
@@ -42,27 +42,27 @@ else
     ntipo = 1; % 1 == exponential, 3 == square exponential %%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%% physical dimensions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    Lx = 36.0;
-    Ly = 36.0;
-    Lz = 50.0;
+    Lx = 512.0;
+    Ly = 512.0;
+    Lz = 20.0;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%% mesh for covariance matrix %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    nx = 20;
-    ny = 20;
-    nz = 35;
+    nx = 128;
+    ny = 128;
+    nz = 1;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%% Mesh for interpolation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     NX = 36;
     NY = 36;
     NZ = 50;
-    interpolacao = 1; % if == 1 the eigenvector are interpolated to this mesh
+    interpolacao = 10; % if == 1 the eigenvector are interpolated to this mesh
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    eta1  = 3.0;    % correlation length in the x direction
-    eta2  = 3.0;    % correlation length in the y direction
-    eta3  = 3.0;    % correlation length in the z direction
-    Nrand = 5000;   % total number of realizations
-    M     = 8000;   % number of terms used in the KL expansion. OBS: if == 0 it 
+    eta1  = 32.0;    % correlation length in the x direction
+    eta2  = 32.0;    % correlation length in the y direction
+    eta3  = 16.0;    % correlation length in the z direction
+    Nrand = 50;   % total number of realizations
+    M     = 0;   % number of terms used in the KL expansion. OBS: if == 0 it 
                     % uses the maximum number of terms (nx^2 x ny^2 x nz^2)
     TIPOINPUT = 1;  % if == 1 reads the conditioned points from the file
                     % indicated in "file_input_cond"
@@ -76,7 +76,7 @@ end
 %% Variables Adjustment %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 cutoff   = Lx/double(nx); % cutoff used when ntipo == 2
 alpha    = 1.0;           % KEEP == 1
-tipo_prt = 0;             % if == 1 print the fields in the LNCC format,
+tipo_prt = 1;             % if == 1 print the fields in the LNCC format,
                           % if == 0 print in the UTDallas simulator format
                           % if == 3 print binary
                           % otherwise print both formats
