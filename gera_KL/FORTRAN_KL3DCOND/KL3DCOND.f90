@@ -56,10 +56,9 @@ PROGRAM MAIN
   INTEGER, ALLOCATABLE :: SEED(:)
   REAL(4), EXTERNAL    :: POWERLAW,EXPONENTIAL
   REAL                 :: TIME,TSTART,TFINAL
-  REAL, DIMENSION(2)   :: TARRAY
 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  CALL ETIME(TARRAY,TSTART)
+  CALL CPU_TIME(TSTART)
   ERROR_READ = 0
 ! READ INPUT DATA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   CALL READ_DATA(ERROR_READ)
@@ -112,7 +111,6 @@ PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! RANDOM FIELDS GENERATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  WRITE(*,*)'LOADING EINGENPAIRS'
 !
   CALL LOAD_MM()
 !
@@ -123,13 +121,12 @@ PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! RANDOM CONDITIONING AND GENERATION !!!!!!!!!!!!!!!!!!!!
-  WRITE(*,*)'CONSTRUCTING       '
 !
   CALL KLCOND3D()
 !
-  CALL ETIME(TARRAY,TFINAL)
+  CALL CPU_TIME(TFINAL)
   TIME = TFINAL - TSTART
-  WRITE(*,331)TIME,TARRAY(1),TARRAY(2)
+  WRITE(*,331)TIME
 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -140,9 +137,7 @@ PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   NERROR = 1
 !
-331 FORMAT('TIME TO GENERATE        (s) =',F8.2,/,&
-           'USER TIME               (s) =',F8.2,/,&
-           'SYSTEM TIME             (s) =',F8.2,/)
+331 FORMAT('TOTAL TIME TO GENERATE  (seconds) =',F8.2)
 !
 END PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -570,7 +565,6 @@ END PROGRAM MAIN
         INTEGER          :: I,J,K
         INTEGER(8)       :: NREC=0 ! NREC < 2,147,483,647
         REAL             :: TIME,T_START,T_FINAL
-        REAL,DIMENSION(2):: TARRAY
         CHARACTER(LEN=3) :: TFILE
         LOGICAL          :: EFILE
         REAL(4),ALLOCATABLE,DIMENSION(:) :: V
@@ -592,8 +586,7 @@ END PROGRAM MAIN
            END IF
         END DO
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        CALL ETIME(TARRAY,T_START)
-        T_START = TARRAY(1)
+        CALL CPU_TIME(T_START)
 !!!!! ABERTURA DOS ARQUIVOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         IF(TFILE.EQ.'ERR')THEN
            WRITE(*,*)'ERROR ON READING INPUT FILE: ',FILE_VET
@@ -633,14 +626,11 @@ END PROGRAM MAIN
            END DO
         END IF
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        CALL ETIME(TARRAY,T_FINAL)
-        T_FINAL = TARRAY(1)
+        CALL CPU_TIME(T_FINAL)
         TIME = T_FINAL-T_START
-        WRITE(*,334)TIME,TARRAY(1),TARRAY(2)
+        WRITE(*,334)TIME
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-334     FORMAT('TIME TO LOAD AUT (s) =',F12.2,/,&
-             'USER TIME        (s) =',F12.2,/,&
-             'SYSTEM TIME      (s) =',F12.2,/)
+334     FORMAT('TIME TO LOAD AUT (seconds)     =',F8.2)
 111     FORMAT(e25.8)
 112     FORMAT(40000e15.7)
 !
@@ -657,7 +647,6 @@ END PROGRAM MAIN
         INTEGER          :: I,J,K
         INTEGER(8)       :: NREC=0
         REAL             :: TIME,T_START,T_FINAL
-        REAL,DIMENSION(2):: TARRAY
         CHARACTER(LEN=3) :: TFILE
         LOGICAL          :: EFILE
         REAL(4),ALLOCATABLE,DIMENSION(:) :: V,VU
@@ -678,8 +667,7 @@ END PROGRAM MAIN
            END IF
         END DO
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        CALL ETIME(TARRAY,T_START)
-        T_START = TARRAY(1)
+        CALL CPU_TIME(T_START)
 !!!!! ABERTURA DOS ARQUIVOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         IF(TFILE.EQ.'ERR')THEN
            WRITE(*,*)'ERROR ON READING INPUT FILE: ',FILE_MM
@@ -734,14 +722,11 @@ END PROGRAM MAIN
         ENDDO
         CLOSE(IN_FILEV)        
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        CALL ETIME(TARRAY,T_FINAL)
-        T_FINAL = TARRAY(1)
+        CALL CPU_TIME(T_FINAL)
         TIME = T_FINAL-T_START
-        WRITE(*,334)TIME,TARRAY(1),TARRAY(2)
+        WRITE(*,334)TIME
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-334     FORMAT('TIME TO LOAD MMatrix (s) =',F12.2,/,&
-             'USER TIME            (s) =',F12.2,/,&
-             'SYSTEM TIME          (s) =',F12.2,/)
+334     FORMAT('TIME TO LOAD MMatrix (seconds) =',F8.2)
 111     FORMAT(e25.8)
 112     FORMAT(40000e15.7)
 !
@@ -769,7 +754,6 @@ END PROGRAM MAIN
         CHARACTER(LEN=4)   :: EXT
         CHARACTER(LEN=5)   :: C
         REAL               :: TIME,T_START,T_FINAL
-        REAL, DIMENSION(2) :: TARRAY
         REAL(4), EXTERNAL  :: MAIOR,MENOR
         REAL(4), EXTERNAL  :: VMEAN,VAR,VARIANCIA
         REAL(4), EXTERNAL  :: VMEAN3D,VAR3D
@@ -778,7 +762,6 @@ END PROGRAM MAIN
         REAL(4)            :: WT
         INTEGER            :: ISTAT,IN_FILE,NELEM
 !
-!        EXTERNAL :: ETIME
 ! SET VARIABLES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
         SIG2 = SIG * SIG
@@ -801,8 +784,7 @@ END PROGRAM MAIN
 !
         DO M=INIF,NFILES+INIF
 !
-           CALL ETIME(TARRAY,T_START)
-           T_START = TARRAY(1)
+           CALL CPU_TIME(T_START)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! GERACAO DA VA GAUSSIANA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            IF(NPROPOSAL.EQ.0)THEN
@@ -869,15 +851,12 @@ END PROGRAM MAIN
 ! PRINT FIELD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            CALL PRINT_OLD3D(XI,NAME)
 !           CALL PRINT_UT(XI,NELEM,NAME)
-           CALL ETIME(TARRAY,T_FINAL)
-           T_FINAL = TARRAY(1)
+           CALL CPU_TIME(T_FINAL)
            TIME = T_FINAL-T_START
-           WRITE(*,333)TIME,TARRAY(1),TARRAY(2)
+           WRITE(*,333)TIME
         ENDDO
 !
-333     FORMAT('TIME TO GENERATE (s) =',F12.2,/,&
-               'USER TIME        (s) =',F12.2,/,&
-               'SYSTEM TIME      (s) =',F12.2,/)
+333     FORMAT('TIME TO GENERATE SAMPLE (seconds) =',F8.2)
 111     FORMAT('NAME OF OUTPUT FILE',I5,': ',A)
 113     FORMAT(I5)
 !
