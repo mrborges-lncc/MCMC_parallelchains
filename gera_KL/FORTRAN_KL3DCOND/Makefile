@@ -26,7 +26,7 @@ OSTYPE    = $(shell uname)
 
 # define standard Fortran90 compiler
 FC = ifort
-FC = gfortran
+#FC = gfortran
 LD = $(FC)
 # define libs
 #BLAS      = -L/home/mrborges/LAPACK/blas_LINUX
