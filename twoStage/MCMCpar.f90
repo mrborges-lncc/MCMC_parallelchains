@@ -3332,9 +3332,11 @@ SUBROUTINE SIMULADOR_C(NK)
   END IF
 !
   IF(NSIMUL.EQ.8)THEN
-     COMMAND='cd ./twophaseflow/; matlab -nodisplay -nosplash -nodesktop -r "Simulator('
-     COMMAND=TRIM(COMMAND)//TRIM(ADJUSTL(NUMB))
-     COMMAND=TRIM(COMMAND)// ('); exit;"  > output')//TRIM(ADJUSTL(NUMB))//('.out')
+     COMMAND='cd ./tracer/exp'
+     COMMAND=TRIM(COMMAND)//TRIM(ADJUSTL(NUMB))//';'
+     COMMAND=TRIM(COMMAND)// ('./Ex_T2P.sh > output_')//TRIM(ADJUSTL(NUMB))//('.out')
+     write(*,*)COMMAND
+     stop 123
   END IF
 !
   WRITE(*,200)NK,COMMAND
@@ -3573,9 +3575,10 @@ SUBROUTINE SIMULADOR_F(NK)
   END IF
 !
   IF(NSIMUL.EQ.8)THEN
-     COMMAND='cd ../twophaseflow/; matlab -nodisplay -nosplash -nodesktop -r "Simulator('
-     COMMAND=TRIM(COMMAND)//TRIM(ADJUSTL(NUMB))
-     COMMAND=TRIM(COMMAND)// ('); exit;"  > output')//TRIM(ADJUSTL(NUMB))//('.out')
+     COMMAND='cd ../tracer/exp'
+     COMMAND=TRIM(COMMAND)//TRIM(ADJUSTL(NUMB))//';'
+     COMMAND=TRIM(COMMAND)// (' ./Ex_T2P.sh > output_')//TRIM(ADJUSTL(NUMB))//('.out')
+     write(*,*)COMMAND
   END IF
 !
   
