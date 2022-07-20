@@ -13,7 +13,7 @@ home= '../twoStage/';
 %
 % homef='~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
 % homef='~/MCMC_parallelchains/';
-homef='../';
+homef='../figuras/';
 base_name = 'TwoPhase2D_RW_RK';
 % base_name = 'TwoPhase3D_onlyPerm_RW_RK';
 nome_extra = '';
@@ -130,7 +130,7 @@ for nf = 1:nvar + 1
     ylim([my0(nf) my(nf)]);
     xlim([0 N]);
     set(gcf,'PaperPositionMode','manual','PaperPosition',[0.25 0.25 2.25*razao 3]);
-    base=[homef 'error' num2str(nf-1,'%d') '_' base_name nome_extra]
+    base=[homef 'error'  nome_extra '_' base_name num2str(nf-1,'%d')]
     print('-depsc','-r300',base);
     pause(1); clf; close all;
 end
