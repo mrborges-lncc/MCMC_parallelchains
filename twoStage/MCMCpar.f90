@@ -5196,7 +5196,7 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
   USE VARIAVEIS, ONLY:  GERATIPO,THETAN,CONT,VETCONT
   USE VARIAVEIS, ONLY:  CONTADORC,NFREQ,JUMP,VARPROP
 !
-  REAL                 :: XEPS,XCS,TOL
+  REAL                 :: XEPS,XCS,TOL, a
   INTEGER              :: K,I,N,DIM,NK,DESTART
   INTEGER              :: IERROR,TAG,NPROC
   REAL,DIMENSION(DIM)  :: XVET
@@ -5216,7 +5216,7 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
   XEPS   = GAMMA_DREAM_METHOD(XEPS,&
        CONTADORC,NFREQ(K),VARPROP(K))
   IERROR = 0
-  XCS    = SQRT(1.0E-03)
+  XCS    = SQRT(1.0E-05)
   XVET   = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -5229,8 +5229,7 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
      DO I=1,DIM
         XVET(I) = RANDOM_NORMAL()*XCS
      END DO
-     THETAN(K,1:DIM) = (SQRT(1.0 - 2*XEPS*XEPS))*&
-          MATDE(1:DIM,NK+1) + &
+     THETAN(K,1:DIM) =  MATDE(1:DIM,NK+1) + &
           XEPS*(MATDE(1:DIM,R(1))-MATDE(1:DIM,R(2)))+XVET
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      CALL GERA_AMTHETA(MKL(K),GERATIPO(K),K,NK)
@@ -5295,7 +5294,7 @@ REAL FUNCTION GAMMA_DREAM_METHOD(SIGK,CT,NFREQ,VP)
 !
   !  CALL RANDOM_SEED()
   AUX = SIGK
-  IF(CT.LE.20) AUX = AUX*2.0
+!  IF(CT.LE.5) AUX = AUX*2.0
 !
   IF(VP.EQ.1)THEN
      TOL   = (5.0D-01)*SIGK
