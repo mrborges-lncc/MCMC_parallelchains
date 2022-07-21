@@ -5216,7 +5216,7 @@ SUBROUTINE DE_METHOD(K,NK,NPROC,DIM)
   XEPS   = GAMMA_DREAM_METHOD(XEPS,&
        CONTADORC,NFREQ(K),VARPROP(K))
   IERROR = 0
-  XCS    = SQRT(1.0E-04)
+  XCS    = SQRT(1.0E-05)
   XVET   = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -5294,7 +5294,7 @@ REAL FUNCTION GAMMA_DREAM_METHOD(SIGK,CT,NFREQ,VP)
 !
   !  CALL RANDOM_SEED()
   AUX = SIGK
-  IF(CT.LE.5) AUX = AUX*2.0
+!  IF(CT.LE.5) AUX = AUX*2.0
 !
   IF(VP.EQ.1)THEN
      TOL   = (5.0D-01)*SIGK
