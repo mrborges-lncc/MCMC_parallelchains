@@ -2,7 +2,7 @@ clear;
 close all;
 repet = 1;
 ini = 0;
-fim = 7;
+fim = 3;
 N   = 0;
 %
 M   = fim-ini+1;
