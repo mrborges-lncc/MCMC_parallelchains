@@ -67,9 +67,6 @@ PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! MEMORY ALLOCATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   NUM_ELEM = NX*NY*NZ
-  ALLOCATE(X(0:NX))
-  ALLOCATE(Y(0:NY))
-  ALLOCATE(Z(0:NZ))
   ALLOCATE(AVAL(MKL))
   ALLOCATE(AVET(NUM_ELEM,MKL))
   ALLOCATE(MU(MKL))
@@ -80,9 +77,6 @@ PROGRAM MAIN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! CLEAR VECTORS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  CALL CLEAR(X,NX)
-  CALL CLEAR(Y,NY)
-  CALL CLEAR(Z,NZ)
   CALL CLEAR(THETA,MKL-1)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! GETS THE SEEDS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -239,6 +233,10 @@ END PROGRAM MAIN
               VET(J,I)=VET(J,I)+1E-6
            ENDDO
         ENDDO
+!
+        IF(NCOND.EQ.0)THEN
+           NCOND = 1
+        END IF
 !
         NERROREAD = 1d0
         CLOSE(UNIT=IN_FILE)
@@ -546,7 +544,7 @@ END PROGRAM MAIN
       END FUNCTION VARIANCIA
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       SUBROUTINE LOAD_FIELDM(N)
-        USE VARIAVEIS, ONLY: FILE_FIELD,FIELDM
+        USE VARIAVEIS, ONLY: FILE_FIELD,FIELDM,BETA,RHO
         IMPLICIT NONE
         !
         INTEGER :: N,FID,ISTAT,I
@@ -565,6 +563,7 @@ END PROGRAM MAIN
         DO I=1,N
            READ(FID,*)FIELDM(I)
         ENDDO
+        FIELDM = BETA * EXP(RHO * FIELDM)
         CLOSE(FID)    
       END SUBROUTINE LOAD_FIELDM
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -752,17 +751,12 @@ END PROGRAM MAIN
         USE RANDOM
         IMPLICIT NONE
 !
-        INTEGER :: PNODE(1:NCOND),K,KK
-        INTEGER :: NRHS,LDA,LDB,INFO
-        INTEGER :: IPIV(NCOND,1)
-        REAL(4) :: B(NCOND,1),MAT(NCOND,NCOND)
         REAL(4) :: AUX1,VARR,AUXSQ
         REAL(4) :: AUXM,AUXV
-        REAL(4) :: XI(1:NX*NY*NZ)
         INTEGER :: I,J,M,MX,MY,MZ
         REAL(4) :: POSIX,POSIY,POSIZ
         REAL(4) :: AUX, SIG2,MEANK,VARK
-        REAL(4),ALLOCATABLE,DIMENSION(:) :: KPERM
+        REAL(4),ALLOCATABLE,DIMENSION(:) :: KPERM,XI
         INTEGER :: MAX,MIN,MIN2
         CHARACTER(LEN=256) :: NAME
         CHARACTER(LEN=4)   :: EXT
@@ -781,6 +775,7 @@ END PROGRAM MAIN
         SIG2 = SIG * SIG
         NELEM= NX * NY * NZ
         ALLOCATE(KPERM(NELEM))
+        ALLOCATE(XI(NELEM))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! IDENTIFICACAO DOS PONTOS NO VETOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -839,9 +834,7 @@ END PROGRAM MAIN
                  END DO
                  THETAUX(I) = MU(I) + AUX
               END DO
-              DO I = 1, MKL
-                 THETA(I) = THETAUX(I)
-              END DO
+              THETA = THETAUX
            END IF
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! SAVE THE NEW THETA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -854,9 +847,16 @@ END PROGRAM MAIN
               ENDDO
               XI(I)=AUX
            ENDDO
-           
-           KPERM = FIELDM + RHO * BETA * XI
-!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           DO I=1,NELEM
+              AUX = 0.125 * BETA * XI(I);
+              AUX1= FIELDM(I) + AUX
+              IF(AUX1.LE.0D0)THEN
+                 WRITE(*,*)'==>>',I,AUX,AUX1,FIELDM(I)
+                 AUX1 = FIELDM(I)
+              END IF
+              KPERM(I) = AUX1
+           END DO
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! NAME OF OUTPUT FILE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            WRITE(C,113)M
@@ -881,7 +881,7 @@ END PROGRAM MAIN
            DO I = 1,NELEM
               VARK = VARK + (KPERM(I) - MEANK)**2
            ENDDO
-           WRITE(*,444)MEANK,SQRT(VARK)
+           WRITE(*,444)MEANK,SQRT(VARK/DBLE(NELEM-1))
         ENDDO
         DEALLOCATE(KPERM)
 !
