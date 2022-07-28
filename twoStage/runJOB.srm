@@ -1,11 +1,10 @@
 #!/bin/bash
-#SBATCH --nodes=4                     #Numero de Nós
+#SBATCH --nodes=2                     #Numero de Nós
 #SBATCH --ntasks-per-node=24          #Numero de tarefas por Nó
-#SBATCH --ntasks=96                   #Numero total de tarefas MPI
-##SBATCH -p cpu_long                   #Fila (partition) a ser utilizada
+#SBATCH --ntasks=48                   #Numero total de tarefas MPI
+#SBATCH -p cpu_long                   #Fila (partition) a ser utilizada
 ##SBATCH -p cpu_small                  #Fila (partition) a ser utilizada
-#SBATCH -p cpu_small                  #Fila (partition) a ser utilizada
-#SBATCH --time=70:00:00               # altera o tempo limite
+#SBATCH --time=200:00:00               # altera o tempo limite
 #SBATCH -J JBorRW	              #Nome job
 #SBATCH --exclusive                   #Utilização exclusiva dos nós durante a execução do job
 
@@ -16,12 +15,8 @@ nodeset -e $SLURM_JOB_NODELIST
 cd $SLURM_SUBMIT_DIR
 
 #Configura os compiladores com intel MPI (PSXE 2016 ou 2017)
-module load gcc/9.3
-module load openmpi/gnu/4.1.1
+module load openmpi/gnu/3.1.4
 module load octave/6.2.0_gnu
-module load intel_psxe/2018
-module load openmpi/icc/4.0.4
-export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi.so
 
 #Configura o executavel
 EXEC=/scratch/simulreserv/marcio.borges/MCMCRW/twoStage/runMCMC

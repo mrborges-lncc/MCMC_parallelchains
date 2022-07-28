@@ -82,30 +82,6 @@ PROGRAM MAIN
   CALL CLEAR(Z,NZ)
   CALL CLEAR(THETA,MKL-1)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! CONSTRUCT VECTORS OF POSITIONS !!!!!!!!!!!!!!!!!!!!!!!!
-!$OMP PARALLEL PRIVATE(I)
-!$OMP DO
-  DO I=0,NX
-     X(I)=(I*FDX)+FDX*.5
-  ENDDO
-!$OMP END DO
-!$OMP END PARALLEL
-!
-!$OMP PARALLEL PRIVATE(J)
-!$OMP DO
-  DO J=0,NY
-     Y(J)=(J*FDY)+FDY*.5
-  ENDDO
-!$OMP END DO
-!$OMP END PARALLEL
-!$OMP PARALLEL PRIVATE(K)
-!$OMP DO
-  DO K=0,NZ
-     Z(K)=(K*FDZ)+FDZ*.5
-  ENDDO
-!$OMP END DO
-!$OMP END PARALLEL
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! GETS THE SEEDS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   CALL RANDOM_SEED(put=NSEED)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -251,6 +227,10 @@ END PROGRAM MAIN
               VET(J,I)=VET(J,I)+1E-6
            ENDDO
         ENDDO
+!
+        IF(NCOND.EQ.0)THEN
+           NCOND = 1
+        END IF
 !
         NERROREAD = 1d0
         CLOSE(UNIT=IN_FILE)
@@ -607,7 +587,7 @@ END PROGRAM MAIN
            ENDDO
            CLOSE(IN_FILEV)
         END IF
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         IF(TFILE.EQ.'BIN')THEN
            IN_FILEV = 326
            OPEN(UNIT=IN_FILEV,FILE=FILE_VET,STATUS='OLD', &
@@ -739,16 +719,12 @@ END PROGRAM MAIN
         USE RANDOM
         IMPLICIT NONE
 !
-        INTEGER :: PNODE(1:NCOND),K,KK
-        INTEGER :: NRHS,LDA,LDB,INFO
-        INTEGER :: IPIV(NCOND,1)
-        REAL(4) :: B(NCOND,1),MAT(NCOND,NCOND)
         REAL(4) :: AUX1,VARR,AUXSQ
         REAL(4) :: AUXM,AUXV
-        REAL(4) :: XI(1:NX*NY*NZ)
         INTEGER :: I,J,M,MX,MY,MZ
         REAL(4) :: POSIX,POSIY,POSIZ
-        REAL(4) :: AUX, SIG2
+        REAL(4) :: AUX, SIG2,MEANK,VARK
+        REAL(4),ALLOCATABLE,DIMENSION(:) :: XI
         INTEGER :: MAX,MIN,MIN2
         CHARACTER(LEN=256) :: NAME
         CHARACTER(LEN=4)   :: EXT
@@ -766,6 +742,7 @@ END PROGRAM MAIN
 !
         SIG2 = SIG * SIG
         NELEM= NX * NY * NZ
+        ALLOCATE(XI(NELEM))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! IDENTIFICACAO DOS PONTOS NO VETOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -824,9 +801,7 @@ END PROGRAM MAIN
                  END DO
                  THETAUX(I) = MU(I) + AUX
               END DO
-              DO I = 1, MKL
-                 THETA(I) = THETAUX(I)
-              END DO
+              THETA = THETAUX
            END IF
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! SAVE THE NEW THETA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -849,13 +824,26 @@ END PROGRAM MAIN
            WRITE(*,111)M,NAME(1:LEN_TRIM(NAME))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! PRINT FIELD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-           CALL PRINT_OLD3D(XI,NAME)
-!           CALL PRINT_UT(XI,NELEM,NAME)
+!           CALL PRINT_OLD3D(XI,NAME)
+           CALL PRINT_UT(XI,NELEM,NAME)
            CALL CPU_TIME(T_FINAL)
            TIME = T_FINAL-T_START
            WRITE(*,333)TIME
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           MEANK = 0.0
+           DO I = 1,NELEM
+              MEANK = MEANK + XI(I)
+           ENDDO
+           MEANK = MEANK/REAL(NELEM)
+           VARK = 0
+           DO I = 1,NELEM
+              VARK = VARK + (XI(I) - MEANK)**2
+           ENDDO
+           WRITE(*,444)MEANK,SQRT(VARK/DBLE(NELEM-1))
         ENDDO
+        DEALLOCATE(XI)
 !
+444     FORMAT('MEAN OF PERM....: ',E10.4,/,'STD OF PERM.....: ',E10.4)
 333     FORMAT('TIME TO GENERATE SAMPLE (seconds) =',F8.2)
 111     FORMAT('NAME OF OUTPUT FILE',I5,': ',A)
 113     FORMAT(I5)
