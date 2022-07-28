@@ -9,6 +9,8 @@ rm -f reject_prod/*;
 rm -f *.o out/*.dat;
 for a in select_thetas/theta_v*.dat; do rm -f $a; done
 rm -f select_thetas/theta_v*;
+rm -rf ../tracer/exp0*;
+rm -rf ../tracer/exp1*;
 rm -rf ../twophaseflow/exp0*;
 rm -rf ../twophaseflow/exp1*;
 rm -f  ../twophaseflow/output*.out;
