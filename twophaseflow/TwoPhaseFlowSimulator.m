@@ -1,4 +1,4 @@
-function TwoPhaseFlowSimulator(exper)
+function Simulator(exper)
 exper = ['exp' num2str(exper,'%0.3d')];
 % Single phase flow Simulator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 25/03/2020
@@ -17,7 +17,6 @@ try
 catch %#ok<CTCH>
    mrstModule add incomp ad-mechanics
 end
-verbose = true;
 
 nD = '3D';
 color = 'none';
@@ -47,10 +46,10 @@ nx  = 128;
 ny  = 128;
 nz  = 1;
 well_r= 0.125;          %% well radius
-TT    = 100.0;          %% days
-nstep = 200;            %% number of time steps for pressure-velocity system
-nprint= 25;             %% Number of impressions
-ndata = 200;            %% Number of impressions of data
+TT    = 120.0;          %% days
+nstep = 240;            %% number of time steps for pressure-velocity system
+nprint= 50;             %% Number of impressions
+ndata = 240;            %% Number of impressions of data
 ndt   = 10;
 [nprint nprjump] = ajusteImpress(nprint,nstep);
 [ndata njump]    = ajusteImpress(ndata,nstep);
@@ -60,7 +59,7 @@ patm  = 1.0*atm;        %% Pressure at 0m cote
 depth = 1.0e03*meter;   %% depth until the top of reservoir
 rhoR  = 2.70e03*kilogram/meter^3;  %% mean density of overload rocks
 overburden= 00.0*atm;   %% Load (overburden)
-fatk  = milli() * darcy();      %% Factor to permeability
+fatk    = milli() * darcy();      %% Factor to permeability
 phibeta = 0.125;
 phirho  = 0.275;
 permbeta= 6.5465e-14;
@@ -119,7 +118,7 @@ fprintf('\n==============================================================\n\n')
 fprintf('Mean k_x....: %4.1f mD \t | \t std k_x....: %4.1f mD\n',mK(1),sK(1));
 fprintf('Mean k_y....: %4.1f mD \t | \t std k_y....: %4.1f mD\n',mK(2),sK(2));
 fprintf('Mean k_z....: %4.1f mD \t | \t std k_z....: %4.1f mD\n',mK(3),sK(3));
-fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2f   \n',mean(rock.poro),std(rock.poro));
+fprintf('Mean phi....: %4.2f    \t | \t std phi....: %4.2g   \n',mean(rock.poro),std(rock.poro));
 fprintf('\n==============================================================\n')
 clear K
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -403,4 +402,6 @@ Totaltime= seconds(telapsed);
 Totaltime.Format = 'hh:mm:ss';
 fprintf('\n =================================================\n')
 fprintf(' Total time elapsed.......: %s\n',char(Totaltime))
-fprintf(' =================================================\n')%clear
+fprintf(' =================================================\n')
+clear
+exit
