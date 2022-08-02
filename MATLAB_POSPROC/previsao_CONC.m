@@ -1,28 +1,27 @@
 clear;
 close all
-loc=150;
-jump=3;
+loc=120;
+jump=5;
 N=00;
 B=400;
 A=50;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Nch_ini = 0;
-Nch_fim = 5;
-Nchains = Nch_fim - Nch_ini + 1;q
-Nini = repmat(1000, 1, Nchains);
-Nfim = [2288 2379 2391 2499 2461 2369];
-% Nfim = repmat(501, 1, Nchains);
+Nch_fim = 47;
+Nchains = Nch_fim - Nch_ini + 1;
+Nini = repmat(300, 1, Nchains);
+Nfim = repmat(620, 1, Nchains);
 Nfim = Nfim(Nch_ini+1:Nch_fim+1)-1;
 Nt   = (Nfim-Nini)+1;
 chains = [Nch_ini:1:Nch_fim];
 nome = 'TwoPhase3D_onlyPerm_RW_RK';
-nome = 'TwoPhase3D_RW_RK';
+nome = 'TwoPhase2D_RW_RK';
 base_name = ['prod_D2_' nome];
 hom = '~/Dropbox/PROJETO_MCMC_RIGID/MCMC_parallelchains/';
 % hom = '~/Dropbox/PROJETO_MCMC_RIGID/MCMCrw_onlyPerm/';
 % hom = '../';
-% hom = '~/MCMCrw/';
-homf= '~/Dropbox/PROJETO_MCMC_RIGID/paper/figuras/';
+hom = '~/MCMCRW/';
+homf= '~/MCMCRW/figuras/';
 dados=load([hom 'twophaseflow/exp/prod/prod_referencia_0.dat']);
 ref=dados;
 home = [hom 'twoStage/select_prod/'];
@@ -122,6 +121,7 @@ set(axes1,'FontName',...
 legend1 = legend(axes1,'show');
 set(legend1,'Location','NorthEast','FontSize',8);
 set(legend1,'Box','off');
+set(legend1,'Position',[0.61 0.6 0.22 0.30]);
 
 % Print
 base=[homf base_name];
