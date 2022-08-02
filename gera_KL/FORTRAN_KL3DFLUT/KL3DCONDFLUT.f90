@@ -563,7 +563,6 @@ END PROGRAM MAIN
         DO I=1,N
            READ(FID,*)FIELDM(I)
         ENDDO
-        FIELDM = BETA * EXP(RHO * FIELDM)
         CLOSE(FID)    
       END SUBROUTINE LOAD_FIELDM
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -754,7 +753,7 @@ END PROGRAM MAIN
         REAL(4) :: AUX1,VARR,AUXSQ
         REAL(4) :: AUXM,AUXV
         INTEGER :: I,J,M,MX,MY,MZ
-        REAL(4) :: POSIX,POSIY,POSIZ
+        REAL(4) :: POSIX,POSIY,POSIZ,EPSILON
         REAL(4) :: AUX, SIG2,MEANK,VARK
         REAL(4),ALLOCATABLE,DIMENSION(:) :: KPERM,XI
         INTEGER :: MAX,MIN,MIN2
@@ -776,6 +775,7 @@ END PROGRAM MAIN
         NELEM= NX * NY * NZ
         ALLOCATE(KPERM(NELEM))
         ALLOCATE(XI(NELEM))
+        EPSILON = 1.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! IDENTIFICACAO DOS PONTOS NO VETOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -848,15 +848,7 @@ END PROGRAM MAIN
               XI(I)=AUX
            ENDDO
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-           DO I=1,NELEM
-              AUX = 0.125 * BETA * XI(I);
-              AUX1= FIELDM(I) + AUX
-              IF(AUX1.LE.0D0)THEN
-                 WRITE(*,*)'==>>',I,AUX,AUX1,FIELDM(I)
-                 AUX1 = FIELDM(I)
-              END IF
-              KPERM(I) = AUX1
-           END DO
+           KPERM = BETA * EXP(RHO * (FIELDM + EPSILON * XI))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! NAME OF OUTPUT FILE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            WRITE(C,113)M
